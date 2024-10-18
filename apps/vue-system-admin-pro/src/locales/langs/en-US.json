@@ -121,5 +121,10 @@
         "y": "y:"
       }
     }
+  },
+  "system": {
+    "manage": {
+      "title": "System Manage"
+    }
   }
 }
