@@ -17,7 +17,7 @@ interface RowType {
   price: string;
   productName: string;
   releaseDate: string;
-  status: 'error' | 'success' | 'warning';
+  status: string;
 }
 
 const gridOptions: VxeGridProps<RowType> = {
