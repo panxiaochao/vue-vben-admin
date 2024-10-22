@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@ant-design/icons-vue':
+      specifier: ^7.0.1
+      version: 7.0.1
     '@changesets/changelog-github':
       specifier: ^0.5.0
       version: 0.5.0
@@ -600,6 +603,9 @@ importers:
 
   apps/vue-system-admin-pro:
     dependencies:
+      '@ant-design/icons-vue':
+        specifier: 'catalog:'
+        version: 7.0.1(vue@3.5.12(typescript@5.6.3))
       '@tanstack/vue-query':
         specifier: 'catalog:'
         version: 5.59.13(vue@3.5.12(typescript@5.6.3))
