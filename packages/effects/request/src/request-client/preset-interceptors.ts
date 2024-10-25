@@ -82,9 +82,9 @@ export const errorMessageResponseInterceptor = (
       const err: string = error?.toString?.() ?? '';
       let errMsg = '';
       if (err?.includes('Network Error')) {
-        errMsg = $t('fallback.http.networkError');
+        errMsg = $t('ui.fallback.http.networkError');
       } else if (error?.message?.includes?.('timeout')) {
-        errMsg = $t('fallback.http.requestTimeout');
+        errMsg = $t('ui.fallback.http.requestTimeout');
       }
       if (errMsg) {
         makeErrorMessage?.(errMsg, error);
@@ -98,30 +98,29 @@ export const errorMessageResponseInterceptor = (
       } else {
         const status = error?.response?.status;
 
-        switch (status) {
-          case 400: {
-            errorMessage = $t('fallback.http.badRequest');
-            break;
-          }
-          case 401: {
-            errorMessage = $t('fallback.http.unauthorized');
-            break;
-          }
-          case 403: {
-            errorMessage = $t('fallback.http.forbidden');
-            break;
-          }
-          case 404: {
-            errorMessage = $t('fallback.http.notFound');
-            break;
-          }
-          case 408: {
-            errorMessage = $t('fallback.http.requestTimeout');
-            break;
-          }
-          default: {
-            errorMessage = $t('fallback.http.internalServerError');
-          }
+      switch (status) {
+        case 400: {
+          errorMessage = $t('ui.fallback.http.badRequest');
+          break;
+        }
+        case 401: {
+          errorMessage = $t('ui.fallback.http.unauthorized');
+          break;
+        }
+        case 403: {
+          errorMessage = $t('ui.fallback.http.forbidden');
+          break;
+        }
+        case 404: {
+          errorMessage = $t('ui.fallback.http.notFound');
+          break;
+        }
+        case 408: {
+          errorMessage = $t('ui.fallback.http.requestTimeout');
+          break;
+        }
+        default: {
+          errorMessage = $t('ui.fallback.http.internalServerError');
         }
       }
       makeErrorMessage?.(errorMessage, error);

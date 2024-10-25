@@ -12,8 +12,7 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { message } from 'ant-design-vue';
-
+import { message } from '#/adapter/naive';
 import { useAuthStore } from '#/store';
 
 import { refreshTokenApi } from './core';
@@ -84,7 +83,7 @@ function createRequestClient(baseURL: string) {
       if (status >= 200 && status < 400 && (code === 0 || code === 200)) {
         return data;
       }
-      throw new Error(`Error ${status}: ${msg}`);
+      throw Object.assign({}, response, { response });
     },
   });
 
