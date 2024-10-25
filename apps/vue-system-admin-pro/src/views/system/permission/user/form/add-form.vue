@@ -30,8 +30,6 @@ defineOptions({
 // 定义组件的事件
 const $emits = defineEmits(['done']);
 
-const formRef = ref();
-
 const useForm = Form.useForm;
 
 const postList = ref([]);
@@ -95,18 +93,15 @@ const openModal = () => {
 };
 
 const handleOk = () => {
-  validate()
-    .then(() => {
-      // console.log(modelRef, toRaw(modelRef));
-      const values = toRaw(modelRef);
-      save(values).then(() => {
-        resetFields();
-        open.value = false;
-        // 刷新
-        $emits('done');
-      });
-    })
-    .catch((error) => catchFailed(error));
+  validate().then(() => {
+    const values = toRaw(modelRef);
+    save(values).then(() => {
+      resetFields();
+      open.value = false;
+      // 刷新
+      $emits('done');
+    });
+  });
 };
 
 const handleCancel = () => {
@@ -130,12 +125,12 @@ defineExpose({
     @cancel="handleCancel"
     @ok="handleOk"
   >
-    <Form ref="formRef" v-bind="formItemLayout">
+    <Form v-bind="formItemLayout">
       <Row :gutter="24">
         <Col :span="12">
           <FormItem
             label="用户姓名"
-            name="username"
+            name="realName"
             v-bind="validateInfos.realName"
           >
             <Input v-model:value="modelRef.realName" allow-clear />

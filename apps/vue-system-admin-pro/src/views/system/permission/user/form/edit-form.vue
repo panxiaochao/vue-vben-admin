@@ -1,11 +1,228 @@
 <script setup lang="ts">
+import { defineEmits, reactive, ref, toRaw } from 'vue';
 
+import { objectPick } from '@vueuse/core';
+import {
+  Col,
+  Form,
+  FormItem,
+  Input,
+  InputNumber,
+  Modal,
+  Radio,
+  RadioGroup,
+  Row,
+  Select,
+  Textarea,
+  TreeSelect,
+} from 'ant-design-vue';
+
+import { listTree } from '#/api/system/permission/org';
+import { selectPosts } from '#/api/system/permission/post';
+import { update } from '#/api/system/permission/user';
+import { catchFailed } from '#/utils/error-helper';
+
+defineOptions({
+  name: 'EditForm',
+  inheritAttrs: false,
+});
+
+// 定义组件的事件
+const $emits = defineEmits(['done']);
+
+const useForm = Form.useForm;
+
+const postList = ref([]);
+const treeData = ref([]);
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+
+const modelRef = reactive({
+  id: undefined,
+  realName: undefined,
+  nickName: undefined,
+  sex: '1',
+  address: undefined,
+  state: '1',
+  email: undefined,
+  mobile: undefined,
+  tel: undefined,
+  fax: undefined,
+  postCode: undefined,
+  orgId: undefined,
+  sort: 0,
+});
+
+const rulesRef = reactive({
+  realName: [{ type: 'string', required: true, message: '请输入用户姓名' }],
+});
+
+const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
+
+const open = defineModel('open', { type: Boolean, default: false });
+
+const width = defineModel('width', { type: Number, default: 800 });
+
+const openModal = (raw) => {
+  const rawValues = toRaw(raw || {});
+  open.value = true;
+  // 加载岗位数据
+  postList.value = [];
+  selectPosts()
+    .then((res) => {
+      postList.value = res;
+    })
+    .catch((error) => catchFailed(error));
+  // 加载机构数据
+  treeData.value = [];
+  listTree()
+    .then((res) => {
+      treeData.value = res;
+    })
+    .catch((error) => catchFailed(error));
+  // 赋值
+  const fieldNames = Object.keys(modelRef) ?? [];
+  const filteredFields = objectPick(rawValues, fieldNames);
+  Object.assign(modelRef, filteredFields);
+};
+
+const handleOk = () => {
+  validate().then(() => {
+    const values = toRaw(modelRef);
+    update(values).then(() => {
+      resetFields();
+      open.value = false;
+      // 刷新
+      $emits('done');
+    });
+  });
+};
+
+const handleCancel = () => {
+  resetFields();
+  open.value = false;
+};
+
+// 暴露方法
+defineExpose({
+  openModal,
+});
 </script>
 
 <template>
-
+  <Modal
+    :body-style="{ padding: '20px' }"
+    :mask-closable="false"
+    :open="open"
+    :width="width"
+    title="编辑用户"
+    @cancel="handleCancel"
+    @ok="handleOk"
+  >
+    <Form v-bind="formItemLayout">
+      <Input v-model:value="modelRef.id" allow-clear class="hidden" />
+      <Row :gutter="24">
+        <Col :span="12">
+          <FormItem
+            label="用户姓名"
+            name="realName"
+            v-bind="validateInfos.realName"
+          >
+            <Input v-model:value="modelRef.realName" allow-clear />
+          </FormItem>
+        </Col>
+        <Col :span="12">
+          <FormItem label="用户昵称" name="nickName">
+            <Input v-model:value="modelRef.nickName" allow-clear />
+          </FormItem>
+        </Col>
+      </Row>
+      <Row :gutter="24">
+        <Col :span="12">
+          <FormItem label="手机号码" name="mobile">
+            <Input v-model:value="modelRef.mobile" allow-clear />
+          </FormItem>
+        </Col>
+        <Col :span="12">
+          <FormItem label="性别" name="sex">
+            <RadioGroup v-model:value="modelRef.sex">
+              <Radio value="1">男</Radio>
+              <Radio value="0">女</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+      </Row>
+      <Row :gutter="24">
+        <Col :span="12">
+          <FormItem label="岗位" name="postCode">
+            <Select
+              v-model:value="modelRef.postCode"
+              :options="postList"
+              allow-clear
+              placeholder="请选择岗位"
+            />
+          </FormItem>
+        </Col>
+        <Col :span="12">
+          <FormItem label="机构" name="orgId">
+            <TreeSelect
+              v-model:value="modelRef.orgId"
+              :tree-data="treeData"
+              allow-clear
+              placeholder="请选择机构"
+            />
+          </FormItem>
+        </Col>
+      </Row>
+      <Row :gutter="24">
+        <Col :span="12">
+          <FormItem label="邮箱" name="email">
+            <Input v-model:value="modelRef.email" allow-clear />
+          </FormItem>
+        </Col>
+        <Col :span="12">
+          <FormItem label="地址" name="address">
+            <Input v-model:value="modelRef.address" allow-clear />
+          </FormItem>
+        </Col>
+      </Row>
+      <Row :gutter="24">
+        <Col :span="12">
+          <FormItem label="人员状态" name="state">
+            <RadioGroup v-model:value="modelRef.state">
+              <Radio value="1">正常</Radio>
+              <Radio value="0">禁用</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+        <Col :span="12">
+          <FormItem label="排序" name="sort">
+            <InputNumber
+              v-model:value="modelRef.sort"
+              :max="1000"
+              :min="0"
+              class="w-full"
+            />
+          </FormItem>
+        </Col>
+      </Row>
+      <Row :gutter="24">
+        <Col :span="12">
+          <FormItem label="备注" name="remark">
+            <Textarea v-model:value="modelRef.remark" allow-clear />
+          </FormItem>
+        </Col>
+        <Col :span="12" />
+      </Row>
+    </Form>
+  </Modal>
 </template>
-
-<style scoped>
-
-</style>

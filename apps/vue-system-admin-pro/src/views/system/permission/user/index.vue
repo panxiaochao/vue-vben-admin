@@ -24,8 +24,10 @@ import { deleteById, page } from '#/api';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
+import EditForm from './form/edit-form.vue';
 
 const addForm = ref();
+const editForm = ref();
 
 // 字段对象
 interface RowType {
@@ -57,7 +59,7 @@ const formOptions: VbenFormProps = {
     {
       component: 'Input',
       fieldName: 'realName',
-      label: '用户姓名',
+      label: '用户姓名：',
       componentProps: {
         allowClear: true,
         placeholder: '请输入用户姓名',
@@ -66,7 +68,7 @@ const formOptions: VbenFormProps = {
     {
       component: 'Input',
       fieldName: 'mobile',
-      label: '手机号码',
+      label: '手机号码：',
       componentProps: {
         allowClear: true,
         placeholder: '请输入手机号码',
@@ -170,6 +172,7 @@ const formDone = () => {
 <template>
   <Page auto-content-height>
     <AddForm ref="addForm" :width="900" @done="formDone" />
+    <EditForm ref="editForm" :width="900" @done="formDone" />
     <Grid>
       <template #toolbar-actions>
         <Button class="mr-2" type="primary" @click="addForm.openModal()">
@@ -185,7 +188,9 @@ const formDone = () => {
         </Tag>
       </template>
       <template #action="{ row }">
-        <Button class="px-0" type="link">编辑</Button>
+        <Button class="px-0" type="link" @click="editForm.openModal(row)">
+          编辑
+        </Button>
         <Divider type="vertical" />
         <Popconfirm
           placement="top"
