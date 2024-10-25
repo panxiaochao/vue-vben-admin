@@ -12,7 +12,8 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { message } from '#/adapter/naive';
+import { message } from 'ant-design-vue';
+
 import { useAuthStore } from '#/store';
 
 import { refreshTokenApi } from './core';
@@ -22,11 +23,6 @@ const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 function createRequestClient(baseURL: string) {
   const client = new RequestClient({
     baseURL,
-    timeout: 6000, // 请求超时时间
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-    withCredentials: false,
   });
 
   /**
@@ -78,7 +74,7 @@ function createRequestClient(baseURL: string) {
     fulfilled: (response) => {
       const { data: responseData, status } = response;
 
-      const { code, data, message: msg } = responseData;
+      const { code, data } = responseData;
 
       if (status >= 200 && status < 400 && (code === 0 || code === 200)) {
         return data;
