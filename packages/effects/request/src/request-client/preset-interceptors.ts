@@ -79,6 +79,13 @@ export const errorMessageResponseInterceptor = (
         return Promise.reject(error);
       }
 
+      const status = error?.response?.status;
+      if (status === 200) {
+        // 说明http success，接口报错
+        makeErrorMessage?.(error?.response?.data?.message, error);
+        return Promise.reject(error);
+      }
+
       const err: string = error?.toString?.() ?? '';
       let errMsg = '';
       if (err?.includes('Network Error')) {
@@ -92,35 +99,29 @@ export const errorMessageResponseInterceptor = (
       }
 
       let errorMessage = '';
-      if (err?.includes('Error 200')) {
-        // 说明http success，接口报错
-        errorMessage = error?.message?.split(':')[1];
-      } else {
-        const status = error?.response?.status;
-        switch (status) {
-          case 400: {
-            errorMessage = $t('ui.fallback.http.badRequest');
-            break;
-          }
-          case 401: {
-            errorMessage = $t('ui.fallback.http.unauthorized');
-            break;
-          }
-          case 403: {
-            errorMessage = $t('ui.fallback.http.forbidden');
-            break;
-          }
-          case 404: {
-            errorMessage = $t('ui.fallback.http.notFound');
-            break;
-          }
-          case 408: {
-            errorMessage = $t('ui.fallback.http.requestTimeout');
-            break;
-          }
-          default: {
-            errorMessage = $t('ui.fallback.http.internalServerError');
-          }
+      switch (status) {
+        case 400: {
+          errorMessage = $t('ui.fallback.http.badRequest');
+          break;
+        }
+        case 401: {
+          errorMessage = $t('ui.fallback.http.unauthorized');
+          break;
+        }
+        case 403: {
+          errorMessage = $t('ui.fallback.http.forbidden');
+          break;
+        }
+        case 404: {
+          errorMessage = $t('ui.fallback.http.notFound');
+          break;
+        }
+        case 408: {
+          errorMessage = $t('ui.fallback.http.requestTimeout');
+          break;
+        }
+        default: {
+          errorMessage = $t('ui.fallback.http.internalServerError');
         }
       }
       makeErrorMessage?.(errorMessage, error);
