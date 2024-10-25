@@ -92,31 +92,36 @@ export const errorMessageResponseInterceptor = (
       }
 
       let errorMessage = '';
-      const status = error?.response?.status;
+      if (err?.includes('Error 200')) {
+        // 说明http success，接口报错
+        errorMessage = error?.message?.split(':')[1];
+      } else {
+        const status = error?.response?.status;
 
-      switch (status) {
-        case 400: {
-          errorMessage = $t('fallback.http.badRequest');
-          break;
-        }
-        case 401: {
-          errorMessage = $t('fallback.http.unauthorized');
-          break;
-        }
-        case 403: {
-          errorMessage = $t('fallback.http.forbidden');
-          break;
-        }
-        case 404: {
-          errorMessage = $t('fallback.http.notFound');
-          break;
-        }
-        case 408: {
-          errorMessage = $t('fallback.http.requestTimeout');
-          break;
-        }
-        default: {
-          errorMessage = $t('fallback.http.internalServerError');
+        switch (status) {
+          case 400: {
+            errorMessage = $t('fallback.http.badRequest');
+            break;
+          }
+          case 401: {
+            errorMessage = $t('fallback.http.unauthorized');
+            break;
+          }
+          case 403: {
+            errorMessage = $t('fallback.http.forbidden');
+            break;
+          }
+          case 404: {
+            errorMessage = $t('fallback.http.notFound');
+            break;
+          }
+          case 408: {
+            errorMessage = $t('fallback.http.requestTimeout');
+            break;
+          }
+          default: {
+            errorMessage = $t('fallback.http.internalServerError');
+          }
         }
       }
       makeErrorMessage?.(errorMessage, error);
