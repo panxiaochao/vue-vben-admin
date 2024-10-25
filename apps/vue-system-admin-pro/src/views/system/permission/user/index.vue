@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { reactive, ref, toRaw } from 'vue';
+
 import { Page, type VbenFormProps } from '@vben/common-ui';
 
 import { DownOutlined } from '@ant-design/icons-vue';
@@ -19,6 +21,11 @@ import {
   type VxeGridProps,
 } from '#/adapter/vxe-table';
 import { deleteById, page } from '#/api';
+
+// 自定义组件
+import AddForm from './form/add-form.vue';
+
+const addForm = ref();
 
 // 字段对象
 interface RowType {
@@ -69,6 +76,12 @@ const formOptions: VbenFormProps = {
   showCollapseButton: false,
 };
 
+// 查询参数
+let queryParams = reactive({
+  pageNo: 1,
+  pageSize: 10,
+});
+
 const gridOptions: VxeGridProps<RowType> = {
   columns,
   // data: [],
@@ -87,15 +100,18 @@ const gridOptions: VxeGridProps<RowType> = {
     },
     ajax: {
       query: async ({ page }, formValues) => {
-        const params = Object.assign(
-          {},
-          {
-            pageNo: page.currentPage,
-            pageSize: page.pageSize,
-            ...formValues,
-          },
-        );
-        return await loadData(params);
+        // Object.assign(queryParams, {
+        //   pageNo: page.currentPage,
+        //   pageSize: page.pageSize,
+        //   ...formValues,
+        // });
+        queryParams = {
+          ...queryParams,
+          pageNo: page.currentPage,
+          pageSize: page.pageSize,
+          ...formValues,
+        };
+        return await loadData();
       },
     },
   },
@@ -109,13 +125,23 @@ const gridEvents: VxeGridListeners<RowType> = {
   },
 };
 
+// 定义表格
+const [Grid, gridApi] = useVbenVxeGrid({
+  gridEvents,
+  gridOptions,
+  formOptions,
+});
+
 // 加载远程数据
-async function loadData(params: {}) {
-  return page(params);
+async function loadData() {
+  return page(toRaw(queryParams));
 }
 
-// 定义表格
-const [Grid] = useVbenVxeGrid({ gridEvents, gridOptions, formOptions });
+// 强制刷新
+async function refresh(bool: boolean) {
+  // reload: 强制刷新到第一页 query: 刷新当前页
+  await (bool ? gridApi.reload(queryParams) : gridApi.query(queryParams));
+}
 
 // 格式化数据
 const formatSex = (row: RowVO) => {
@@ -126,17 +152,30 @@ const formatState = (row: RowVO) => {
   return row.state === '1' ? '正常' : '禁用';
 };
 
-// 自定方法
+// 自定义方法
 const deleteRow = (row: RowVO) => {
-  deleteById(row.id)
-    .then(() => message.success('删除成功'))
-    .catch(() => message.error('删除失败'));
+  deleteById(row.id).then(() => {
+    message.success('删除成功');
+    // reload
+    refresh(true);
+  });
+};
+
+// 表单处理完成做刷新处理
+const formDone = () => {
+  refresh(true);
 };
 </script>
 
 <template>
   <Page auto-content-height>
+    <AddForm ref="addForm" :width="900" @done="formDone" />
     <Grid>
+      <template #toolbar-actions>
+        <Button class="mr-2" type="primary" @click="addForm.openModal()">
+          新建用户
+        </Button>
+      </template>
       <template #sex="{ row }">
         <span>{{ formatSex(row) }}</span>
       </template>
@@ -157,7 +196,10 @@ const deleteRow = (row: RowVO) => {
         </Popconfirm>
         <Divider type="vertical" />
         <Dropdown :arrow="{ pointAtCenter: true }" placement="bottomRight">
-          <Button class="px-0" type="link"> 更多<DownOutlined /> </Button>
+          <Button class="px-0" type="link">
+            更多
+            <DownOutlined />
+          </Button>
           <template #overlay>
             <Menu>
               <MenuItem><a>密码管理</a></MenuItem>
