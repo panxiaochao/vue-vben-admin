@@ -6,7 +6,6 @@ import {
   Form,
   FormItem,
   Input,
-  InputNumber,
   InputPassword,
   Modal,
   Radio,
@@ -60,7 +59,6 @@ const modelRef = reactive({
   fax: undefined,
   postCode: undefined,
   orgId: undefined,
-  sort: 0,
 });
 
 const rulesRef = reactive({
@@ -221,23 +219,10 @@ defineExpose({
           </FormItem>
         </Col>
         <Col :span="12">
-          <FormItem label="排序" name="sort">
-            <InputNumber
-              v-model:value="modelRef.sort"
-              :max="1000"
-              :min="0"
-              class="w-full"
-            />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
           <FormItem label="备注" name="remark">
             <Textarea v-model:value="modelRef.remark" allow-clear />
           </FormItem>
         </Col>
-        <Col :span="12" />
       </Row>
     </Form>
   </Modal>

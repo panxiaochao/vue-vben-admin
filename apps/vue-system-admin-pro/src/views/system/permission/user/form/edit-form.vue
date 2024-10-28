@@ -7,7 +7,6 @@ import {
   Form,
   FormItem,
   Input,
-  InputNumber,
   Modal,
   Radio,
   RadioGroup,
@@ -20,7 +19,6 @@ import {
 import { listTree } from '#/api/system/permission/org';
 import { selectPosts } from '#/api/system/permission/post';
 import { update } from '#/api/system/permission/user';
-import { catchFailed } from '#/utils/error-helper';
 
 defineOptions({
   name: 'EditForm',
@@ -59,7 +57,6 @@ const modelRef = reactive({
   fax: undefined,
   postCode: undefined,
   orgId: undefined,
-  sort: 0,
 });
 
 const rulesRef = reactive({
@@ -77,18 +74,14 @@ const openModal = (raw) => {
   open.value = true;
   // 加载岗位数据
   postList.value = [];
-  selectPosts()
-    .then((res) => {
-      postList.value = res;
-    })
-    .catch((error) => catchFailed(error));
+  selectPosts().then((res) => {
+    postList.value = res;
+  });
   // 加载机构数据
   treeData.value = [];
-  listTree()
-    .then((res) => {
-      treeData.value = res;
-    })
-    .catch((error) => catchFailed(error));
+  listTree().then((res) => {
+    treeData.value = res;
+  });
   // 赋值
   const fieldNames = Object.keys(modelRef) ?? [];
   const filteredFields = objectPick(rawValues, fieldNames);
@@ -205,23 +198,10 @@ defineExpose({
           </FormItem>
         </Col>
         <Col :span="12">
-          <FormItem label="排序" name="sort">
-            <InputNumber
-              v-model:value="modelRef.sort"
-              :max="1000"
-              :min="0"
-              class="w-full"
-            />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
           <FormItem label="备注" name="remark">
             <Textarea v-model:value="modelRef.remark" allow-clear />
           </FormItem>
         </Col>
-        <Col :span="12" />
       </Row>
     </Form>
   </Modal>

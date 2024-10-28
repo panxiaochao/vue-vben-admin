@@ -21,13 +21,18 @@ import {
   type VxeGridProps,
 } from '#/adapter/vxe-table';
 import { deleteById, page } from '#/api';
+import { rolesByUserId } from '#/api/system/permission/user-role';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
 import EditForm from './form/edit-form.vue';
+import GrantRole from './form/grant-role.vue';
 
 const addForm = ref();
 const editForm = ref();
+const grantRole = ref();
+
+const userRoleIds = ref([]);
 
 // 字段对象
 interface RowType {
@@ -43,11 +48,12 @@ interface RowType {
 
 // 字段定义
 const columns = [
-  { field: 'realName', title: '用户姓名', with: 150 },
+  { field: 'realName', title: '用户姓名' },
+  { field: 'nickName', title: '用户昵称' },
   { field: 'sex', title: '性别', slots: { default: 'sex' } },
   { field: 'mobile', title: '手机号码' },
   { field: 'email', title: '邮箱' },
-  { field: 'updateTime', title: '更新时间' },
+  { field: 'createTime', title: '创建时间' },
   { field: 'loginTime', title: '登录时间' },
   { field: 'state', title: '状态', width: 100, slots: { default: 'state' } },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
@@ -163,6 +169,16 @@ const deleteRow = (row: RowVO) => {
   });
 };
 
+// 选择角色
+const selectRoles = (row: RowVO) => {
+  rolesByUserId({
+    userId: row.id,
+  }).then((res) => {
+    userRoleIds.value = res;
+    grantRole.value.openModal(row);
+  });
+};
+
 // 表单处理完成做刷新处理
 const formDone = () => {
   refresh(true);
@@ -173,6 +189,7 @@ const formDone = () => {
   <Page auto-content-height>
     <AddForm ref="addForm" :width="900" @done="formDone" />
     <EditForm ref="editForm" :width="900" @done="formDone" />
+    <GrantRole ref="grantRole" :user-role-ids="userRoleIds" :width="500" />
     <Grid>
       <template #toolbar-actions>
         <Button class="mr-2" type="primary" @click="addForm.openModal()">
@@ -207,8 +224,12 @@ const formDone = () => {
           </Button>
           <template #overlay>
             <Menu>
-              <MenuItem><a>密码管理</a></MenuItem>
-              <MenuItem><a>授权角色</a></MenuItem>
+              <MenuItem>
+                <a>密码管理</a>
+              </MenuItem>
+              <MenuItem>
+                <a @click="selectRoles(row)">授权角色</a>
+              </MenuItem>
             </Menu>
           </template>
         </Dropdown>
