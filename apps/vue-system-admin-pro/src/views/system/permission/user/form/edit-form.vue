@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, reactive, ref, toRaw } from 'vue';
+import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
 import { objectPick } from '@vueuse/core';
 import {
@@ -82,10 +82,12 @@ const openModal = (raw) => {
   listTree().then((res) => {
     treeData.value = res;
   });
-  // 赋值
-  const fieldNames = Object.keys(modelRef) ?? [];
-  const filteredFields = objectPick(rawValues, fieldNames);
-  Object.assign(modelRef, filteredFields);
+  nextTick(() => {
+    // 赋值
+    const fieldNames = Object.keys(modelRef) ?? [];
+    const filteredFields = objectPick(rawValues, fieldNames);
+    Object.assign(modelRef, filteredFields);
+  });
 };
 
 const handleOk = () => {

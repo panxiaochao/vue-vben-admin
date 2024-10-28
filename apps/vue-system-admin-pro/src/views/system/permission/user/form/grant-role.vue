@@ -33,7 +33,7 @@ const modelRef = reactive({
   roleId: [],
 });
 
-const { resetFields, validate } = useForm(modelRef);
+const { resetFields } = useForm(modelRef);
 
 const open = defineModel('open', { type: Boolean, default: false });
 
@@ -58,19 +58,17 @@ const openModal = (raw) => {
 };
 
 const handleOk = () => {
-  validate().then(() => {
-    const values = toRaw(modelRef);
-    const params = Object.assign(
-      {},
-      {
-        roleId: values.roleId.join(','),
-        userId: modelRef.id,
-      },
-    );
-    save(params).then(() => {
-      resetFields();
-      open.value = false;
-    });
+  const values = toRaw(modelRef);
+  const params = Object.assign(
+    {},
+    {
+      roleId: values.roleId.join(','),
+      userId: modelRef.id,
+    },
+  );
+  save(params).then(() => {
+    resetFields();
+    open.value = false;
   });
 };
 
