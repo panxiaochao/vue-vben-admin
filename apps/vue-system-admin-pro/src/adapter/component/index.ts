@@ -48,7 +48,6 @@ const withDefaultPlaceholder = <T extends Component>(
 
 // 这里需要自行根据业务组件库进行适配，需要用到的组件都需要在这里类型说明
 export type ComponentType =
-  | 'AInput'
   | 'AutoComplete'
   | 'Checkbox'
   | 'CheckboxGroup'
