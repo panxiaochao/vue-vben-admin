@@ -42,7 +42,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemRole',
             path: '/system/permission/role',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/permission/role/index.vue'),
             meta: {
               title: '角色管理',
             },
@@ -102,7 +102,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemArea',
             path: '/system/settings/area',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/settings/area/index.vue'),
             meta: {
               title: '行政区域',
             },

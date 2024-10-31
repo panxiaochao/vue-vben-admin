@@ -79,7 +79,7 @@ const openModal = (raw) => {
   });
   // 加载机构数据
   treeData.value = [];
-  listTree().then((res) => {
+  listTree({}).then((res) => {
     treeData.value = res;
   });
   nextTick(() => {

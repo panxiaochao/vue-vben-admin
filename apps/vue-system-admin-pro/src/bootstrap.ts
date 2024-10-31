@@ -19,6 +19,9 @@ async function bootstrap(namespace: string) {
 
   const app = createApp(App);
 
+  // 加载Antd组件
+  // await lazy_use(app);
+
   // 国际化 i18n 配置
   await setupI18n(app);
 

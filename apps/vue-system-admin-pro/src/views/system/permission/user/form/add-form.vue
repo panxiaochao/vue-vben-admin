@@ -80,14 +80,14 @@ const openModal = () => {
     .then((res) => {
       postList.value = res;
     })
-    .catch((error) => catchFailed(error));
+    .catch(() => catchFailed({ message: '加载岗位数据异常' }));
   // 加载机构数据
   treeData.value = [];
-  listTree()
+  listTree({})
     .then((res) => {
       treeData.value = res;
     })
-    .catch((error) => catchFailed(error));
+    .catch(() => catchFailed({ message: '加载机构数据异常' }));
 };
 
 const handleOk = () => {

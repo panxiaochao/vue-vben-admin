@@ -85,14 +85,14 @@ const formOptions: VbenFormProps = {
 };
 
 // 查询参数
-let queryParams = reactive({
+const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
 });
 
 const gridOptions: VxeGridProps<RowType> = {
   columns,
-  // data: [],
+  data: [],
   // loading: false,
   height: 'auto',
   pagerConfig: {
@@ -108,24 +108,18 @@ const gridOptions: VxeGridProps<RowType> = {
     },
     ajax: {
       query: async ({ page }, formValues) => {
-        // Object.assign(queryParams, {
-        //   pageNo: page.currentPage,
-        //   pageSize: page.pageSize,
-        //   ...formValues,
-        // });
-        queryParams = {
-          ...queryParams,
+        Object.assign(queryParams, {
           pageNo: page.currentPage,
           pageSize: page.pageSize,
           ...formValues,
-        };
+        });
         return await loadData();
       },
     },
   },
 };
 
-// 分页变化监听
+// 监听事件：分页
 const gridEvents: VxeGridListeners<RowType> = {
   pageChange: ({ currentPage, pageSize }) => {
     gridOptions.pagerConfig.currentPage = currentPage;
@@ -152,16 +146,16 @@ async function refresh(bool: boolean) {
 }
 
 // 格式化数据
-const formatSex = (row: RowVO) => {
+const formatSex = (row: RowType) => {
   return row.sex === '1' ? '男' : '女';
 };
 
-const formatState = (row: RowVO) => {
+const formatState = (row: RowType) => {
   return row.state === '1' ? '正常' : '禁用';
 };
 
 // 自定义方法
-const deleteRow = (row: RowVO) => {
+const deleteRow = (row: RowType) => {
   deleteById(row.id).then(() => {
     message.success('删除成功');
     // reload
@@ -170,7 +164,7 @@ const deleteRow = (row: RowVO) => {
 };
 
 // 选择角色
-const selectRoles = (row: RowVO) => {
+const selectRoles = (row: RowType) => {
   rolesByUserId({
     userId: row.id,
   }).then((res) => {
