@@ -144,7 +144,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemLogLogin',
             path: '/system/log/login',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/log/login/index.vue'),
             meta: {
               title: '访问日志',
             },
@@ -152,7 +152,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemLogOperate',
             path: '/system/log/operate',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/log/operate/index.vue'),
             meta: {
               title: '操作日志',
             },
