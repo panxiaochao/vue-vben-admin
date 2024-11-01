@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, nextTick, reactive, toRaw } from 'vue';
+import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
 import { objectPick } from '@vueuse/core';
 import { Col, Form, FormItem, Input, Modal, Row, Select } from 'ant-design-vue';
@@ -15,6 +15,8 @@ defineOptions({
 const $emits = defineEmits(['done']);
 
 const useForm = Form.useForm;
+
+const confirmLoading = ref<boolean>(false);
 
 const areaLevelList = defineModel('areaLevelList', {
   type: Array,
@@ -69,13 +71,19 @@ const openModal = (raw) => {
 
 const handleOk = () => {
   validate().then(() => {
-    const values = toRaw(modelRef);
-    update(values).then(() => {
-      resetFields();
-      open.value = false;
-      // 刷新
-      $emits('done');
-    });
+    confirmLoading.value = true;
+    setTimeout(() => {
+      const values = toRaw(modelRef);
+      update(values)
+        .then(() => {
+          resetFields();
+          confirmLoading.value = false;
+          open.value = false;
+          // 刷新
+          $emits('done');
+        })
+        .finally(() => (confirmLoading.value = false));
+    }, 100);
   });
 };
 
@@ -93,6 +101,7 @@ defineExpose({
 <template>
   <Modal
     :body-style="{ padding: '20px' }"
+    :confirm-loading="confirmLoading"
     :mask-closable="false"
     :open="open"
     :width="width"

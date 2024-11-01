@@ -127,7 +127,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <Page auto-content-height>
+  <Page auto-content-height title="行政区域">
+    <template #description>
+      中国全国5级行政区划（省、市、县、镇、村），截止时间2023年6月30日，数据来源地址：
+      <Button
+        class="px-0"
+        href="https://www.stats.gov.cn/sj/tjbz/gjtjbz/"
+        target="_blank"
+        type="link"
+      >
+        国家统计局
+      </Button>
+    </template>
     <EditForm
       ref="editForm"
       :area-level-list="areaLevelList"
