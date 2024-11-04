@@ -59,6 +59,7 @@ const modelRef = reactive({
   fax: undefined,
   postCode: undefined,
   orgId: undefined,
+  remark: undefined,
 });
 
 const rulesRef = reactive({

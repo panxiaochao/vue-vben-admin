@@ -50,7 +50,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemPost',
             path: '/system/permission/post',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/permission/post/index.vue'),
             meta: {
               title: '岗位管理',
             },

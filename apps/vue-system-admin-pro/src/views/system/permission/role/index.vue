@@ -2,7 +2,6 @@
 import { Page } from '@vben/common-ui';
 
 import { DownOutlined } from '@ant-design/icons-vue';
-import { Card, Table } from 'ant-design-vue';
 
 const columns = [
   {
@@ -58,9 +57,9 @@ const data = [
 
 <template>
   <Page auto-content-height>
-    <Card class="h-full">
+    <a-card class="h-full">
       <a-button type="primary">Primary Button</a-button>
-      <Table :columns="columns" :data-source="data" size="small">
+      <a-table :columns="columns" :data-source="data" size="small">
         <template #headerCell="{ column }">
           <template v-if="column.key === 'name'">
             <span>
@@ -106,7 +105,7 @@ const data = [
             </span>
           </template>
         </template>
-      </Table>
-    </Card>
+      </a-table>
+    </a-card>
   </Page>
 </template>
