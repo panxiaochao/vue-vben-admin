@@ -161,22 +161,22 @@ const formDone = () => {
         </a-button>
       </template>
       <template #state="{ row }">
-        <Tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
+        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
           {{ formatState(row) }}
-        </Tag>
+        </a-tag>
       </template>
       <template #action="{ row }">
-        <Button class="px-0" type="link" @click="editForm.openModal(row)">
+        <a-button class="px-0" type="link" @click="editForm.openModal(row)">
           编辑
-        </Button>
-        <Divider type="vertical" />
-        <Popconfirm
+        </a-button>
+        <a-divider type="vertical" />
+        <a-popconfirm
           placement="top"
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
-          <Button class="px-0" danger type="link">删除</Button>
-        </Popconfirm>
+          <a-button class="px-0" danger type="link">删除</a-button>
+        </a-popconfirm>
       </template>
     </Grid>
   </Page>

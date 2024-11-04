@@ -19,7 +19,6 @@ import {
 import { listTree } from '#/api/system/permission/org';
 import { selectPosts } from '#/api/system/permission/post';
 import { save } from '#/api/system/permission/user';
-import { catchFailed } from '#/utils/error-helper';
 
 defineOptions({
   name: 'AddForm',
@@ -77,18 +76,14 @@ const openModal = () => {
   open.value = true;
   // 加载岗位数据
   postList.value = [];
-  selectPosts()
-    .then((res) => {
-      postList.value = res;
-    })
-    .catch(() => catchFailed({ message: '加载岗位数据异常' }));
+  selectPosts().then((res) => {
+    postList.value = res;
+  });
   // 加载机构数据
   treeData.value = [];
-  listTree({})
-    .then((res) => {
-      treeData.value = res;
-    })
-    .catch(() => catchFailed({ message: '加载机构数据异常' }));
+  listTree({}).then((res) => {
+    treeData.value = res;
+  });
 };
 
 const handleOk = () => {

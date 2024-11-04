@@ -130,14 +130,14 @@ onMounted(() => {
   <Page auto-content-height title="行政区域">
     <template #description>
       中国全国5级行政区划（省、市、县、镇、村），截止时间2023年6月30日，数据来源地址：
-      <Button
+      <a-button
         class="px-0"
         href="https://www.stats.gov.cn/sj/tjbz/gjtjbz/"
         target="_blank"
         type="link"
       >
         国家统计局
-      </Button>
+      </a-button>
     </template>
     <EditForm
       ref="editForm"
@@ -150,40 +150,10 @@ onMounted(() => {
         <span>{{ formatAreaLevel(row) }}</span>
       </template>
       <template #areaName="{ row }">
-        <Button class="px-0" type="link" @click="editForm.openModal(row)">
+        <a-button class="px-0" type="link" @click="editForm.openModal(row)">
           {{ row.areaName }}
-        </Button>
+        </a-button>
       </template>
-      <!--      <template #action="{ row }">-->
-      <!--        <Button class="px-0" type="link" @click="editForm.openModal(row)">-->
-      <!--          编辑-->
-      <!--        </Button>-->
-      <!--        <Divider type="vertical" />-->
-      <!--        <Popconfirm-->
-      <!--          placement="top"-->
-      <!--          title="确定要删除吗?"-->
-      <!--          @confirm="() => deleteRow(row)"-->
-      <!--        >-->
-      <!--          <Button class="px-0" danger type="link">删除</Button>-->
-      <!--        </Popconfirm>-->
-      <!--        <Divider type="vertical" />-->
-      <!--        <Dropdown :arrow="{ pointAtCenter: true }" placement="bottomRight">-->
-      <!--          <Button class="px-0" type="link">-->
-      <!--            更多-->
-      <!--            <DownOutlined />-->
-      <!--          </Button>-->
-      <!--          <template #overlay>-->
-      <!--            <Menu>-->
-      <!--              <MenuItem>-->
-      <!--                <a>密码管理</a>-->
-      <!--              </MenuItem>-->
-      <!--              <MenuItem>-->
-      <!--                <a @click="selectRoles(row)">授权角色</a>-->
-      <!--              </MenuItem>-->
-      <!--            </Menu>-->
-      <!--          </template>-->
-      <!--        </Dropdown>-->
-      <!--      </template>-->
     </Grid>
   </Page>
 </template>

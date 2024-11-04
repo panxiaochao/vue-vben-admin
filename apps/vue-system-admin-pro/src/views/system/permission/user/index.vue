@@ -186,52 +186,52 @@ const formDone = () => {
     <GrantRole ref="grantRole" :user-role-ids="userRoleIds" :width="500" />
     <Grid>
       <template #toolbar-actions>
-        <Button
+        <a-button
           :icon="h(FormOutlined)"
           class="mr-2"
           type="primary"
           @click="addForm.openModal()"
         >
           新建用户
-        </Button>
+        </a-button>
       </template>
       <template #sex="{ row }">
         <span>{{ formatSex(row) }}</span>
       </template>
       <template #state="{ row }">
-        <Tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
+        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
           {{ formatState(row) }}
-        </Tag>
+        </a-tag>
       </template>
       <template #action="{ row }">
-        <Button class="px-0" type="link" @click="editForm.openModal(row)">
+        <a-button class="px-0" type="link" @click="editForm.openModal(row)">
           编辑
-        </Button>
-        <Divider type="vertical" />
-        <Popconfirm
+        </a-button>
+        <a-divider type="vertical" />
+        <a-popconfirm
           placement="top"
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
           <Button class="px-0" danger type="link">删除</Button>
-        </Popconfirm>
-        <Divider type="vertical" />
-        <Dropdown :arrow="{ pointAtCenter: true }" placement="bottomRight">
-          <Button class="px-0" type="link">
+        </a-popconfirm>
+        <a-divider type="vertical" />
+        <a-dropdown :arrow="{ pointAtCenter: true }" placement="bottomRight">
+          <a-button class="px-0" type="link">
             更多
             <DownOutlined />
-          </Button>
+          </a-button>
           <template #overlay>
-            <Menu>
-              <MenuItem>
+            <a-menu>
+              <a-menu-item>
                 <a>密码管理</a>
-              </MenuItem>
-              <MenuItem>
+              </a-menu-item>
+              <a-menu-item>
                 <a @click="selectRoles(row)">授权角色</a>
-              </MenuItem>
-            </Menu>
+              </a-menu-item>
+            </a-menu>
           </template>
-        </Dropdown>
+        </a-dropdown>
       </template>
     </Grid>
   </Page>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { defineEmits, nextTick, reactive, toRaw } from 'vue';
+import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
 import { objectPick } from '@vueuse/core';
-import { Form } from 'ant-design-vue';
+import { Form, Select } from 'ant-design-vue';
 
-import { update } from '#/api/system/permission/post';
+import { selectDataScopes, update } from '#/api/system/permission/role';
 
 defineOptions({
-  name: 'EditForm',
+  name: 'AddForm',
   inheritAttrs: false,
 });
 
@@ -15,6 +15,8 @@ defineOptions({
 const $emits = defineEmits(['done']);
 
 const useForm = Form.useForm;
+
+const dataScopeList = ref([]);
 
 const formItemLayout = {
   labelCol: {
@@ -29,16 +31,17 @@ const formItemLayout = {
 
 const modelRef = reactive({
   id: undefined,
-  postName: undefined,
-  postCode: undefined,
+  roleName: undefined,
+  roleCode: undefined,
+  dataScope: '1',
   remark: undefined,
   sort: 0,
   state: '1',
 });
 
 const rulesRef = reactive({
-  postName: [{ type: 'string', required: true, message: '请输入岗位名称' }],
-  postCode: [{ type: 'string', required: true, message: '请输入岗位编码' }],
+  roleName: [{ type: 'string', required: true, message: '请输入角色名称' }],
+  roleCode: [{ type: 'string', required: true, message: '请输入角色编码' }],
 });
 
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
@@ -49,6 +52,11 @@ const width = defineModel('width', { type: Number, default: 800 });
 
 const openModal = (raw) => {
   open.value = true;
+  // 加载岗位数据
+  dataScopeList.value = [];
+  selectDataScopes().then((res) => {
+    dataScopeList.value = res;
+  });
   // 赋值
   const rawValues = toRaw(raw || {});
   nextTick(() => {
@@ -87,25 +95,37 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
-    title="编辑岗位"
+    title="编辑角色"
     @cancel="handleCancel"
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
       <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
       <a-form-item
-        label="岗位名称"
-        name="postName"
-        v-bind="validateInfos.postName"
+        label="角色名称"
+        name="roleName"
+        v-bind="validateInfos.roleName"
       >
-        <a-input v-model:value="modelRef.postName" allow-clear />
+        <a-input v-model:value="modelRef.roleName" allow-clear />
       </a-form-item>
       <a-form-item
-        label="岗位编码"
-        name="postCode"
-        v-bind="validateInfos.postCode"
+        label="角色编码"
+        name="roleCode"
+        v-bind="validateInfos.roleCode"
       >
-        <a-input v-model:value="modelRef.postCode" allow-clear />
+        <a-input v-model:value="modelRef.roleCode" allow-clear />
+      </a-form-item>
+      <a-form-item
+        label="数据权限"
+        name="dataScope"
+        v-bind="validateInfos.dataScope"
+      >
+        <Select
+          v-model:value="modelRef.dataScope"
+          :options="dataScopeList"
+          allow-clear
+          placeholder="请选择数据权限"
+        />
       </a-form-item>
       <a-form-item label="排序" name="sort">
         <a-input-number

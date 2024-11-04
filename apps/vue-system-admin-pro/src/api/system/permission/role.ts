@@ -29,3 +29,9 @@ export function listRole(params) {
     },
   );
 }
+
+export function selectDataScopes() {
+  return requestClient.get(
+    `${VUE_APP_API_BASE_URL}/system/v1/sysrole/selectDataScopes`,
+  );
+}
