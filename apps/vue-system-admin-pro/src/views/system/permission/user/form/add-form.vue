@@ -1,20 +1,7 @@
 <script setup lang="ts">
 import { defineEmits, reactive, ref, toRaw } from 'vue';
 
-import {
-  Col,
-  Form,
-  FormItem,
-  Input,
-  InputPassword,
-  Modal,
-  Radio,
-  RadioGroup,
-  Row,
-  Select,
-  Textarea,
-  TreeSelect,
-} from 'ant-design-vue';
+import { Form } from 'ant-design-vue';
 
 import { listTree } from '#/api/system/permission/org';
 import { selectPosts } from '#/api/system/permission/post';
@@ -110,7 +97,7 @@ defineExpose({
 </script>
 
 <template>
-  <Modal
+  <a-modal
     :body-style="{ padding: '20px' }"
     :mask-closable="false"
     :open="open"
@@ -119,107 +106,107 @@ defineExpose({
     @cancel="handleCancel"
     @ok="handleOk"
   >
-    <Form v-bind="formItemLayout">
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem
+    <a-form v-bind="formItemLayout">
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item
             label="用户姓名"
             name="realName"
             v-bind="validateInfos.realName"
           >
-            <Input v-model:value="modelRef.realName" allow-clear />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="用户昵称" name="nickName">
-            <Input v-model:value="modelRef.nickName" allow-clear />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem
+            <a-input v-model:value="modelRef.realName" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="用户昵称" name="nickName">
+            <a-input v-model:value="modelRef.nickName" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item
             label="登录账号"
             name="loginName"
             v-bind="validateInfos.loginName"
           >
-            <Input v-model:value="modelRef.loginName" allow-clear />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="登录密码" name="password">
-            <InputPassword
+            <a-input v-model:value="modelRef.loginName" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="登录密码" name="password">
+            <a-input-password
               v-model:value="modelRef.password"
               allow-clear
               placeholder="若不填写，默认使用系统密码"
             />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem label="手机号码" name="mobile">
-            <Input v-model:value="modelRef.mobile" allow-clear />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="性别" name="sex">
-            <RadioGroup v-model:value="modelRef.sex">
-              <Radio value="1">男</Radio>
-              <Radio value="0">女</Radio>
-            </RadioGroup>
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem label="岗位" name="postCode">
-            <Select
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="手机号码" name="mobile">
+            <a-input v-model:value="modelRef.mobile" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="性别" name="sex">
+            <a-radio-group v-model:value="modelRef.sex">
+              <a-radio value="1">男</a-radio>
+              <a-radio value="0">女</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="岗位" name="postCode">
+            <a-select
               v-model:value="modelRef.postCode"
               :options="postList"
               allow-clear
               placeholder="请选择岗位"
             />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="机构" name="orgId">
-            <TreeSelect
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="机构" name="orgId">
+            <a-tree-select
               v-model:value="modelRef.orgId"
               :tree-data="treeData"
               allow-clear
               placeholder="请选择机构"
             />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem label="邮箱" name="email">
-            <Input v-model:value="modelRef.email" allow-clear />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="地址" name="address">
-            <Input v-model:value="modelRef.address" allow-clear />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem label="人员状态" name="state">
-            <RadioGroup v-model:value="modelRef.state">
-              <Radio value="1">正常</Radio>
-              <Radio value="0">禁用</Radio>
-            </RadioGroup>
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="备注" name="remark">
-            <Textarea v-model:value="modelRef.remark" allow-clear />
-          </FormItem>
-        </Col>
-      </Row>
-    </Form>
-  </Modal>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="邮箱" name="email">
+            <a-input v-model:value="modelRef.email" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="地址" name="address">
+            <a-input v-model:value="modelRef.address" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="人员状态" name="state">
+            <a-radio-group v-model:value="modelRef.state">
+              <a-radio value="1">正常</a-radio>
+              <a-radio value="0">禁用</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="备注" name="remark">
+            <a-textarea v-model:value="modelRef.remark" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
+  </a-modal>
 </template>

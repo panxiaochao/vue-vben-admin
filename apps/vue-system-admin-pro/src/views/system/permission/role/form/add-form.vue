@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineEmits, reactive, ref, toRaw } from 'vue';
 
-import { Form, Select } from 'ant-design-vue';
+import { Form } from 'ant-design-vue';
 
 import { save, selectDataScopes } from '#/api/system/permission/role';
 
@@ -110,7 +110,7 @@ defineExpose({
         name="dataScope"
         v-bind="validateInfos.dataScope"
       >
-        <Select
+        <a-select
           v-model:value="modelRef.dataScope"
           :options="dataScopeList"
           allow-clear

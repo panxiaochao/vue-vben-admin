@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
-import { objectPick } from '@vueuse/core';
-import { Col, Form, FormItem, Input, Modal, Row, Select } from 'ant-design-vue';
+import { Form } from 'ant-design-vue';
+import { pick } from 'lodash-es';
 
 import { update } from '#/api/system/settings/area';
 
@@ -37,7 +37,21 @@ const formItemLayout = {
   },
 };
 
-const modelRef = reactive({
+// 字段对象
+interface FormState {
+  id: string | undefined;
+  parentId: string | undefined;
+  areaName: string | undefined;
+  areaCode: string | undefined;
+  cityCode: string | undefined;
+  areaLevel: number | undefined;
+  areaNameEn: string | undefined;
+  areaNameEnAbbr: string | undefined;
+  longitude: string | undefined;
+  latitude: string | undefined;
+}
+
+const defaultModel = {
   id: undefined,
   parentId: undefined,
   areaName: undefined,
@@ -48,6 +62,10 @@ const modelRef = reactive({
   areaNameEnAbbr: undefined,
   longitude: undefined,
   latitude: undefined,
+};
+
+const modelRef = reactive<FormState>({
+  ...defaultModel,
 });
 
 const rulesRef = reactive({
@@ -58,15 +76,20 @@ const rulesRef = reactive({
 
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
 
-const openModal = (raw) => {
+// 赋值
+const updateForm = (raw: FormState) => {
   const rawValues = toRaw(raw || {});
+  if (rawValues) {
+    nextTick(() => {
+      const fieldNames = Object.keys(defaultModel) ?? [];
+      Object.assign(modelRef, pick(rawValues, fieldNames));
+    });
+  }
+};
+
+const openModal = (raw: FormState) => {
   open.value = true;
-  nextTick(() => {
-    // 赋值
-    const fieldNames = Object.keys(modelRef) ?? [];
-    const filteredFields = objectPick(rawValues, fieldNames);
-    Object.assign(modelRef, filteredFields);
-  });
+  updateForm(raw);
 };
 
 const handleOk = () => {
@@ -99,7 +122,7 @@ defineExpose({
 </script>
 
 <template>
-  <Modal
+  <a-modal
     :body-style="{ padding: '20px' }"
     :confirm-loading="confirmLoading"
     :mask-closable="false"
@@ -109,73 +132,73 @@ defineExpose({
     @cancel="handleCancel"
     @ok="handleOk"
   >
-    <Form v-bind="formItemLayout">
-      <Input v-model:value="modelRef.id" allow-clear class="hidden" />
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem
+    <a-form v-bind="formItemLayout">
+      <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item
             label="区域名称"
             name="areaName"
             v-bind="validateInfos.areaName"
           >
-            <Input v-model:value="modelRef.areaName" allow-clear />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem
+            <a-input v-model:value="modelRef.areaName" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item
             label="区域编码"
             name="areaCode"
             v-bind="validateInfos.areaCode"
           >
-            <Input v-model:value="modelRef.areaCode" allow-clear />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem
+            <a-input v-model:value="modelRef.areaCode" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item
             label="区域层级"
             name="areaLevel"
             v-bind="validateInfos.areaLevel"
           >
-            <Select
+            <a-select
               v-model:value="modelRef.areaLevel"
               :options="areaLevelList"
               allow-clear
               placeholder="请选择区域层级"
             />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="行政编码" name="cityCode">
-            <Input v-model:value="modelRef.cityCode" allow-clear />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem label="英文名称" name="areaNameEn">
-            <Input v-model:value="modelRef.areaNameEn" allow-clear />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="英文简称" name="areaNameEnAbbr">
-            <Input v-model:value="modelRef.areaNameEnAbbr" allow-clear />
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24">
-        <Col :span="12">
-          <FormItem label="经度" name="longitude">
-            <Input v-model:value="modelRef.longitude" allow-clear />
-          </FormItem>
-        </Col>
-        <Col :span="12">
-          <FormItem label="维度" name="latitude">
-            <Input v-model:value="modelRef.latitude" allow-clear />
-          </FormItem>
-        </Col>
-      </Row>
-    </Form>
-  </Modal>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="行政编码" name="cityCode">
+            <a-input v-model:value="modelRef.cityCode" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="英文名称" name="areaNameEn">
+            <a-input v-model:value="modelRef.areaNameEn" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="英文简称" name="areaNameEnAbbr">
+            <a-input v-model:value="modelRef.areaNameEnAbbr" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="经度" name="longitude">
+            <a-input v-model:value="modelRef.longitude" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="维度" name="latitude">
+            <a-input v-model:value="modelRef.latitude" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
+  </a-modal>
 </template>

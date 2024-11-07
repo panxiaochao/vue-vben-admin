@@ -2,6 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@vben/tsconfig/web-app.json",
   "compilerOptions": {
+    // 使用lodash开启
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "#/*": ["./src/*"]

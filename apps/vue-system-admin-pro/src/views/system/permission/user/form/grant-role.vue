@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { nextTick, reactive, ref, toRaw } from 'vue';
 
-import { Form, FormItem, Modal, Select } from 'ant-design-vue';
+import { Form } from 'ant-design-vue';
+import { pick } from 'lodash-es';
 
 import { listRole } from '#/api/system/permission/role';
 import { save } from '#/api/system/permission/user-role';
@@ -15,8 +16,6 @@ const useForm = Form.useForm;
 
 const roleList = ref([]);
 
-const realName = ref('');
-
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -28,9 +27,21 @@ const formItemLayout = {
   },
 };
 
-const modelRef = reactive({
+// 字段对象
+interface FormState {
+  id: string | undefined;
+  realName: string | undefined;
+  roleId: string[];
+}
+
+const defaultModel = {
   id: undefined,
+  realName: '',
   roleId: [],
+};
+
+const modelRef = reactive<FormState>({
+  ...defaultModel,
 });
 
 const { resetFields } = useForm(modelRef);
@@ -41,19 +52,26 @@ const width = defineModel('width', { type: Number, default: 800 });
 
 const userRoleIds = defineModel('userRoleIds', { type: Array, default: [] });
 
-const openModal = (raw) => {
+// 赋值
+const updateForm = (raw: FormState) => {
   const rawValues = toRaw(raw || {});
+  if (rawValues) {
+    nextTick(() => {
+      const fieldNames = Object.keys(defaultModel) ?? [];
+      Object.assign(modelRef, pick(rawValues, fieldNames), {
+        roleId: userRoleIds.value,
+      });
+    });
+  }
+};
+
+const openModal = (raw: FormState) => {
   open.value = true;
   // 加载角色下拉数据
   roleList.value = [];
-  listRole().then((res) => {
+  listRole({}).then((res) => {
     roleList.value = res;
-    nextTick(() => {
-      realName.value = rawValues.realName;
-      // 赋值
-      modelRef.roleId = userRoleIds.value;
-      modelRef.id = rawValues.id;
-    });
+    updateForm(raw);
   });
 };
 
@@ -84,7 +102,7 @@ defineExpose({
 </script>
 
 <template>
-  <Modal
+  <a-modal
     :body-style="{ padding: '20px' }"
     :mask-closable="false"
     :open="open"
@@ -93,17 +111,17 @@ defineExpose({
     @cancel="handleCancel"
     @ok="handleOk"
   >
-    <Form v-bind="formItemLayout">
-      <FormItem label="当前用户"> {{ realName }} </FormItem>
-      <FormItem label="角色" name="roleId">
-        <Select
+    <a-form v-bind="formItemLayout">
+      <a-form-item label="当前用户"> {{ modelRef.realName }} </a-form-item>
+      <a-form-item label="角色" name="roleId">
+        <a-select
           v-model:value="modelRef.roleId"
           :options="roleList"
           allow-clear
           mode="multiple"
           placeholder="请选择角色"
         />
-      </FormItem>
-    </Form>
-  </Modal>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>

@@ -43,10 +43,12 @@
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
     "@ant-design/icons-vue": "catalog:",
+    "@types/lodash-es": "catalog:",
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "lodash-es": "catalog:"
   }
 }

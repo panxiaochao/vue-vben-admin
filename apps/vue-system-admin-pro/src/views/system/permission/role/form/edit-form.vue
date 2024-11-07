@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
-import { objectPick } from '@vueuse/core';
-import { Form, Select } from 'ant-design-vue';
+import { Form } from 'ant-design-vue';
+import { pick } from 'lodash-es';
 
 import { selectDataScopes, update } from '#/api/system/permission/role';
 
@@ -29,7 +29,18 @@ const formItemLayout = {
   },
 };
 
-const modelRef = reactive({
+// 字段对象
+interface FormState {
+  id: string | undefined;
+  roleName: string | undefined;
+  roleCode: string | undefined;
+  dataScope: string | undefined;
+  remark: string | undefined;
+  sort: number;
+  state: string | undefined;
+}
+
+const defaultModel = {
   id: undefined,
   roleName: undefined,
   roleCode: undefined,
@@ -37,6 +48,10 @@ const modelRef = reactive({
   remark: undefined,
   sort: 0,
   state: '1',
+};
+
+const modelRef = reactive<FormState>({
+  ...defaultModel,
 });
 
 const rulesRef = reactive({
@@ -50,20 +65,25 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
-const openModal = (raw) => {
+// 赋值
+const updateForm = (raw: FormState) => {
+  const rawValues = toRaw(raw || {});
+  if (rawValues) {
+    nextTick(() => {
+      const fieldNames = Object.keys(defaultModel) ?? [];
+      Object.assign(modelRef, pick(rawValues, fieldNames));
+    });
+  }
+};
+
+const openModal = (raw: FormState) => {
   open.value = true;
   // 加载岗位数据
   dataScopeList.value = [];
   selectDataScopes().then((res) => {
     dataScopeList.value = res;
   });
-  // 赋值
-  const rawValues = toRaw(raw || {});
-  nextTick(() => {
-    const fieldNames = Object.keys(modelRef) ?? [];
-    const filteredFields = objectPick(rawValues, fieldNames);
-    Object.assign(modelRef, filteredFields);
-  });
+  updateForm(raw);
 };
 
 const handleOk = () => {
@@ -120,7 +140,7 @@ defineExpose({
         name="dataScope"
         v-bind="validateInfos.dataScope"
       >
-        <Select
+        <a-select
           v-model:value="modelRef.dataScope"
           :options="dataScopeList"
           allow-clear

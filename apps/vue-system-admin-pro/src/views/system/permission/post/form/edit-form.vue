@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineEmits, nextTick, reactive, toRaw } from 'vue';
 
-import { objectPick } from '@vueuse/core';
 import { Form } from 'ant-design-vue';
+import { pick } from 'lodash-es';
 
 import { update } from '#/api/system/permission/post';
 
@@ -27,14 +27,26 @@ const formItemLayout = {
   },
 };
 
-const modelRef = reactive({
+// 字段对象
+interface FormState {
+  id: string | undefined;
+  postName: string | undefined;
+  postCode: string | undefined;
+  remark: string | undefined;
+  sort: number;
+  state: string;
+}
+
+const defaultModel = {
   id: undefined,
   postName: undefined,
   postCode: undefined,
   remark: undefined,
   sort: 0,
   state: '1',
-});
+};
+
+const modelRef = reactive<FormState>({ ...defaultModel });
 
 const rulesRef = reactive({
   postName: [{ type: 'string', required: true, message: '请输入岗位名称' }],
@@ -47,15 +59,20 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
-const openModal = (raw) => {
-  open.value = true;
-  // 赋值
+// 赋值
+const updateForm = (raw: FormState) => {
   const rawValues = toRaw(raw || {});
-  nextTick(() => {
-    const fieldNames = Object.keys(modelRef) ?? [];
-    const filteredFields = objectPick(rawValues, fieldNames);
-    Object.assign(modelRef, filteredFields);
-  });
+  if (rawValues) {
+    nextTick(() => {
+      const fieldNames = Object.keys(defaultModel) ?? [];
+      Object.assign(modelRef, pick(rawValues, fieldNames));
+    });
+  }
+};
+
+const openModal = (raw: FormState) => {
+  open.value = true;
+  updateForm(raw);
 };
 
 const handleOk = () => {
