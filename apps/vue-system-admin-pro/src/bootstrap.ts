@@ -7,16 +7,14 @@ import '@vben/styles';
 import '@vben/styles/antd';
 
 import { VueQueryPlugin } from '@tanstack/vue-query';
-
-import { lazy_use } from '#/adapter/component/antd_use';
-import { setupI18n } from '#/locales';
 import { useTitle } from '@vueuse/core';
 
+import { lazy_use } from '#/adapter/component/antd_use';
 import { $t, setupI18n } from '#/locales';
+import { router } from '#/router';
 
 import { initComponentAdapter } from './adapter/component';
 import App from './app.vue';
-import { router } from './router';
 
 async function bootstrap(namespace: string) {
   // 初始化组件适配器
@@ -40,7 +38,7 @@ async function bootstrap(namespace: string) {
   app.use(router);
 
   // 配置@tanstack/vue-query
-  // app.use(VueQueryPlugin);
+  app.use(VueQueryPlugin);
 
   // 动态更新标题
   watchEffect(() => {
