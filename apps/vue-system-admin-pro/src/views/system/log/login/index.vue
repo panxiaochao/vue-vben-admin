@@ -3,11 +3,7 @@ import { reactive, toRaw } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '#/adapter/vxe-table';
+import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
 import { page } from '#/api/system/log/login';
 
 // 字段对象
@@ -76,17 +72,8 @@ const gridOptions: VxeGridProps<RowType> = {
   },
 };
 
-// 监听事件：分页
-const gridEvents: VxeGridListeners<RowType> = {
-  pageChange: ({ currentPage, pageSize }) => {
-    gridOptions.pagerConfig.currentPage = currentPage;
-    gridOptions.pagerConfig.pageSize = pageSize;
-  },
-};
-
 // 定义表格
 const [Grid] = useVbenVxeGrid({
-  gridEvents,
   gridOptions,
 });
 

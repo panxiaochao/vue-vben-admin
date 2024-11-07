@@ -4,22 +4,9 @@ import { h, reactive, ref, toRaw } from 'vue';
 import { Page, type VbenFormProps } from '@vben/common-ui';
 
 import { DownOutlined, FormOutlined } from '@ant-design/icons-vue';
-import {
-  Button,
-  Divider,
-  Dropdown,
-  Menu,
-  MenuItem,
-  message,
-  Popconfirm,
-  Tag,
-} from 'ant-design-vue';
+import { Button, message } from 'ant-design-vue';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '#/adapter/vxe-table';
+import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
 import { deleteById, page } from '#/api/system/permission/user';
 import { rolesByUserId } from '#/api/system/permission/user-role';
 
@@ -119,17 +106,8 @@ const gridOptions: VxeGridProps<RowType> = {
   },
 };
 
-// 监听事件：分页
-const gridEvents: VxeGridListeners<RowType> = {
-  pageChange: ({ currentPage, pageSize }) => {
-    gridOptions.pagerConfig.currentPage = currentPage;
-    gridOptions.pagerConfig.pageSize = pageSize;
-  },
-};
-
 // 定义表格
 const [Grid, gridApi] = useVbenVxeGrid({
-  gridEvents,
   gridOptions,
   formOptions,
 });
