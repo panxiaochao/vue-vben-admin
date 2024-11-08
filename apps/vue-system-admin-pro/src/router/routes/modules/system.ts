@@ -110,7 +110,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemDictionary',
             path: '/system/settings/dictionary',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/settings/dictionary/index.vue'),
             meta: {
               title: '数据字典',
             },

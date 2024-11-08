@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
+import { defineEmits, nextTick, reactive, toRaw } from 'vue';
 
 import { Form } from 'ant-design-vue';
 import { pick } from 'lodash-es';
 
-import { selectDataScopes, update } from '#/api/system/permission/role';
+import { update } from '#/api/system/settings/dict';
 
 defineOptions({
   name: 'EditForm',
@@ -15,8 +15,6 @@ defineOptions({
 const $emits = defineEmits(['done']);
 
 const useForm = Form.useForm;
-
-const dataScopeList = ref([]);
 
 const formItemLayout = {
   labelCol: {
@@ -32,20 +30,20 @@ const formItemLayout = {
 // 字段对象
 interface FormState {
   id: string | undefined;
-  roleName: string | undefined;
-  roleCode: string | undefined;
-  dataScope: string | undefined;
+  dictName: string | undefined;
+  dictCode: string | undefined;
   remark: string | undefined;
+  dictType: string;
   sort: number;
   state: string | undefined;
 }
 
 const defaultModel = {
   id: undefined,
-  roleName: undefined,
-  roleCode: undefined,
-  dataScope: '1',
+  dictName: undefined,
+  dictCode: undefined,
   remark: undefined,
+  dictType: '0',
   sort: 0,
   state: '1',
 };
@@ -55,8 +53,8 @@ const modelRef = reactive<FormState>({
 });
 
 const rulesRef = reactive({
-  roleName: [{ type: 'string', required: true, message: '请输入角色名称' }],
-  roleCode: [{ type: 'string', required: true, message: '请输入角色编码' }],
+  dictName: [{ type: 'string', required: true, message: '请输入字典名称' }],
+  dictCode: [{ type: 'string', required: true, message: '请输入字典编码' }],
 });
 
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
@@ -78,11 +76,6 @@ const updateForm = (raw: FormState) => {
 
 const openModal = (raw: FormState) => {
   open.value = true;
-  // 加载岗位数据
-  dataScopeList.value = [];
-  selectDataScopes().then((res) => {
-    dataScopeList.value = res;
-  });
   updateForm(raw);
 };
 
@@ -115,37 +108,25 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
-    title="编辑角色"
+    title="编辑字典"
     @cancel="handleCancel"
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
       <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
       <a-form-item
-        label="角色名称"
-        name="roleName"
-        v-bind="validateInfos.roleName"
+        label="字典名称"
+        name="dictName"
+        v-bind="validateInfos.dictName"
       >
-        <a-input v-model:value="modelRef.roleName" allow-clear />
+        <a-input v-model:value="modelRef.dictName" allow-clear />
       </a-form-item>
       <a-form-item
-        label="角色编码"
-        name="roleCode"
-        v-bind="validateInfos.roleCode"
+        label="字典编码"
+        name="dictCode"
+        v-bind="validateInfos.dictCode"
       >
-        <a-input v-model:value="modelRef.roleCode" allow-clear />
-      </a-form-item>
-      <a-form-item
-        label="数据权限"
-        name="dataScope"
-        v-bind="validateInfos.dataScope"
-      >
-        <a-select
-          v-model:value="modelRef.dataScope"
-          :options="dataScopeList"
-          allow-clear
-          placeholder="请选择数据权限"
-        />
+        <a-input v-model:value="modelRef.dictCode" allow-clear />
       </a-form-item>
       <a-form-item label="排序" name="sort">
         <a-input-number
@@ -159,6 +140,12 @@ defineExpose({
         <a-radio-group v-model:value="modelRef.state">
           <a-radio value="1">正常</a-radio>
           <a-radio value="0">禁用</a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item label="字典类型" name="dictType">
+        <a-radio-group v-model:value="modelRef.dictType">
+          <a-radio value="0">字符串型</a-radio>
+          <a-radio value="1">数值类型</a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item label="描述" name="remark">

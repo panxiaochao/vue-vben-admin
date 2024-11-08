@@ -610,6 +610,9 @@ importers:
       '@tanstack/vue-query':
         specifier: 'catalog:'
         version: 5.59.20(vue@3.5.12(typescript@5.6.3))
+      '@types/lodash-es':
+        specifier: 'catalog:'
+        version: 4.17.12
       '@vben/access':
         specifier: workspace:*
         version: link:../../packages/effects/access
@@ -1556,9 +1559,6 @@ importers:
       '@tanstack/vue-query':
         specifier: 'catalog:'
         version: 5.59.20(vue@3.5.12(typescript@5.6.3))
-      '@types/lodash-es':
-        specifier: 'catalog:'
-        version: 4.17.12
       '@vben/access':
         specifier: workspace:*
         version: link:../packages/effects/access
