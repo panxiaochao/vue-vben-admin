@@ -7,23 +7,21 @@ import { FormOutlined, PullRequestOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
-import { deleteById, page, publishedData } from '#/api/system/settings/dict';
+import { deleteById, page, publishedData } from '#/api/system/settings/param';
 
 // 自定义组件
-import DictionaryItem from './dictionary-item/index.vue';
 import AddForm from './form/add-form.vue';
 import EditForm from './form/edit-form.vue';
 
 const addForm = ref();
 const editForm = ref();
-const dictionaryItem = ref();
 const publishedLoading = ref(false);
 
 // 字段对象
 interface RowType {
   id: string;
-  dictName: string;
-  dictCode: string;
+  paramName: string;
+  paramKey: string;
   remark: string;
   sort: number;
   createTime: string;
@@ -32,11 +30,11 @@ interface RowType {
 
 // 字段定义
 const columns = [
-  { field: 'dictName', title: '字典名称' },
-  { field: 'dictCode', title: '字典编码' },
-  { field: 'remark', title: '描述' },
-  { field: 'sort', title: '排序' },
-  { field: 'createTime', title: '创建时间' },
+  { field: 'paramName', title: '参数名称' },
+  { field: 'paramKey', title: '参数键' },
+  { field: 'paramValue', title: '参数值' },
+  { field: 'paramTypeStr', title: '参数类型' },
+  { field: 'createTime', title: '创建时间', width: 180 },
   { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];
@@ -46,20 +44,20 @@ const formOptions: VbenFormProps = {
   schema: [
     {
       component: 'Input',
-      fieldName: 'dictName',
-      label: '字典名称：',
+      fieldName: 'paramName',
+      label: '参数名称：',
       componentProps: {
         allowClear: true,
-        placeholder: '请输入字典名称',
+        placeholder: '请输入参数名称',
       },
     },
     {
       component: 'Input',
-      fieldName: 'dictCode',
-      label: '字典编码：',
+      fieldName: 'paramKey',
+      label: '参数键：',
       componentProps: {
         allowClear: true,
-        placeholder: '请输入字典编码',
+        placeholder: '请输入参数键',
       },
     },
   ],
@@ -136,7 +134,7 @@ const formDone = () => {
   refresh(true);
 };
 
-// 发布字典
+// 发布参数
 const onPublishedData = () => {
   publishedLoading.value = true;
   publishedData()
@@ -153,7 +151,6 @@ const onPublishedData = () => {
   <Page auto-content-height>
     <AddForm ref="addForm" :width="500" @done="formDone" />
     <EditForm ref="editForm" :width="500" @done="formDone" />
-    <DictionaryItem ref="dictionaryItem" :width="1000" />
     <Grid>
       <template #toolbar-actions>
         <a-button
@@ -162,7 +159,7 @@ const onPublishedData = () => {
           type="primary"
           @click="addForm.openModal()"
         >
-          新建字典
+          新建参数
         </a-button>
         <a-button
           :icon="h(PullRequestOutlined)"
@@ -171,7 +168,7 @@ const onPublishedData = () => {
           type="primary"
           @click="onPublishedData"
         >
-          发布字典
+          发布参数
         </a-button>
       </template>
       <template #state="{ row }">
@@ -182,14 +179,6 @@ const onPublishedData = () => {
       <template #action="{ row }">
         <a-button class="px-0" type="link" @click="editForm.openModal(row)">
           编辑
-        </a-button>
-        <a-divider type="vertical" />
-        <a-button
-          class="px-0"
-          type="link"
-          @click="dictionaryItem.openModal(row.id)"
-        >
-          字典配置
         </a-button>
         <a-divider type="vertical" />
         <a-popconfirm

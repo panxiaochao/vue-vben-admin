@@ -1,27 +1,27 @@
 import { requestClient } from '#/api/request';
 
-const VUE_APP_API_BASE_URL = 'http://localhost:8081';
+const { VITE_PROJECT_API_URL } = import.meta.env;
 
 export async function page(params: any) {
-  return requestClient.get(`${VUE_APP_API_BASE_URL}/system/v1/sysorg/page`, {
+  return requestClient.get(`${VITE_PROJECT_API_URL}/system/v1/sysorg/page`, {
     params,
   });
 }
 export async function save(data: any) {
-  return requestClient.post(`${VUE_APP_API_BASE_URL}/system/v1/sysorg`, data);
+  return requestClient.post(`${VITE_PROJECT_API_URL}/system/v1/sysorg`, data);
 }
 
 export async function update(data: any) {
-  return requestClient.put(`${VUE_APP_API_BASE_URL}/system/v1/sysorg`, data);
+  return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sysorg`, data);
 }
 
 export async function deleteById(id: any) {
-  return requestClient.delete(`${VUE_APP_API_BASE_URL}/system/v1/sysorg/${id}`);
+  return requestClient.delete(`${VITE_PROJECT_API_URL}/system/v1/sysorg/${id}`);
 }
 
 export function listTree(params: any) {
   return requestClient.get(
-    `${VUE_APP_API_BASE_URL}/system/v1/sysorg/listTree`,
+    `${VITE_PROJECT_API_URL}/system/v1/sysorg/listTree`,
     {
       params,
     },

@@ -1,23 +1,23 @@
 import { requestClient } from '#/api/request';
 
-const VUE_APP_API_BASE_URL = 'http://localhost:8081';
+const { VITE_PROJECT_API_URL } = import.meta.env;
 
 export function save(data) {
   return requestClient.post(
-    `${VUE_APP_API_BASE_URL}/system/v1/sysuserrole`,
+    `${VITE_PROJECT_API_URL}/system/v1/sysuserrole`,
     data,
   );
 }
 
 export function getById(id) {
   return requestClient.get(
-    `${VUE_APP_API_BASE_URL}/system/v1/sysuserrole/${id}`,
+    `${VITE_PROJECT_API_URL}/system/v1/sysuserrole/${id}`,
   );
 }
 
 export function rolesByUserId(params) {
   return requestClient.get(
-    `${VUE_APP_API_BASE_URL}/system/v1/sysuserrole/rolesByUserId`,
+    `${VITE_PROJECT_API_URL}/system/v1/sysuserrole/rolesByUserId`,
     { params },
   );
 }

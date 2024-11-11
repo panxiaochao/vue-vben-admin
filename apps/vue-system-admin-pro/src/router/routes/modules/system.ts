@@ -126,7 +126,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemParams',
             path: '/system/settings/params',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/settings/param/index.vue'),
             meta: {
               title: '系统参数',
             },

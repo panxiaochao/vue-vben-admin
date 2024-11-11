@@ -1,20 +1,20 @@
 import { requestClient } from '#/api/request';
 
-const VUE_APP_API_BASE_URL = 'http://localhost:8081';
+const { VITE_PROJECT_API_URL } = import.meta.env;
 
 export function listTree(params) {
   return requestClient.get(
-    `${VUE_APP_API_BASE_URL}/system/v1/sysarea/listTree`,
+    `${VITE_PROJECT_API_URL}/system/v1/sysarea/listTree`,
     { params },
   );
 }
 
 export async function update(data) {
-  return requestClient.put(`${VUE_APP_API_BASE_URL}/system/v1/sysarea`, data);
+  return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sysarea`, data);
 }
 
 export function selectAreaLevels() {
   return requestClient.get(
-    `${VUE_APP_API_BASE_URL}/system/v1/sysarea/selectAreaLevels`,
+    `${VITE_PROJECT_API_URL}/system/v1/sysarea/selectAreaLevels`,
   );
 }
