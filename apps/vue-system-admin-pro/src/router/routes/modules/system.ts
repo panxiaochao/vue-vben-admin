@@ -170,7 +170,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemMonitorServer',
             path: '/system/monitor/server',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/monitor/server/index.vue'),
             meta: {
               title: '系统监控',
             },
