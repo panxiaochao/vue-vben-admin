@@ -118,7 +118,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemOnline',
             path: '/system/settings/online',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/settings/online/index.vue'),
             meta: {
               title: '在线会话',
             },
