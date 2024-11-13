@@ -21,6 +21,7 @@ interface RowType {
   areaLevel: number;
   areaNameEn: string;
   areaNameEnAbbr: string;
+  parentPath: string;
   longitude: string;
   latitude: string;
   children: RowType[];

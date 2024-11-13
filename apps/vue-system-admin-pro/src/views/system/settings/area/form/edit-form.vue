@@ -47,6 +47,7 @@ interface FormState {
   areaLevel: number | undefined;
   areaNameEn: string | undefined;
   areaNameEnAbbr: string | undefined;
+  parentPath: string | undefined;
   longitude: string | undefined;
   latitude: string | undefined;
 }
@@ -60,6 +61,7 @@ const defaultModel = {
   areaLevel: undefined,
   areaNameEn: undefined,
   areaNameEnAbbr: undefined,
+  parentPath: undefined,
   longitude: undefined,
   latitude: undefined,
 };
@@ -198,6 +200,14 @@ defineExpose({
             <a-input v-model:value="modelRef.latitude" allow-clear />
           </a-form-item>
         </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="地区路径" name="parentPath">
+            <a-input v-model:value="modelRef.parentPath" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12" />
       </a-row>
     </a-form>
   </a-modal>
