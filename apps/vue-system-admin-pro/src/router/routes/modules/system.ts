@@ -84,7 +84,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemTenantPackage',
             path: '/system/tenant/package',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/tenant/package/index.vue'),
             meta: {
               title: '租户套餐',
             },
@@ -110,7 +110,8 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemDictionary',
             path: '/system/settings/dictionary',
-            component: () => import('#/views/system/settings/dictionary/index.vue'),
+            component: () =>
+              import('#/views/system/settings/dictionary/index.vue'),
             meta: {
               title: '数据字典',
             },

@@ -22,7 +22,7 @@ interface DiskInfos {
 
 const gridOptions: VxeGridProps<DiskInfos> = {
   columns: [
-    { field: 'dirName', title: '盘符路径' },
+    { field: 'dirName', title: '盘符路径', width: 500, align: 'left' },
     { field: 'sysTypeName', title: '文件系统' },
     { field: 'typeName', title: '文件类型' },
     { field: 'total', title: '总大小', slots: { default: 'total' } },
@@ -312,4 +312,9 @@ onMounted(async () => {
 .monitor-center-row-col-card {
   text-align: center;
 }
+/*.vxe-cell {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}*/
 </style>
