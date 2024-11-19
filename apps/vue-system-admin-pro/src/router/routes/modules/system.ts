@@ -76,7 +76,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemTenantUser',
             path: '/system/tenant/user',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/tenant/user/index.vue'),
             meta: {
               title: '租户用户',
             },

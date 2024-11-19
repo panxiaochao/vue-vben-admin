@@ -1,10 +1,10 @@
 {
-  "welcomeBack": "Welcome Back",
+  "welcomeBack": "System Admin Pro",
   "pageTitle": "Plug-and-play Admin system",
   "pageDesc": "Efficient, versatile frontend template",
   "loginSuccess": "Login Successful",
   "loginSuccessDesc": "Welcome Back",
-  "loginSubtitle": "Enter your account details to manage your projects",
+  "loginSubtitle": "System backend management",
   "selectAccount": "Quick Select Account",
   "username": "Username",
   "password": "Password",
