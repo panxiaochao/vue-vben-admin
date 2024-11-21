@@ -1,0 +1,44 @@
+{
+  "private": true,
+  "name": "@pxc/framework",
+  "version": "1.0.0",
+  "description": "自己的框架组件库",
+  "homepage": "https://github.com/panxiaochao/vue-system-admin-pro",
+  "bugs": "https://github.com/panxiaochao/vue-system-admin-pro/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panxiaochao/vue-system-admin-pro.git",
+    "directory": "apps/vue-system-admin-pro"
+  },
+  "license": "MIT",
+  "type": "module",
+  "author": {
+    "name": "Lypxc",
+    "email": "545685602@qq.com",
+    "url": "https://github.com/panxiaochao"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "scripts": {
+    "build": "pnpm unbuild"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  }
+}

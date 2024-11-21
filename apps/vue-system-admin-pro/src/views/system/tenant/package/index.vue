@@ -12,9 +12,11 @@ import { deleteById, page } from '#/api/system/tenant/package';
 // 自定义组件
 import AddForm from './form/add-form.vue';
 import EditForm from './form/edit-form.vue';
+import GrantTenantResource from './form/grant-tenant-resource.vue';
 
 const addForm = ref();
 const editForm = ref();
+const grantTenantResource = ref();
 
 // 字段对象
 interface RowType {
@@ -33,7 +35,7 @@ const columns = [
   { field: 'remark', title: '备注' },
   { field: 'createTime', title: '创建时间', width: 180 },
   { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
-  { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
+  { field: 'action', title: '操作', width: 230, slots: { default: 'action' } },
 ];
 
 // 搜索表单定义
@@ -136,6 +138,11 @@ const formDone = () => {
   <Page auto-content-height>
     <AddForm ref="addForm" :width="500" @done="formDone" />
     <EditForm ref="editForm" :width="500" @done="formDone" />
+    <GrantTenantResource
+      ref="grantTenantResource"
+      :width="500"
+      @done="formDone"
+    />
     <Grid>
       <template #toolbar-actions>
         <a-button
@@ -155,6 +162,14 @@ const formDone = () => {
       <template #action="{ row }">
         <a-button class="px-0" type="link" @click="editForm.openModal(row)">
           编辑
+        </a-button>
+        <a-divider type="vertical" />
+        <a-button
+          class="px-0"
+          type="link"
+          @click="grantTenantResource.openModal(row)"
+        >
+          授权套餐资源
         </a-button>
         <a-divider type="vertical" />
         <a-popconfirm

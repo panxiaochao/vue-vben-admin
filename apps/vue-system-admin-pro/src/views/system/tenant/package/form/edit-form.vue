@@ -115,7 +115,7 @@ defineExpose({
         name="packageId"
         v-bind="validateInfos.packageId"
       >
-        <a-input v-model:value="modelRef.packageId" allow-clear />
+        <a-input v-model:value="modelRef.packageId" allow-clear disabled />
       </a-form-item>
       <a-form-item
         label="套餐名称"

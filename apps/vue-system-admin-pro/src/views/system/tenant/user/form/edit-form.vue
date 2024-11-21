@@ -88,7 +88,6 @@ const width = defineModel('width', { type: Number, default: 800 });
 const updateForm = (raw: FormState) => {
   const rawValues = toRaw(raw || {});
   if (rawValues) {
-    console.log(rawValues);
     nextTick(() => {
       const fieldNames = Object.keys(defaultModel) ?? [];
       Object.assign(modelRef, pick(rawValues, fieldNames));
@@ -164,7 +163,8 @@ defineExpose({
             <a-input
               v-model:value="modelRef.tenantId"
               allow-clear
-              placeholder="请填写租户编号(由数字组成)"
+              disabled
+              placeholder="请填写租户编号"
             />
           </a-form-item>
         </a-col>

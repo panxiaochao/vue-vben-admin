@@ -125,7 +125,7 @@ defineExpose({
             <a-input
               v-model:value="modelRef.tenantId"
               allow-clear
-              placeholder="请填写租户编号(由数字组成)"
+              placeholder="请填写租户编号"
             />
           </a-form-item>
         </a-col>
