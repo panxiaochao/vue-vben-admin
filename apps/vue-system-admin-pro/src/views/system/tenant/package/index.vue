@@ -35,7 +35,7 @@ const columns = [
   { field: 'remark', title: '备注' },
   { field: 'createTime', title: '创建时间', width: 180 },
   { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
-  { field: 'action', title: '操作', width: 230, slots: { default: 'action' } },
+  { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];
 
 // 搜索表单定义
@@ -169,7 +169,7 @@ const formDone = () => {
           type="link"
           @click="grantTenantResource.openModal(row)"
         >
-          授权套餐资源
+          授权资源
         </a-button>
         <a-divider type="vertical" />
         <a-popconfirm

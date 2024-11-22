@@ -12,9 +12,11 @@ import { deleteById, page } from '#/api/system/permission/role';
 // 自定义组件
 import AddForm from './form/add-form.vue';
 import EditForm from './form/edit-form.vue';
+import GrantRoleResource from './form/grant-role-resource.vue';
 
 const addForm = ref();
 const editForm = ref();
+const grantRoleResource = ref();
 
 // 字段对象
 interface RowType {
@@ -136,6 +138,7 @@ const formDone = () => {
   <Page auto-content-height>
     <AddForm ref="addForm" :width="500" @done="formDone" />
     <EditForm ref="editForm" :width="500" @done="formDone" />
+    <GrantRoleResource ref="grantRoleResource" :width="500" @done="formDone" />
     <Grid>
       <template #toolbar-actions>
         <a-button
@@ -157,7 +160,13 @@ const formDone = () => {
           编辑
         </a-button>
         <a-divider type="vertical" />
-        <a-button class="px-0" type="link"> 授权资源 </a-button>
+        <a-button
+          class="px-0"
+          type="link"
+          @click="grantRoleResource.openModal(row)"
+        >
+          授权资源
+        </a-button>
         <a-divider type="vertical" />
         <a-popconfirm
           placement="top"

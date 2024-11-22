@@ -6,12 +6,12 @@ import { pick } from 'lodash-es';
 
 import { queryAllTree } from '#/api/system/permission/menu';
 import {
-  queryPackageMenus,
-  savePackageMenus,
-} from '#/api/system/tenant/tenant-package-menu';
+  queryRoleMenus,
+  saveRoleMenus,
+} from '#/api/system/permission/role-menu';
 
 defineOptions({
-  name: 'GrantTenantResource',
+  name: 'GrantRoleResource',
   inheritAttrs: false,
 });
 
@@ -33,8 +33,8 @@ const formItemLayout = {
 
 // 字段对象
 interface FormState {
-  packageId: string;
-  packageName: string;
+  id: string;
+  roleName: string;
   // 是否自动展开父节点
   autoExpandParent: boolean;
   // 层级关联：true 取消关联，false 父子关联
@@ -52,8 +52,8 @@ interface FormState {
 }
 
 const defaultModel = {
-  packageId: '',
-  packageName: '',
+  id: '',
+  roleName: '',
   // 是否自动展开父节点
   autoExpandParent: true,
   // 父子节点选中状态不再关联
@@ -97,7 +97,7 @@ const openModal = (raw: FormState) => {
     modelRef.allTreeKeys = res.ids;
     updateForm(raw);
     // 查询已关联菜单权限数据
-    queryPackageMenus({ packageId: raw.packageId }).then((res) => {
+    queryRoleMenus({ roleId: raw.id }).then((res) => {
       modelRef.checkedKeys = [...res];
       modelRef.expandedKeys = [...res];
     });
@@ -107,10 +107,10 @@ const openModal = (raw: FormState) => {
 const handleOk = () => {
   const values = toRaw(modelRef);
   const postBody = {
-    packageId: values.packageId,
+    roleId: values.id,
     menuId: values.checkedKeys.join(','),
   };
-  savePackageMenus(postBody).then(() => {
+  saveRoleMenus(postBody).then(() => {
     Object.assign(modelRef, defaultModel);
     open.value = false;
   });
@@ -201,12 +201,12 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
-    title="授权套餐资源"
+    title="授权角色资源"
     @cancel="handleCancel"
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
-      <a-form-item label="套餐名称"> {{ modelRef.packageName }} </a-form-item>
+      <a-form-item label="角色名称"> {{ modelRef.roleName }} </a-form-item>
       <a-form-item label="菜单权限" name="menuId">
         <a-tree
           v-model:checked-keys="modelRef.checkedKeys"
