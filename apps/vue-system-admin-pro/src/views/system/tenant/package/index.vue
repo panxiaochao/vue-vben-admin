@@ -173,7 +173,7 @@ const formDone = () => {
         </a-button>
         <a-divider type="vertical" />
         <a-popconfirm
-          placement="top"
+          placement="right"
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >

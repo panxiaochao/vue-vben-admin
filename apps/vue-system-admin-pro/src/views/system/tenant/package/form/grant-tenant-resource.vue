@@ -2,7 +2,7 @@
 import { nextTick, reactive, ref, toRaw } from 'vue';
 
 import { UpOutlined } from '@ant-design/icons-vue';
-import { pick } from 'lodash-es';
+import { difference, pick } from 'lodash-es';
 
 import { queryAllTree } from '#/api/system/permission/menu';
 import {
@@ -146,22 +146,12 @@ const onExpand = (keys: any) => {
   modelRef.autoExpandParent = false;
 };
 
-/**
- * 删除相匹配数组的项
- */
+// 删除相匹配数组的项
 const removeMatchingItems = (target: string[], source: string[]) => {
-  // 使用哈希表记录 source 中的元素
-  const hashTable = {};
-  for (const item of source) {
-    hashTable[item] = true;
-  }
-  // 使用 filter 方法遍历第一个数组，过滤出不在哈希表中存在的项
-  return target.filter((item: string) => !hashTable[item]);
+  return difference(target, source);
 };
 
-/**
- * 获取当前节点及以下所有子孙级的key
- */
+// 获取当前节点及以下所有子孙级的key
 function getNodeAllKey(node: any) {
   const keys: any = [];
   keys.push(node.key);
@@ -177,12 +167,26 @@ function getNodeAllKey(node: any) {
   return keys;
 }
 
+// 获取当前节点的父节点及所有父节点
+const findParentNodeKey = (node: any) => {
+  const keys: any = [];
+  if (node.parent) {
+    keys.push(node.parent.key);
+    const recursion = (data: any) => {
+      keys.push(data.key);
+      data.parent && recursion(data.parent);
+    };
+    node.parent?.parent && recursion(node.parent.parent);
+  }
+  return keys;
+};
+
 const onCheck = (o: any, e: any) => {
-  modelRef.checkedKeys = o.checked;
   const keys = getNodeAllKey(e.node);
+  const parentKeys = findParentNodeKey(e.node);
   modelRef.checkedKeys = e.checked
-    ? [...new Set([...keys, ...modelRef.checkedKeys])]
-    : removeMatchingItems(modelRef.checkedKeys, keys);
+    ? [...new Set([...keys, ...o.checked, ...parentKeys])]
+    : removeMatchingItems(o.checked, keys);
 };
 
 const onSelect = (keys: string[]) => {

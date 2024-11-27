@@ -101,8 +101,10 @@ const loadAreaLevel = () => {
 
 // 加载远程数据
 const loadData = () => {
+  gridApi.setLoading(true);
   listTree({}).then((res) => {
     gridApi.setGridOptions({ data: res });
+    gridApi.setLoading(false);
   });
 };
 
