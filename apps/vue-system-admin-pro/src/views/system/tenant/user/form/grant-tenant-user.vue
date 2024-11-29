@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { h, nextTick, reactive, ref, toRaw } from 'vue';
+import { h, reactive, ref, toRaw } from 'vue';
 
 import { type VbenFormProps } from '@vben/common-ui';
 
 import { FormOutlined } from '@ant-design/icons-vue';
 import { Button, message } from 'ant-design-vue';
-import { pick } from 'lodash-es';
 
 import {
   useVbenVxeGrid,
   type VxeGridListeners,
   type VxeGridProps,
 } from '#/adapter/vxe-table';
-import { selectPageByTenantId } from '#/api/system/permission/user';
+import { selectTenantUserPage } from '#/api/system/permission/user';
 import { deleteTenantUser } from '#/api/system/tenant/tenant-user';
 
 // 自定义组件
@@ -32,10 +31,14 @@ const width = defineModel('width', { type: Number, default: 800 });
 // 字段对象
 interface FormState {
   tenantId: string;
+  pageNo: number;
+  pageSize: number;
 }
 
 const defaultModel = {
   tenantId: '',
+  pageNo: 1,
+  pageSize: 10,
 };
 
 const modelRef = reactive<FormState>({
@@ -66,6 +69,10 @@ const columns = [
 
 // 搜索表单定义
 const formOptions: VbenFormProps = {
+  // 提交函数
+  handleSubmit: onSubmit,
+  // 重置函数
+  handleReset: onReset,
   schema: [
     {
       component: 'Input',
@@ -89,12 +96,6 @@ const formOptions: VbenFormProps = {
   showCollapseButton: false,
 };
 
-// 查询参数
-const queryParams = reactive({
-  pageNo: 1,
-  pageSize: 10,
-});
-
 const gridOptions: VxeGridProps<RowType> = {
   columns,
   data: [],
@@ -110,7 +111,7 @@ const gridOptions: VxeGridProps<RowType> = {
 // 监听事件：分页
 const gridEvents: VxeGridListeners<RowType> = {
   pageChange: ({ currentPage, pageSize }) => {
-    Object.assign(queryParams, {
+    Object.assign(modelRef, {
       pageNo: currentPage,
       pageSize,
     });
@@ -125,9 +126,14 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents,
 });
 
-// 加载远程数据
-async function loadData() {
-  return selectPageByTenantId(toRaw(queryParams)).then((res) => {
+// 加载数据
+function loadData() {
+  fetchData(toRaw(modelRef));
+}
+
+// 远程获取数据
+function fetchData(params: object) {
+  selectTenantUserPage(params).then((res) => {
     gridApi.setGridOptions({
       data: res.list,
       pagerConfig: {
@@ -142,10 +148,10 @@ async function loadData() {
 // 强制刷新
 async function refresh(bool: boolean) {
   bool &&
-    Object.assign(queryParams, {
+    Object.assign(modelRef, {
       pageNo: 1,
     });
-  await loadData();
+  loadData();
 }
 
 // 格式化数据
@@ -167,30 +173,30 @@ const formDone = () => {
   refresh(true);
 };
 
-// 赋值
-const updateForm = (raw: FormState) => {
-  const rawValues = toRaw(raw || {});
-  if (rawValues) {
-    nextTick(() => {
-      const fieldNames = Object.keys(defaultModel) ?? [];
-      Object.assign(modelRef, pick(rawValues, fieldNames));
-    });
-  }
-};
-
 const openModal = (raw: FormState) => {
   open.value = true;
-  Object.assign(queryParams, {
-    tenantId: raw.tenantId,
-  });
-  updateForm(raw);
+  Object.assign(modelRef, { tenantId: raw.tenantId });
   loadData();
 };
 
 const onClose = () => {
   open.value = false;
   gridApi.setGridOptions({ data: [] });
+  gridApi.formApi.resetForm();
 };
+
+function onSubmit(values: Record<string, any>) {
+  const queryParams = {
+    ...modelRef,
+    ...values,
+  };
+  fetchData(queryParams);
+}
+
+function onReset() {
+  gridApi.formApi.resetForm();
+  refresh(true);
+}
 
 // 暴露方法
 defineExpose({
@@ -210,6 +216,9 @@ defineExpose({
   >
     <UserTable ref="userTable" :width="900" @done="formDone" />
     <Grid>
+      <template #actionItem>
+        <a-button type="primary">搜索</a-button>
+      </template>
       <template #toolbar-actions>
         <a-button
           :icon="h(FormOutlined)"
@@ -237,7 +246,9 @@ defineExpose({
 </template>
 
 <style scoped>
-.bg-background-deep {
-  background-color: hsl(0deg 0% 100%);
+:deep() {
+  .bg-background-deep {
+    background-color: #fff;
+  }
 }
 </style>

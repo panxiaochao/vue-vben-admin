@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { nextTick, reactive, toRaw } from 'vue';
+import { reactive, toRaw } from 'vue';
 
 import { type VbenFormProps } from '@vben/common-ui';
 
 import { message } from 'ant-design-vue';
-import { map, pick } from 'lodash-es';
+import { map } from 'lodash-es';
 
 import {
   useVbenVxeGrid,
   type VxeGridListeners,
   type VxeGridProps,
 } from '#/adapter/vxe-table';
-import { page } from '#/api/system/permission/user';
+import { selectNoExistsTenantUserPage } from '#/api/system/permission/user';
 import { saveTenantUsers } from '#/api/system/tenant/tenant-user';
 
 defineOptions({
@@ -29,10 +29,14 @@ const width = defineModel('width', { type: Number, default: 800 });
 // 字段对象
 interface FormState {
   tenantId: string;
+  pageNo: number;
+  pageSize: number;
 }
 
 const defaultModel = {
   tenantId: '',
+  pageNo: 1,
+  pageSize: 5,
 };
 
 const modelRef = reactive<FormState>({
@@ -61,6 +65,11 @@ const columns = [
 
 // 搜索表单定义
 const formOptions: VbenFormProps = {
+  // 提交函数
+  handleSubmit: onSubmit,
+  // 重置函数
+  handleReset: onReset,
+  // 表单定义
   schema: [
     {
       component: 'Input',
@@ -84,12 +93,6 @@ const formOptions: VbenFormProps = {
   showCollapseButton: false,
 };
 
-// 查询参数
-const queryParams = reactive({
-  pageNo: 1,
-  pageSize: 5,
-});
-
 const gridOptions: VxeGridProps<RowType> = {
   columns,
   data: [],
@@ -104,7 +107,7 @@ const gridOptions: VxeGridProps<RowType> = {
 // 监听事件：分页
 const gridEvents: VxeGridListeners<RowType> = {
   pageChange: ({ currentPage, pageSize }) => {
-    Object.assign(queryParams, {
+    Object.assign(modelRef, {
       pageNo: currentPage,
       pageSize,
     });
@@ -119,9 +122,14 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents,
 });
 
-// 加载远程数据
-async function loadData() {
-  return page(toRaw(queryParams)).then((res) => {
+// 加载数据
+function loadData() {
+  fetchData(toRaw(modelRef));
+}
+
+// 远程获取数据
+function fetchData(params: object) {
+  selectNoExistsTenantUserPage(params).then((res) => {
     gridApi.setGridOptions({
       data: res.list,
       pagerConfig: {
@@ -131,6 +139,15 @@ async function loadData() {
       },
     });
   });
+}
+
+// 强制刷新
+async function refresh(bool: boolean) {
+  bool &&
+    Object.assign(modelRef, {
+      pageNo: 1,
+    });
+  loadData();
 }
 
 // 格式化数据
@@ -156,25 +173,35 @@ const handleOk = () => {
 
 const handleCancel = () => {
   open.value = false;
-  gridApi.setGridOptions({ data: [] });
-};
-
-// 赋值
-const updateForm = (raw: FormState) => {
-  const rawValues = toRaw(raw || {});
-  if (rawValues) {
-    nextTick(() => {
-      const fieldNames = Object.keys(defaultModel) ?? [];
-      Object.assign(modelRef, pick(rawValues, fieldNames));
-    });
-  }
+  gridApi.setGridOptions({
+    data: [],
+    pagerConfig: {
+      currentPage: 1,
+      pageSize: 5,
+      total: 0,
+    },
+  });
+  gridApi.formApi.resetForm();
 };
 
 const openModal = (raw: FormState) => {
   open.value = true;
-  updateForm(raw);
+  Object.assign(modelRef, { tenantId: raw.tenantId });
   loadData();
 };
+
+function onSubmit(values: Record<string, any>) {
+  const queryParams = {
+    ...modelRef,
+    ...values,
+  };
+  fetchData(queryParams);
+}
+
+function onReset() {
+  gridApi.formApi.resetForm();
+  refresh(true);
+}
 
 // 暴露方法
 defineExpose({
@@ -201,7 +228,9 @@ defineExpose({
 </template>
 
 <style scoped>
-.bg-background-deep {
-  background-color: hsl(0deg 0% 100%);
+:deep() {
+  .bg-background-deep {
+    background-color: hsl(0deg 0% 100%);
+  }
 }
 </style>

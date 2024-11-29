@@ -8,9 +8,18 @@ export async function page(params: object) {
   });
 }
 
-export async function selectPageByTenantId(params: object) {
+export async function selectTenantUserPage(params: object) {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/sysuser/selectPageByTenantId`,
+    `${VITE_PROJECT_API_URL}/system/v1/sysuser/selectTenantUserPage`,
+    {
+      params,
+    },
+  );
+}
+
+export async function selectNoExistsTenantUserPage(params: object) {
+  return requestClient.get(
+    `${VITE_PROJECT_API_URL}/system/v1/sysuser/selectNoExistsTenantUserPage`,
     {
       params,
     },

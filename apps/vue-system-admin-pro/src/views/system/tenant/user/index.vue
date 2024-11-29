@@ -166,7 +166,11 @@ const formDone = () => {
           编辑
         </a-button>
         <a-divider type="vertical" />
-        <a-button class="px-0" type="link" @click="grantTenantUser.openModal(row)">
+        <a-button
+          class="px-0"
+          type="link"
+          @click="grantTenantUser.openModal(row)"
+        >
           授权用户
         </a-button>
         <a-divider type="vertical" />
