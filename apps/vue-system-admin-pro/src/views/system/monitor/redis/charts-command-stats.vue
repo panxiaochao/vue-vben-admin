@@ -1,49 +1,76 @@
-<script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-
+<script lang="ts">
 import {
-  EchartsUI,
-  type EchartsUIType,
-  useEcharts,
-} from '@vben/plugins/echarts';
+  defineComponent,
+  type PropType,
+  reactive,
+  type Ref,
+  ref,
+  watchEffect,
+} from 'vue';
 
-defineOptions({
-  name: 'ChartsCommandStats',
+import { useEcharts } from '@pxc/framework/echarts';
+import { cloneDeep } from 'lodash-es';
+
+export default defineComponent({
+  name: 'Pie',
   inheritAttrs: false,
-});
-
-const chartRef = ref<EchartsUIType>();
-const { renderEcharts } = useEcharts(chartRef);
-
-const pieData = defineModel('pieData', { type: Array, default: [] });
-
-onMounted(() => {
-  renderEcharts({
-    legend: {
-      top: 'bottom',
+  props: {
+    chartData: {
+      type: Array,
+      default: () => [],
     },
-    series: [
-      {
-        animationDelay() {
-          return Math.random() * 400;
-        },
-        animationEasing: 'exponentialInOut',
-        animationType: 'scale',
-        center: ['50%', '50%'],
-        data: [],
-        name: '命令统计',
-        radius: '60%',
-        roseType: 'radius',
-        type: 'pie',
+    option: {
+      type: Object,
+      default: () => ({}),
+    },
+    width: {
+      type: String as PropType<string>,
+      default: '100%',
+    },
+    height: {
+      type: String as PropType<string>,
+      default: '500px',
+    },
+  },
+  setup(props) {
+    const chartRef = ref<HTMLDivElement | null>(null);
+    const { setOptions } = useEcharts(chartRef as Ref<HTMLDivElement>);
+    const option = reactive({
+      legend: {
+        top: 'bottom',
       },
-    ],
-    tooltip: {
-      trigger: 'item',
-    },
-  });
+      series: [
+        {
+          animationEasing: 'exponentialInOut',
+          animationType: 'scale',
+          center: ['50%', '50%'],
+          data: [],
+          name: '命令统计',
+          radius: '60%',
+          type: 'pie',
+        },
+      ],
+      tooltip: {
+        trigger: 'item',
+      },
+    });
+
+    watchEffect(() => {
+      props.chartData && initCharts();
+    });
+
+    function initCharts() {
+      if (props.option) {
+        Object.assign(option, cloneDeep(props.option));
+      }
+      option.series[0].data = props.chartData;
+      setOptions(option);
+    }
+    return { chartRef };
+  },
 });
 </script>
 
 <template>
-  <EchartsUI ref="chartRef" height="500px" />
+  <div ref="chartRef" :style="{ height, width }"></div>
 </template>

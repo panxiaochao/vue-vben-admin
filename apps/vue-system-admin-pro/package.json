@@ -41,6 +41,7 @@
     "@vben/styles": "workspace:*",
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
+    "@pxc/framework": "workspace:*",
     "@vueuse/core": "catalog:",
     "@ant-design/icons-vue": "catalog:",
     "@types/lodash-es": "catalog:",

@@ -95,7 +95,7 @@ onMounted(() => {
       <a-row :gutter="10" :style="{ marginBottom: '24px' }" class="mb-2">
         <a-col :span="24">
           <a-card :bordered="false" title="命令统计">
-            <ChartsCommandStats ref="chartsCommandStats" :pie-data="pieData" />
+            <ChartsCommandStats ref="chartsCommandStats" :chart-data="pieData" />
           </a-card>
         </a-col>
       </a-row>

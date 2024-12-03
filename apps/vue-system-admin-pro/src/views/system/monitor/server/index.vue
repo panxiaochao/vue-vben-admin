@@ -2,41 +2,56 @@
 import { onMounted, reactive, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
-import { useVbenVxeGrid, type VxeGridProps } from '@vben/plugins/vxe-table';
 
 import { monitorInfo, networkInterfaces } from '#/api/system/monitor/server';
 
 const spinning = ref(false);
 const networkSpinning = ref(false);
 
-interface DiskInfos {
-  id: string;
-  dirName: string;
-  sysTypeName: string;
-  typeName: string;
-  total: number;
-  free: number;
-  used: number;
-  usage: number;
-}
-
-const gridOptions: VxeGridProps<DiskInfos> = {
-  columns: [
-    { field: 'dirName', title: '盘符路径', width: 500, align: 'left' },
-    { field: 'sysTypeName', title: '文件系统' },
-    { field: 'typeName', title: '文件类型' },
-    { field: 'total', title: '总大小', slots: { default: 'total' } },
-    { field: 'free', title: '可用大小', slots: { default: 'free' } },
-    { field: 'used', title: '已用大小', slots: { default: 'used' } },
-    { field: 'usage', title: '已用百分比', slots: { default: 'usage' } },
-  ],
-  data: [],
-  pagerConfig: {
-    enabled: false,
+const columns = [
+  {
+    title: '盘符路径',
+    dataIndex: 'dirName',
+    key: 'dirName',
   },
-};
+  {
+    title: '文件系统',
+    dataIndex: 'sysTypeName',
+    key: 'sysTypeName',
+    align: 'center',
+  },
+  {
+    title: '文件类型',
+    dataIndex: 'typeName',
+    key: 'typeName',
+    align: 'center',
+  },
+  {
+    title: '总大小',
+    dataIndex: 'total',
+    key: 'total',
+    align: 'center',
+  },
+  {
+    title: '可用大小',
+    dataIndex: 'free',
+    key: 'free',
+    align: 'center',
+  },
 
-const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
+  {
+    title: '已用大小',
+    dataIndex: 'used',
+    key: 'used',
+    align: 'center',
+  },
+  {
+    title: '已用百分比',
+    dataIndex: 'usage',
+    key: 'usage',
+    align: 'center',
+  },
+];
 
 // CPU信息
 const cpuInfo = reactive<object>({});
@@ -74,7 +89,6 @@ const loadData = () => {
       Object.assign(memInfo, res.mem);
       Object.assign(diskInfo, res.diskInfo);
       Object.assign(diskInfos, res.diskInfos);
-      gridApi.setGridOptions({ data: res.diskInfos });
     })
     .finally(() => {
       spinning.value = false;
@@ -292,16 +306,31 @@ onMounted(async () => {
         </a-card>
 
         <a-card :bordered="false" class="mb-6" title="磁盘状态">
-          <Grid>
-            <template #total="{ row }"> {{ row.total }} GB </template>
-            <template #free="{ row }"> {{ row.free }} GB </template>
-            <template #used="{ row }"> {{ row.used }} GB </template>
-            <template #usage="{ row }">
-              <a-tag :color="getPercentageColor(row.usage)">
-                {{ row.usage }}%
-              </a-tag>
+          <a-table
+            :columns="columns"
+            :data-source="diskInfos"
+            :pagination="false"
+            row-key="dirName"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'total'">
+                <span> {{ record.total }} GB </span>
+              </template>
+              <template v-if="column.key === 'free'">
+                <span> {{ record.free }} GB </span>
+              </template>
+              <template v-if="column.key === 'used'">
+                <span> {{ record.used }} GB </span>
+              </template>
+              <template v-if="column.key === 'usage'">
+                <span>
+                  <a-tag :color="getPercentageColor(record.usage)">
+                    {{ record.usage }}%
+                  </a-tag>
+                </span>
+              </template>
             </template>
-          </Grid>
+          </a-table>
         </a-card>
       </a-spin>
     </div>
