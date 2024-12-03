@@ -13,12 +13,12 @@ import { toRaw } from 'vue';
 import { Store } from '@vben-core/shared/store';
 import {
   bindMethods,
+  createMerge,
   isFunction,
+  isObject,
   mergeWithArrayOverride,
   StateHandler,
 } from '@vben-core/shared/utils';
-
-import { objectPick } from '@vueuse/core';
 
 function getDefaultState(): VbenFormProps {
   return {
@@ -185,7 +185,7 @@ export class FormApi {
     const fieldSet = new Set(fields);
     const schema = this.state?.schema ?? [];
 
-    const filterSchema = schema.filter((item) => fieldSet.has(item.fieldName));
+    const filterSchema = schema.filter((item) => !fieldSet.has(item.fieldName));
 
     this.setState({
       schema: filterSchema,
@@ -250,8 +250,17 @@ export class FormApi {
       form.setValues(fields, shouldValidate);
       return;
     }
-    const fieldNames = this.state?.schema?.map((item) => item.fieldName) ?? [];
-    const filteredFields = objectPick(fields, fieldNames);
+
+    const fieldMergeFn = createMerge((obj, key, value) => {
+      if (key in obj) {
+        obj[key] =
+          !Array.isArray(obj[key]) && isObject(obj[key])
+            ? fieldMergeFn(obj[key], value)
+            : value;
+      }
+      return true;
+    });
+    const filteredFields = fieldMergeFn(fields, form.values);
     form.setValues(filteredFields, shouldValidate);
   }
 
