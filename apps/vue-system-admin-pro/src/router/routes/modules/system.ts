@@ -179,7 +179,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemMonitorRedis',
             path: '/system/monitor/redis',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/monitor/redis/index.vue'),
             meta: {
               title: 'Redis监控',
             },
