@@ -13,12 +13,21 @@ import {
   useWindowSize,
 } from '@vueuse/core';
 
+// 可以根据需要选用只用到的渲染器
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
+
 import echarts from './echarts';
 
 type EchartsThemeType = 'dark' | 'light' | null;
 
-function useEcharts(chartRef: Ref<HTMLDivElement>) {
+type EchartsRenderType = 'CanvasRenderer' | 'SVGRenderer';
+
+function useEcharts(chartRef: Ref<HTMLDivElement>, render?: EchartsRenderType) {
   console.log('---useECharts---初始化加载---');
+  // 渲染模式
+  if (render) {
+    echarts.use(render === 'SVGRenderer' ? SVGRenderer : CanvasRenderer);
+  }
   let chartInstance: echarts.ECharts | null = null;
   const cacheOptions = ref({}) as Ref<EChartsOption>;
 
@@ -37,6 +46,7 @@ function useEcharts(chartRef: Ref<HTMLDivElement>) {
     } as EChartsOption;
   });
 
+  // 初始化 echats实例
   const initCharts = (t?: EchartsThemeType) => {
     const el = unref(chartRef);
     if (!el || !unref(el)) {
