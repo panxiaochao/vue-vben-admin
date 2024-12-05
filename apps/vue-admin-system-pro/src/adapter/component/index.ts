@@ -79,6 +79,7 @@ async function initComponentAdapter() {
     // 如果你的组件体积比较大，可以使用异步加载
     // Button: () =>
     // import('xxx').then((res) => res.Button),
+
     ApiSelect: (props, { attrs, slots }) => {
       return h(
         ApiSelect,
@@ -87,8 +88,8 @@ async function initComponentAdapter() {
           ...attrs,
           component: Select,
           loadingSlot: 'suffixIcon',
-          visibleEvent: 'onDropdownVisibleChange',
           modelField: 'value',
+          visibleEvent: 'onVisibleChange',
         },
         slots,
       );

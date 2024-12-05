@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, toRaw } from 'vue';
 
-import { Page } from '@vben/common-ui';
+import { Page, type VbenFormProps } from '@vben/common-ui';
 
 import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
 import { page } from '#/api/system/log/login';
@@ -44,6 +44,31 @@ const queryParams = reactive({
   pageSize: 10,
 });
 
+// 搜索表单定义
+const formOptions: VbenFormProps = {
+  schema: [
+    {
+      component: 'Input',
+      fieldName: 'loginName',
+      label: '登录名：',
+      componentProps: {
+        allowClear: true,
+        placeholder: '请输入登录名',
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'ip',
+      label: 'IP：',
+      componentProps: {
+        allowClear: true,
+        placeholder: '请输入IP',
+      },
+    },
+  ],
+  showCollapseButton: false,
+};
+
 const gridOptions: VxeGridProps<RowType> = {
   columns,
   data: [],
@@ -61,10 +86,11 @@ const gridOptions: VxeGridProps<RowType> = {
       total: 'pagination.total',
     },
     ajax: {
-      query: async ({ page }) => {
+      query: async ({ page }, formValues) => {
         Object.assign(queryParams, {
           pageNo: page.currentPage,
           pageSize: page.pageSize,
+          ...formValues,
         });
         return await loadData();
       },
@@ -75,6 +101,7 @@ const gridOptions: VxeGridProps<RowType> = {
 // 定义表格
 const [Grid] = useVbenVxeGrid({
   gridOptions,
+  formOptions,
 });
 
 // 加载远程数据
@@ -88,7 +115,7 @@ const formatLoginType = (row: RowType) => {
 };
 
 const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '禁用';
+  return row.state === '1' ? '正常' : '失败';
 };
 </script>
 

@@ -1,4 +1,6 @@
 import type { App } from 'vue';
+// 注册所有 ICON
+import * as antIcons from '@ant-design/icons-vue';
 
 // base antd library
 import {
@@ -142,7 +144,7 @@ const components = [
   Upload,
 ];
 
-async function lazy_use(app: App) {
+async function lazy_use_components(app: App) {
   components.forEach((component) => {
     // 用于全局注册一个组件，使得该组件可以在整个应用的任何地方被使用，而无需在每个组件中单独导入
     // const { name } = component;
@@ -156,7 +158,15 @@ async function lazy_use(app: App) {
       app.use(component);
     }
   });
-  console.warn('[Admin-system-pro] NOTICE: Antd use lazy-load.');
+  console.warn('[Admin-system-pro] NOTICE: Antd Components use lazy-load.');
 }
 
-export { lazy_use };
+async function lazy_use_icons(app: App) {
+  // 注册图标组件
+  Object.keys(antIcons).forEach((key) => {
+    app.component(key, antIcons[key]);
+  });
+  console.warn('[Admin-system-pro] NOTICE: Antd use Icons lazy-load.');
+}
+
+export { lazy_use_components, lazy_use_icons };

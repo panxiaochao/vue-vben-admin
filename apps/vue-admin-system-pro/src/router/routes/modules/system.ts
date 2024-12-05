@@ -58,7 +58,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemMenu',
             path: '/system/permission/menu',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/permission/menu/index.vue'),
             meta: {
               title: '菜单管理',
             },
