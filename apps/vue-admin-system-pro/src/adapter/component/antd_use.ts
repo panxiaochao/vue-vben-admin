@@ -156,7 +156,7 @@ async function lazy_use(app: App) {
       app.use(component);
     }
   });
-  console.warn('[System-admin-pro] NOTICE: Antd use lazy-load.');
+  console.warn('[Admin-system-pro] NOTICE: Antd use lazy-load.');
 }
 
 export { lazy_use };
