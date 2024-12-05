@@ -3,12 +3,12 @@
   "name": "@pxc/framework",
   "version": "1.0.0",
   "description": "自己的框架组件库",
-  "homepage": "https://github.com/panxiaochao/vue-system-admin-pro",
-  "bugs": "https://github.com/panxiaochao/vue-system-admin-pro/issues",
+  "homepage": "https://github.com/panxiaochao/vue-admin-system-pro",
+  "bugs": "https://github.com/panxiaochao/vue-admin-system-pro/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/panxiaochao/vue-system-admin-pro.git",
-    "directory": "apps/vue-system-admin-pro"
+    "url": "git+https://github.com/panxiaochao/vue-admin-system-pro.git",
+    "directory": "apps/vue-admin-system-pro"
   },
   "license": "MIT",
   "type": "module",
