@@ -65,6 +65,11 @@ const formOptions: VbenFormProps = {
   ],
   // 控制表单是否显示折叠按钮
   showCollapseButton: true,
+  submitButtonOptions: {
+    content: '查询',
+  },
+  // 是否在字段值改变时提交表单
+  submitOnChange: false,
   // 按下回车时是否提交表单
   submitOnEnter: false,
 };
@@ -104,7 +109,7 @@ const [Grid] = useVbenVxeGrid({ formOptions, gridOptions });
 </script>
 
 <template>
-  <Page auto-content-height>
+  <div class="vp-raw w-full">
     <Grid />
-  </Page>
+  </div>
 </template>
