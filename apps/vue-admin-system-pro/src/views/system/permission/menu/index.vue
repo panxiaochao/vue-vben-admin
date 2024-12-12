@@ -135,8 +135,8 @@ onMounted(() => {
 
 <template>
   <Page auto-content-height>
-    <AddForm ref="addForm" :width="900" @done="formDone" />
-    <EditForm ref="editForm" :width="900" @done="formDone" />
+    <AddForm ref="addForm" :width="600" @done="formDone" />
+    <EditForm ref="editForm" :width="600" @done="formDone" />
     <Grid>
       <template #toolbar-actions>
         <a-button

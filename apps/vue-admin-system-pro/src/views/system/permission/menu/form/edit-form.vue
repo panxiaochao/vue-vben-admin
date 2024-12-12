@@ -17,11 +17,10 @@ const $emits = defineEmits(['done']);
 
 const useForm = Form.useForm;
 
-// 菜单类型
-const menuTypeValue = ref('0');
-
 // 下拉菜单
 const treeData = ref([]);
+
+const menuNameLabel = ref('菜单名称');
 
 const formItemLayout = {
   labelCol: {
@@ -117,9 +116,9 @@ const openModal = (raw: FormState) => {
 const handleOk = () => {
   // 对应各自的验证字段
   let validateNames: any[];
-  if (menuTypeValue.value === '0') {
+  if (modelRef.menuType === '0') {
     validateNames = ['menuName', 'component', 'url', 'componentName'];
-  } else if (menuTypeValue.value === '1') {
+  } else if (modelRef.menuType === '1') {
     validateNames = [
       'menuName',
       'component',
@@ -148,10 +147,7 @@ const handleCancel = () => {
 };
 
 function onChangeMenuType(e: any) {
-  menuTypeValue.value = e.target.value;
-  // Object.assign(modelRef, {
-  //   component: e.target.value === '0' ? '/layouts/RouteView' : '',
-  // });
+  menuNameLabel.value = e.target.value === '2' ? '按钮名称' : '菜单名称';
 }
 
 // 暴露方法
@@ -171,176 +167,132 @@ defineExpose({
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <a-form-item
-            label="菜单名称"
-            name="menuName"
-            v-bind="validateInfos.menuName"
-          >
-            <a-input v-model:value="modelRef.menuName" allow-clear />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label="菜单类型" name="menuType">
-            <a-radio-group
-              v-model:value="modelRef.menuType"
-              @change="onChangeMenuType"
-            >
-              <a-radio value="0">一级菜单</a-radio>
-              <a-radio value="1">子菜单</a-radio>
-              <a-radio value="2">按钮权限</a-radio>
-            </a-radio-group>
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row v-if="menuTypeValue !== '2'" :gutter="24">
-        <a-col :span="12">
-          <a-form-item name="component" v-bind="validateInfos.component">
-            <template #label>
-              <a-tooltip class="mr-1">
-                <template #title>
-                  访问的组件路径，如：`system/user/index`，默认在`views`目录下
-                </template>
-                <QuestionCircleOutlined />
-              </a-tooltip>
-              组件地址
+      <a-form-item label="菜单类型" name="menuType">
+        <a-radio-group
+          v-model:value="modelRef.menuType"
+          @change="onChangeMenuType"
+        >
+          <a-radio value="0">一级菜单</a-radio>
+          <a-radio value="1">子菜单</a-radio>
+          <a-radio value="2">按钮权限</a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item name="menuName" v-bind="validateInfos.menuName">
+        <template #label>
+          {{ menuNameLabel }}
+        </template>
+        <a-input v-model:value="modelRef.menuName" allow-clear />
+      </a-form-item>
+      <a-form-item
+        v-if="modelRef.menuType !== '0'"
+        label="上级菜单"
+        name="parentId"
+        v-bind="validateInfos.parentId"
+      >
+        <a-tree-select
+          v-model:value="modelRef.parentId"
+          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+          :tree-data="treeData"
+          allow-clear
+          placeholder="请选择"
+        />
+      </a-form-item>
+      <a-form-item
+        v-if="modelRef.menuType !== '2'"
+        name="component"
+        v-bind="validateInfos.component"
+      >
+        <template #label>
+          <a-tooltip class="mr-1">
+            <template #title>
+              访问的组件路径，如：`system/user/index`，默认在`views`目录下
             </template>
-            <a-input v-model:value="modelRef.component" allow-clear />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label="路由地址" name="url" v-bind="validateInfos.url">
-            <a-input v-model:value="modelRef.url" allow-clear />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <a-form-item
-            v-if="menuTypeValue !== '0'"
-            label="上级菜单"
-            name="parentId"
-            v-bind="validateInfos.parentId"
-          >
-            <a-tree-select
-              v-model:value="modelRef.parentId"
-              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-              :tree-data="treeData"
-              allow-clear
-              placeholder="请选择"
-            />
-          </a-form-item>
-          <!--          <a-form-item-->
-          <!--            v-if="menuTypeValue === '0'"-->
-          <!--            label="跳转地址"-->
-          <!--            name="redirectUrl"-->
-          <!--          >-->
-          <!--            <a-input v-model:value="modelRef.redirectUrl" allow-clear />-->
-          <!--          </a-form-item>-->
-        </a-col>
-        <a-col :span="12">
-          <a-form-item
-            v-if="menuTypeValue !== '2'"
-            label="路由名称"
-            name="componentName"
-            v-bind="validateInfos.componentName"
-          >
-            <a-input
-              v-model:value="modelRef.componentName"
-              allow-clear
-              placeholder="路由名称, 且不能重名，对应name"
-            />
-          </a-form-item>
-          <a-form-item
-            v-if="menuTypeValue === '2'"
-            label="授权标识"
-            name="permissionCode"
-            v-bind="validateInfos.permissionCode"
-          >
-            <a-input
-              v-model:value="modelRef.permissionCode"
-              allow-clear
-              placeholder="请输入授权标识，如sys_user_add"
-            />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <a-form-item
-            v-if="menuTypeValue !== '2'"
-            label="菜单图标"
-            name="icon"
-          >
-            <a-input v-model:value="modelRef.icon" allow-clear />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label="排序" name="sort">
-            <a-input-number
-              v-model:value="modelRef.sort"
-              :max="1000"
-              :min="0"
-              style="width: 100%"
-            />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <a-form-item name="state">
-            <template #label>
-              <a-tooltip class="mr-1">
-                <template #title> 选择禁用则路由将不会出现在侧边栏 </template>
-                <QuestionCircleOutlined />
-              </a-tooltip>
-              菜单状态
+            <QuestionCircleOutlined />
+          </a-tooltip>
+          组件地址
+        </template>
+        <a-input v-model:value="modelRef.component" allow-clear />
+      </a-form-item>
+      <a-form-item
+        v-if="modelRef.menuType !== '2'"
+        label="路由名称"
+        name="componentName"
+        v-bind="validateInfos.componentName"
+      >
+        <a-input
+          v-model:value="modelRef.componentName"
+          allow-clear
+          placeholder="路由名称, 且不能重名，对应name"
+        />
+      </a-form-item>
+      <a-form-item
+        v-if="modelRef.menuType === '2'"
+        label="授权标识"
+        name="permissionCode"
+        v-bind="validateInfos.permissionCode"
+      >
+        <a-input
+          v-model:value="modelRef.permissionCode"
+          allow-clear
+          placeholder="请输入授权标识，如sys_user_add"
+        />
+      </a-form-item>
+      <a-form-item
+        v-if="modelRef.menuType !== '2'"
+        label="菜单图标"
+        name="icon"
+      >
+        <a-input v-model:value="modelRef.icon" allow-clear />
+      </a-form-item>
+      <a-form-item label="排序" name="sort">
+        <a-input-number
+          v-model:value="modelRef.sort"
+          :max="1000"
+          :min="0"
+          style="width: 100%"
+        />
+      </a-form-item>
+      <a-form-item name="state">
+        <template #label>
+          <a-tooltip class="mr-1">
+            <template #title> 选择禁用则路由将不会显示 </template>
+            <QuestionCircleOutlined />
+          </a-tooltip>
+          显示状态
+        </template>
+        <a-radio-group v-model:value="modelRef.state">
+          <a-radio value="1">正常</a-radio>
+          <a-radio value="0">禁用</a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item v-if="modelRef.menuType !== '2'" name="keepAlive">
+        <template #label>
+          <a-tooltip class="mr-1">
+            <template #title> 组件保留状态，避免重新渲染 </template>
+            <QuestionCircleOutlined />
+          </a-tooltip>
+          缓存路由
+        </template>
+        <a-radio-group v-model:value="modelRef.keepAlive">
+          <a-radio value="1">是</a-radio>
+          <a-radio value="0">否</a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item v-if="modelRef.menuType !== '2'" name="openType">
+        <template #label>
+          <a-tooltip class="mr-1">
+            <template #title>
+              选择外链, 则路由地址需要以 http(s):// 开头
             </template>
-            <a-radio-group v-model:value="modelRef.state">
-              <a-radio value="1">正常</a-radio>
-              <a-radio value="0">禁用</a-radio>
-            </a-radio-group>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item v-if="menuTypeValue !== '2'" name="keepAlive">
-            <template #label>
-              <a-tooltip class="mr-1">
-                <template #title> 组件保留状态，避免重新渲染 </template>
-                <QuestionCircleOutlined />
-              </a-tooltip>
-              缓存路由
-            </template>
-            <a-radio-group v-model:value="modelRef.keepAlive">
-              <a-radio value="1">是</a-radio>
-              <a-radio value="0">否</a-radio>
-            </a-radio-group>
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <div v-if="menuTypeValue !== '2'">
-        <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-item name="openType">
-              <template #label>
-                <a-tooltip class="mr-1">
-                  <template #title>
-                    选择外链, 则路由地址需要以 http(s):// 开头
-                  </template>
-                  <QuestionCircleOutlined />
-                </a-tooltip>
-                打开方式
-              </template>
-              <a-radio-group v-model:value="modelRef.openType">
-                <a-radio value="0">内链</a-radio>
-                <a-radio value="1">外链</a-radio>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12" />
-        </a-row>
-      </div>
+            <QuestionCircleOutlined />
+          </a-tooltip>
+          打开方式
+        </template>
+        <a-radio-group v-model:value="modelRef.openType">
+          <a-radio value="0">内链</a-radio>
+          <a-radio value="1">外链</a-radio>
+        </a-radio-group>
+      </a-form-item>
     </a-form>
   </a-modal>
 </template>
