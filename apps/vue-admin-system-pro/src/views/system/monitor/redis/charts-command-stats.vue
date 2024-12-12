@@ -8,7 +8,7 @@ import {
   watchEffect,
 } from 'vue';
 
-import { useEcharts } from '@pxc/framework/echarts';
+import { type ECOption, useEcharts } from '@pxc/framework/echarts';
 import { cloneDeep } from 'lodash-es';
 
 export default defineComponent({
@@ -34,8 +34,10 @@ export default defineComponent({
   },
   setup(props) {
     const chartRef = ref<HTMLDivElement | null>(null);
-    const { setOptions } = useEcharts(chartRef as Ref<HTMLDivElement>);
-    const option = reactive({
+    const { setOptions, getInstance } = useEcharts(
+      chartRef as Ref<HTMLDivElement>,
+    );
+    const option: ECOption = reactive({
       legend: {
         top: 'bottom',
       },
@@ -66,7 +68,8 @@ export default defineComponent({
       option.series[0].data = props.chartData;
       setOptions(option);
     }
-    return { chartRef };
+
+    return { chartRef, getInstance };
   },
 });
 </script>

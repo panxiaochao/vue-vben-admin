@@ -1,5 +1,3 @@
-import type { EChartsOption } from 'echarts';
-
 import type { Ref } from 'vue';
 import { computed, nextTick, ref, unref, watch } from 'vue';
 
@@ -16,37 +14,40 @@ import {
 // 可以根据需要选用只用到的渲染器
 import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
 
-import echarts from './echarts';
+import echarts, { type ECOption } from './echarts';
 
 type EchartsThemeType = 'dark' | 'light' | null;
 
 type EchartsRenderType = 'CanvasRenderer' | 'SVGRenderer';
 
-function useEcharts(chartRef: Ref<HTMLDivElement>, render?: EchartsRenderType) {
-  console.log('---useECharts---初始化加载---');
+function useEcharts(
+  chartRef: Ref<HTMLDivElement | null>,
+  render?: EchartsRenderType,
+) {
+  console.log('useECharts初始化加载');
   // 渲染模式
   if (render) {
     echarts.use(render === 'SVGRenderer' ? SVGRenderer : CanvasRenderer);
   }
   let chartInstance: echarts.ECharts | null = null;
-  const cacheOptions = ref({}) as Ref<EChartsOption>;
+  const cacheOptions = ref({}) as Ref<ECOption>;
 
   const { isDark } = usePreferences();
   const { height, width } = useWindowSize();
   const resizeHandler: () => void = useDebounceFn(resize, 200);
 
-  const getOptions = computed((): EChartsOption => {
+  const getOptions = computed((): ECOption => {
     if (!isDark.value) {
-      return cacheOptions.value as EChartsOption;
+      return cacheOptions.value as ECOption;
     }
 
     return {
       backgroundColor: 'transparent',
       ...cacheOptions.value,
-    } as EChartsOption;
+    } as ECOption;
   });
 
-  // 初始化 echats实例
+  // 初始化图表实例的函数
   const initCharts = (t?: EchartsThemeType) => {
     const el = unref(chartRef);
     if (!el || !unref(el)) {
@@ -57,7 +58,7 @@ function useEcharts(chartRef: Ref<HTMLDivElement>, render?: EchartsRenderType) {
     return chartInstance;
   };
 
-  const setOptions = (options: EChartsOption, clear = true) => {
+  const setOptions = (options: ECOption, clear = true) => {
     cacheOptions.value = options;
     if (unref(chartRef)?.offsetHeight === 0) {
       useTimeoutFn(() => {
@@ -76,16 +77,21 @@ function useEcharts(chartRef: Ref<HTMLDivElement>, render?: EchartsRenderType) {
           if (!instance) return;
         }
         clear && chartInstance?.clear();
-
         chartInstance?.setOption(currentOptions);
       }, 30);
     });
   };
 
   function resize() {
-    chartInstance?.resize();
+    chartInstance?.resize({
+      animation: {
+        duration: 300,
+        easing: 'quadraticIn',
+      },
+    });
   }
 
+  // 监测元素节点，如果尺寸发生变化就触发
   useResizeObserver(chartRef as never, resizeHandler);
 
   watch([width, height], () => {
@@ -97,7 +103,7 @@ function useEcharts(chartRef: Ref<HTMLDivElement>, render?: EchartsRenderType) {
       chartInstance.dispose();
       initCharts();
       setOptions(cacheOptions.value);
-      resize();
+      resizeHandler();
     }
   });
 
@@ -116,6 +122,7 @@ function useEcharts(chartRef: Ref<HTMLDivElement>, render?: EchartsRenderType) {
   }
 
   return {
+    echarts,
     getInstance,
     resize,
     setOptions,
