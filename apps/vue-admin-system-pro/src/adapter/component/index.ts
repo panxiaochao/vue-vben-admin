@@ -8,7 +8,7 @@ import type { BaseFormComponentType } from '@vben/common-ui';
 import type { Component, SetupContext } from 'vue';
 import { h } from 'vue';
 
-import { ApiSelect, globalShareState, IconPicker } from '@vben/common-ui';
+import { ApiComponent, globalShareState, IconPicker } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
@@ -90,8 +90,8 @@ async function initComponentAdapter() {
           ...attrs,
           component: Select,
           loadingSlot: 'suffixIcon',
-          visibleEvent: 'onDropdownVisibleChange',
           modelPropName: 'value',
+          visibleEvent: 'onVisibleChange',
         },
         slots,
       );
