@@ -43,7 +43,7 @@ import { Page } from '@vben/common-ui';
         layout="vertical"
       >
         <a-descriptions-item :span="3" label="L0：1%～5%：小仓">
-          10（0.2手） ~ 50（0.1手）
+          10（0.02手） ~ 50（0.1手）
         </a-descriptions-item>
         <a-descriptions-item :span="3" label="L1：5%～10%：低仓">
           50（0.1手） ~ 100（0.2手）
@@ -66,7 +66,7 @@ import { Page } from '@vben/common-ui';
         layout="vertical"
       >
         <a-descriptions-item :span="3" label="L0：1%～5%：小仓">
-          20（0.4手） ~ 100（0.2手）
+          20（0.04手） ~ 100（0.2手）
         </a-descriptions-item>
         <a-descriptions-item :span="3" label="L1：5%～10%：低仓">
           100（0.2手） ~ 200（0.4手）
@@ -89,7 +89,7 @@ import { Page } from '@vben/common-ui';
         layout="vertical"
       >
         <a-descriptions-item :span="3" label="L0：1%～5%：小仓">
-          30（0.6手） ~ 150（0.3手）
+          30（0.06手） ~ 150（0.3手）
         </a-descriptions-item>
         <a-descriptions-item :span="3" label="L1：5%～10%：低仓">
           150（0.3手） ~ 300（0.6手）
@@ -112,7 +112,7 @@ import { Page } from '@vben/common-ui';
         layout="vertical"
       >
         <a-descriptions-item :span="3" label="L0：1%～5%：小仓">
-          40（0.8手） ~ 200（0.2手）
+          40（0.08手） ~ 200（0.2手）
         </a-descriptions-item>
         <a-descriptions-item :span="3" label="L1：5%～10%：低仓">
           200（0.4手） ~ 400（0.8手）
