@@ -115,7 +115,9 @@ async function loadData() {
 // 强制刷新
 async function refresh(bool: boolean) {
   // reload: 强制刷新到第一页 query: 刷新当前页
-  await (bool ? gridApi.reload(queryParams) : gridApi.query(queryParams));
+  await (bool
+    ? gridApi.reload(Object.assign(queryParams, { pageNo: 1 }))
+    : gridApi.query(queryParams));
 }
 
 const formatState = (row: RowType) => {

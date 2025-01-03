@@ -53,7 +53,9 @@ const modelRef = reactive<FormState>({
 });
 
 const rulesRef = reactive({
-  dictItemText: [{ type: 'string', required: true, message: '请输入字典项名称' }],
+  dictItemText: [
+    { type: 'string', required: true, message: '请输入字典项名称' },
+  ],
   dictItemValue: [
     { type: 'string', required: true, message: '请输入字典项编码' },
   ],
