@@ -196,8 +196,9 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             name: 'SystemDatabaseSource',
-            path: '/system/database/source',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            path: '/system/database/datasource',
+            component: () =>
+              import('#/views/system/database/datasource/index.vue'),
             meta: {
               title: '数据源',
             },
@@ -205,9 +206,28 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemDatabaseField',
             path: '/system/database/field',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () => import('#/views/system/database/field/index.vue'),
             meta: {
               title: '字段类型',
+            },
+          },
+        ],
+      },
+      {
+        name: 'SystemDevelopment',
+        path: '/system/development',
+        meta: {
+          icon: 'mdi:code-block-tags',
+          title: '开发管理',
+        },
+        children: [
+          {
+            name: 'SystemCodeGen',
+            path: '/system/development/codegen',
+            component: () =>
+              import('#/views/system/development/codegen/index.vue'),
+            meta: {
+              title: '代码生成',
             },
           },
         ],

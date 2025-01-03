@@ -19,8 +19,6 @@ const routes: RouteRecordRaw[] = [
         path: '/exchange/forex_analysis',
         component: () => import('#/views/exchange/analysis/index.vue'),
         meta: {
-          affixTab: true,
-          icon: 'lucide:area-chart',
           title: $t('exchange.manage.analysis.title'),
         },
       },

@@ -10,6 +10,7 @@ export async function page(params) {
     },
   );
 }
+
 export async function save(data) {
   return requestClient.post(
     `${VITE_PROJECT_API_URL}/system/v1/sysloglogin`,
