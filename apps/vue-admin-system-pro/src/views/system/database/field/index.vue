@@ -51,21 +51,26 @@ const columns = [
 const formOptions: VbenFormProps = {
   schema: [
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'dbType',
       label: '数据库类型：',
-      componentProps: {
-        allowClear: true,
-        placeholder: '请输入数据库类型',
+      componentProps: () => {
+        return {
+          options: dbTypeList,
+          placeholder: '请输入数据库类型',
+        };
       },
     },
     {
-      component: 'Input',
-      fieldName: 'columnType',
-      label: '字段类型：',
-      componentProps: {
-        allowClear: true,
-        placeholder: '请输入数据库字段类型',
+      component: 'Select',
+      fieldName: 'javaType',
+      label: '映射类型：',
+      componentProps: () => {
+        return {
+          options: javaTypeList,
+          placeholder: '请输入JAVA映射类型',
+          fieldNames: { label: 'label', value: 'label' },
+        };
       },
     },
   ],
