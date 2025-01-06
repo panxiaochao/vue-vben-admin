@@ -3,11 +3,7 @@ import { defineEmits, reactive, ref, toRaw } from 'vue';
 
 import { Form, message } from 'ant-design-vue';
 
-import {
-  save,
-  selectDbSources,
-  testConn,
-} from '#/api/system/database/datasource';
+import { save, testConn } from '#/api/system/database/datasource';
 
 defineOptions({
   name: 'AddForm',
@@ -18,8 +14,6 @@ defineOptions({
 const $emits = defineEmits(['done']);
 
 const useForm = Form.useForm;
-
-const dbTypeList = ref([]);
 
 // 提交loading
 const submitLoading = ref(false);
@@ -64,12 +58,10 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
+const dbTypeList = defineModel('dbTypeList', { type: Array, default: [] });
+
 const openModal = () => {
   open.value = true;
-  // 加载数据库类型
-  selectDbSources().then((res) => {
-    dbTypeList.value = res;
-  });
 };
 
 const handleOk = () => {

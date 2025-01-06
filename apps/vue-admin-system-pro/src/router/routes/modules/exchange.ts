@@ -7,7 +7,7 @@ const routes: RouteRecordRaw[] = [
   {
     component: BasicLayout,
     meta: {
-      icon: 'lucide:layout-dashboard',
+      icon: 'mdi:exchange',
       order: -1,
       title: $t('exchange.manage.title'),
     },

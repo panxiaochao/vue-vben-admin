@@ -4,11 +4,7 @@ import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 import { Form, message } from 'ant-design-vue';
 import { pick } from 'lodash-es';
 
-import {
-  selectDbSources,
-  testConn,
-  update,
-} from '#/api/system/database/datasource';
+import { testConn, update } from '#/api/system/database/datasource';
 
 defineOptions({
   name: 'EditForm',
@@ -19,8 +15,6 @@ defineOptions({
 const $emits = defineEmits(['done']);
 
 const useForm = Form.useForm;
-
-const dbTypeList = ref([]);
 
 // 提交loading
 const submitLoading = ref(false);
@@ -84,6 +78,8 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
+const dbTypeList = defineModel('dbTypeList', { type: Array, default: [] });
+
 // 赋值
 const updateForm = (raw: FormState) => {
   const rawValues = toRaw(raw || {});
@@ -97,10 +93,6 @@ const updateForm = (raw: FormState) => {
 
 const openModal = (raw: FormState) => {
   open.value = true;
-  // 加载数据库类型
-  selectDbSources().then((res) => {
-    dbTypeList.value = res;
-  });
   updateForm(raw);
 };
 

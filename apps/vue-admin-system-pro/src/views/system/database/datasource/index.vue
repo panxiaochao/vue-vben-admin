@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { h, reactive, ref, toRaw } from 'vue';
+import type { VbenFormProps } from '@vben/common-ui';
 
-import { Page, type VbenFormProps } from '@vben/common-ui';
+import type { VxeGridProps } from '#/adapter/vxe-table';
+
+import { h, onMounted, reactive, ref, toRaw } from 'vue';
+
+import { Page } from '@vben/common-ui';
 
 import { FormOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
-import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
-import { deleteById, page, testConn } from '#/api/system/database/datasource';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import {
+  deleteById,
+  page,
+  selectDbSources,
+  testConn,
+} from '#/api/system/database/datasource';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -15,6 +24,9 @@ import EditForm from './form/edit-form.vue';
 
 const addForm = ref();
 const editForm = ref();
+
+// 数据库类型下拉
+const dbTypeList = ref([]);
 
 // 字段对象
 interface RowType {
@@ -51,12 +63,15 @@ const formOptions: VbenFormProps = {
       },
     },
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'dbType',
       label: '数据库类型：',
-      componentProps: {
-        allowClear: true,
-        placeholder: '请输入数据库类型',
+      componentProps: () => {
+        return {
+          options: dbTypeList,
+          placeholder: '请输入数据库类型',
+          fieldNames: { label: 'label', value: 'label' },
+        };
       },
     },
   ],
@@ -148,12 +163,19 @@ const testConnSource = (row: RowType) => {
 const formDone = () => {
   refresh(true);
 };
+
+onMounted(() => {
+  // 加载数据库类型
+  selectDbSources().then((res) => {
+    dbTypeList.value = res;
+  });
+});
 </script>
 
 <template>
   <Page auto-content-height>
-    <AddForm ref="addForm" @done="formDone" />
-    <EditForm ref="editForm" @done="formDone" />
+    <AddForm ref="addForm" @done="formDone" :db-type-list="dbTypeList" />
+    <EditForm ref="editForm" @done="formDone" :db-type-list="dbTypeList" />
     <Grid>
       <template #toolbar-actions>
         <a-button
