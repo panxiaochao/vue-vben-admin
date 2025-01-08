@@ -32,6 +32,7 @@ const dbTypeList = ref([]);
 interface RowType {
   id: string;
   dbName: string;
+  dbCode: string;
   dbType: string;
   dbUsername: number;
   testConn: string;
@@ -42,6 +43,7 @@ interface RowType {
 // 字段定义
 const columns = [
   { field: 'dbName', title: '数据库名称' },
+  { field: 'dbCode', title: '数据源编码' },
   { field: 'dbType', title: '数据库类型' },
   { field: 'dbUsername', title: '用户名' },
   { field: 'testConn', title: '连接状态', slots: { default: 'testConn' } },
@@ -155,7 +157,7 @@ const testConnSource = (row: RowType) => {
     }
     row.testConnTime = res.testConnTime;
     row.testConn = res.testConn;
-    // this.$refs.editForm.updateById(record)
+    editForm.value.updateConnState(row);
   });
 };
 

@@ -31,6 +31,7 @@ const formItemLayout = {
 
 const modelRef = reactive({
   dbName: undefined,
+  dbCode: undefined,
   dbHost: undefined,
   dbPort: undefined,
   dbDriver: undefined,
@@ -45,6 +46,7 @@ const modelRef = reactive({
 
 const rulesRef = reactive({
   dbName: [{ type: 'string', required: true, message: '请输入数据库名称' }],
+  dbCode: [{ type: 'string', required: true, message: '请输入数据源编码' }],
   dbHost: [{ type: 'string', required: true, message: '请输入主机' }],
   dbPort: [{ type: 'string', required: true, message: '请输入端口' }],
   dbType: [{ type: 'string', required: true, message: '请输入数据库类型' }],
@@ -134,6 +136,13 @@ defineExpose({
   >
     <a-form v-bind="formItemLayout">
       <a-form-item
+        label="数据源编码"
+        name="dbCode"
+        v-bind="validateInfos.dbCode"
+      >
+        <a-input v-model:value="modelRef.dbCode" allow-clear />
+      </a-form-item>
+      <a-form-item
         label="数据库名称"
         name="dbName"
         v-bind="validateInfos.dbName"
@@ -146,7 +155,7 @@ defineExpose({
       <a-form-item label="端口" name="dbPort" v-bind="validateInfos.dbPort">
         <a-input v-model:value="modelRef.dbPort" allow-clear />
       </a-form-item>
-      <a-form-item label="数据库驱动" name="dbDriver" style="display: none">
+      <a-form-item label="数据库驱动" name="dbDriver">
         <a-input v-model:value="modelRef.dbDriver" />
       </a-form-item>
       <a-form-item

@@ -230,6 +230,16 @@ const routes: RouteRecordRaw[] = [
               title: '代码生成',
             },
           },
+          {
+            name: 'SystemCodeGenEdit',
+            path: '/system/development/codegen/gen',
+            component: () =>
+              import('#/views/system/development/codegen/gen/index.vue'),
+            meta: {
+              // hideInMenu: true,
+              title: '生成代码',
+            },
+          },
         ],
       },
     ],

@@ -1,18 +1,26 @@
 <script setup lang="ts">
-import { onMounted, reactive, toRaw } from 'vue';
+import type { VbenFormProps } from '@vben/common-ui';
 
-import { Page, type VbenFormProps } from '@vben/common-ui';
+import type { VxeGridListeners, VxeGridProps } from '#/adapter/vxe-table';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '#/adapter/vxe-table';
+import { onMounted, reactive, ref, toRaw } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { Page } from '@vben/common-ui';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { selectDataSourceList } from '#/api/system/database/datasource';
 import { queryDsTablePage } from '#/api/system/development/codegen';
+
+const dataSourceList = ref([]);
+
+// 定义变量内容
+const router = useRouter();
 
 const defaultQueryParams = {
   pageNo: 1,
   pageSize: 10,
+  dbName: '',
 };
 
 // 查询参数
@@ -31,11 +39,10 @@ interface RowType {
 
 // 字段定义
 const columns = [
-  { field: 'schema', title: '数据库名' },
-  { field: 'catalog', title: '目录' },
+  { field: 'schema', title: 'Schema' },
+  { field: 'catalog', title: 'Catalog' },
   { field: 'tableName', title: '表名' },
   { field: 'tableComment', title: '表注释' },
-  { field: 'tableType', title: '表类型' },
   { field: 'action', title: '操作', width: 80, slots: { default: 'action' } },
 ];
 
@@ -46,6 +53,17 @@ const formOptions: VbenFormProps = {
   // 重置函数
   handleReset: onReset,
   schema: [
+    {
+      component: 'Select',
+      fieldName: 'dbName',
+      label: '数据源：',
+      componentProps: () => {
+        return {
+          options: dataSourceList,
+          placeholder: '请输入数据源',
+        };
+      },
+    },
     {
       component: 'Input',
       fieldName: 'tableName',
@@ -96,20 +114,35 @@ function loadData() {
 
 // 远程获取数据
 function fetchData(params: object) {
-  queryDsTablePage(params).then((res) => {
-    gridApi.setGridOptions({
-      data: res.list,
-      pagerConfig: {
-        currentPage: res.pagination.pageNo,
-        pageSize: res.pagination.pageSize,
-        total: res.pagination.total,
-      },
+  gridApi.setLoading(true);
+  queryDsTablePage(params)
+    .then((res) => {
+      gridApi.setGridOptions({
+        data: res.list,
+        pagerConfig: {
+          currentPage: res.pagination.pageNo,
+          pageSize: res.pagination.pageSize,
+          total: res.pagination.total,
+        },
+      });
+    })
+    .catch(() => {
+      gridApi.setGridOptions({
+        data: [],
+        pagerConfig: {
+          currentPage: 1,
+          pageSize: 10,
+          total: 0,
+        },
+      });
+    })
+    .finally(() => {
+      gridApi.setLoading(false);
     });
-  });
 }
 
 // 强制刷新
-async function refresh(bool: boolean) {
+function refresh(bool: boolean) {
   bool &&
     Object.assign(queryParams, {
       pageNo: 1,
@@ -119,7 +152,7 @@ async function refresh(bool: boolean) {
 
 function onSubmit(values: Record<string, any>) {
   Object.assign(queryParams, values);
-  fetchData(queryParams);
+  refresh(true);
 }
 
 function onReset() {
@@ -127,8 +160,21 @@ function onReset() {
   refresh(true);
 }
 
+const openGenTab = (row: RowType) => {
+  router.push({
+    path: '/system/development/codegen/gen',
+    query: {
+      tableName: row.tableName,
+      dsName: queryParams?.dbName,
+    },
+  });
+};
+
 onMounted(() => {
-  loadData();
+  // 加载数据源管理下拉
+  selectDataSourceList().then((res) => {
+    dataSourceList.value = res;
+  });
 });
 </script>
 
@@ -136,7 +182,9 @@ onMounted(() => {
   <Page auto-content-height>
     <Grid>
       <template #action="{ row }">
-        <a-button class="px-0" type="link"> 编辑 </a-button>
+        <a-button class="px-0" type="link" @click="openGenTab(row)">
+          编辑
+        </a-button>
       </template>
     </Grid>
   </Page>

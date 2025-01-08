@@ -216,9 +216,6 @@ defineExpose({
   >
     <UserTable ref="userTable" :width="900" @done="formDone" />
     <Grid>
-      <template #actionItem>
-        <a-button type="primary">搜索</a-button>
-      </template>
       <template #toolbar-actions>
         <a-button
           :icon="h(FormOutlined)"
