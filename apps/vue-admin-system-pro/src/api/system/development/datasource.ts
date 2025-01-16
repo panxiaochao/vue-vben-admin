@@ -4,51 +4,51 @@ const { VITE_PROJECT_API_URL } = import.meta.env;
 
 export function selectDbSources() {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource/selectDbSources`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource/selectDbSources`,
   );
 }
 export function selectDataSourceList() {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource/selectDataSourceList`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource/selectDataSourceList`,
   );
 }
 
 export function testConn(data: object) {
   return requestClient.post(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource/testConn`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource/testConn`,
     data,
   );
 }
 
 export function selectJavaTypes() {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource/selectJavaTypes`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource/selectJavaTypes`,
   );
 }
 
 export function page(params: object) {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource/page`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource/page`,
     { params },
   );
 }
 
 export function save(data: object) {
   return requestClient.post(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource`,
     data,
   );
 }
 
 export function update(data: object) {
   return requestClient.put(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource`,
     data,
   );
 }
 
 export function deleteById(id: Array<number | string> | number | string) {
   return requestClient.delete(
-    `${VITE_PROJECT_API_URL}/system/v1/databasesource/${id}`,
+    `${VITE_PROJECT_API_URL}/development/v1/databasesource/${id}`,
   );
 }

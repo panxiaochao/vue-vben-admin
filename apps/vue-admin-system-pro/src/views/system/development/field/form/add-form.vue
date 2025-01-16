@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { defineEmits, nextTick, reactive, toRaw } from 'vue';
+import { defineEmits, reactive, toRaw } from 'vue';
 
 import { Form } from 'ant-design-vue';
-import { pick } from 'lodash-es';
 
-import { update } from '#/api/system/database/fieldtype';
+import { save } from '#/api/system/development/fieldtype';
 
 defineOptions({
-  name: 'EditForm',
+  name: 'AddForm',
   inheritAttrs: false,
 });
 
@@ -27,22 +26,11 @@ const formItemLayout = {
   },
 };
 
-// 字段对象
-interface FormState {
-  id: string | undefined;
-  dbType: string | undefined;
-  columnType: string | undefined;
-  packageName: string | undefined;
-}
-
-const defaultModel = {
-  id: undefined,
+const modelRef = reactive({
   dbType: undefined,
   columnType: undefined,
   packageName: undefined,
-};
-
-const modelRef = reactive<FormState>({ ...defaultModel });
+});
 
 const rulesRef = reactive({
   dbType: [{ type: 'string', required: true, message: '请输入数据库类型' }],
@@ -64,26 +52,14 @@ const dbTypeList = defineModel('dbTypeList', { type: Array, default: [] });
 
 const javaTypeList = defineModel('javaTypeList', { type: Array, default: [] });
 
-// 赋值
-const updateForm = (raw: FormState) => {
-  const rawValues = toRaw(raw || {});
-  if (rawValues) {
-    nextTick(() => {
-      const fieldNames = Object.keys(defaultModel) ?? [];
-      Object.assign(modelRef, pick(rawValues, fieldNames));
-    });
-  }
-};
-
-const openModal = (raw: FormState) => {
+const openModal = () => {
   open.value = true;
-  updateForm(raw);
 };
 
 const handleOk = () => {
   validate().then(() => {
     const values = toRaw(modelRef);
-    update(values).then(() => {
+    save(values).then(() => {
       resetFields();
       open.value = false;
       // 刷新
@@ -109,12 +85,11 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
-    title="编辑岗位"
+    title="新建岗位"
     @cancel="handleCancel"
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
-      <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
       <a-form-item
         label="数据库类型"
         name="dbType"

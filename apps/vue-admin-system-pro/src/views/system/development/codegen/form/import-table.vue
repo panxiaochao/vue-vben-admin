@@ -3,15 +3,20 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { reactive, ref, toRaw } from 'vue';
+import { reactive, ref } from 'vue';
+
+import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { queryDsTable } from '#/api/system/development/codegen';
+import { importTables, queryDsTable } from '#/api/system/development/gen-table';
 
 defineOptions({
   name: 'ImportTable',
   inheritAttrs: false,
 });
+
+// 定义组件的事件
+const $emits = defineEmits(['done']);
 
 // 提交loading
 const submitLoading = ref(false);
@@ -27,12 +32,12 @@ const dataSourceList = defineModel('dataSourceList', {
 
 // 查询对象
 interface FormState {
-  dbName: string;
+  databaseId: string;
   tableName: string;
 }
 
 const defaultModel = {
-  dbName: '',
+  databaseId: '',
   tableName: '',
 };
 
@@ -68,7 +73,7 @@ const formOptions: VbenFormProps = {
   schema: [
     {
       component: 'Select',
-      fieldName: 'dbName',
+      fieldName: 'databaseId',
       label: '数据源：',
       componentProps: () => {
         return {
@@ -105,18 +110,23 @@ const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
 });
 
-// 加载数据
-function loadData() {
-  fetchData(toRaw(modelRef));
-}
-
 // 远程获取数据
 function fetchData(params: object) {
-  queryDsTable(params).then((res) => {
-    gridApi.setGridOptions({
-      data: res,
+  gridApi.setLoading(true);
+  queryDsTable(params)
+    .then((res) => {
+      gridApi.setGridOptions({
+        data: res,
+      });
+    })
+    .catch(() => {
+      gridApi.setGridOptions({
+        data: [],
+      });
+    })
+    .finally(() => {
+      gridApi.setLoading(false);
     });
-  });
 }
 
 const openModal = () => {
@@ -130,16 +140,49 @@ const onClose = () => {
 };
 
 function onSubmit(values: Record<string, any>) {
-  const queryParams = {
-    ...modelRef,
-    ...values,
-  };
-  fetchData(queryParams);
+  if ((values.databaseId ?? '') === '') {
+    message.error('请选择数据源！');
+    gridApi.setGridOptions({
+      data: [],
+    });
+  } else {
+    Object.assign(modelRef, values);
+    fetchData(modelRef);
+  }
 }
 
 function onReset() {
   gridApi.formApi.resetForm();
+  gridApi.setGridOptions({ data: [] });
 }
+
+const handleImport = () => {
+  const checkRecords = gridApi.grid?.getCheckboxRecords();
+  if (checkRecords.length > 0) {
+    if (checkRecords.length > 10) {
+      message.error('勾选数量请少于10个！');
+    } else {
+      const tableNames = checkRecords.map((item) => {
+        return item?.tableName;
+      });
+      // message.info(JSON.stringify(tableNames));
+      submitLoading.value = true;
+      importTables(modelRef.databaseId, tableNames)
+        .then(() => {
+          message.info('success');
+          onReset();
+          open.value = false;
+          // 刷新
+          $emits('done');
+        })
+        .finally(() => {
+          submitLoading.value = false;
+        });
+    }
+  } else {
+    message.error('请勾选需要导入的表数据！');
+  }
+};
 
 // 暴露方法
 defineExpose({
@@ -162,7 +205,12 @@ defineExpose({
     <template #footer>
       <a-space>
         <a-button key="back" @click="onClose">取消</a-button>
-        <a-button key="submit" :loading="submitLoading" type="primary">
+        <a-button
+          key="submit"
+          :loading="submitLoading"
+          type="primary"
+          @click="handleImport"
+        >
           导入
         </a-button>
       </a-space>

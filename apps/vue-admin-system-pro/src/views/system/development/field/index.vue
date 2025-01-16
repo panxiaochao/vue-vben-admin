@@ -14,9 +14,9 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   deleteById,
   page,
-  selectDbSources,
-  testConn,
-} from '#/api/system/database/datasource';
+  selectDbTypes,
+  selectJavaTypes,
+} from '#/api/system/development/fieldtype';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -24,46 +24,32 @@ import EditForm from './form/edit-form.vue';
 
 const addForm = ref();
 const editForm = ref();
-
 // 数据库类型下拉
 const dbTypeList = ref([]);
+// JavaType下拉
+const javaTypeList = ref([]);
 
 // 字段对象
 interface RowType {
   id: string;
-  dbName: string;
-  dbCode: string;
-  dbType: string;
-  dbUsername: number;
-  testConn: string;
-  testConnTime: string;
-  createTime: string;
+  dbTypeStr: string;
+  columnType: string;
+  javaType: string;
+  packageName: number;
 }
 
 // 字段定义
 const columns = [
-  { field: 'dbName', title: '数据库名称' },
-  { field: 'dbCode', title: '数据源编码' },
-  { field: 'dbType', title: '数据库类型' },
-  { field: 'dbUsername', title: '用户名' },
-  { field: 'testConn', title: '连接状态', slots: { default: 'testConn' } },
-  { field: 'testConnTime', title: '最近连接时间' },
-  { field: 'createTime', title: '创建时间' },
-  { field: 'action', title: '操作', width: 190, slots: { default: 'action' } },
+  { field: 'dbTypeStr', title: '数据库类型' },
+  { field: 'columnType', title: '数据库字段类型' },
+  { field: 'javaType', title: 'JAVA映射类型' },
+  { field: 'packageName', title: 'JAVA包名' },
+  { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
 ];
 
 // 搜索表单定义
 const formOptions: VbenFormProps = {
   schema: [
-    {
-      component: 'Input',
-      fieldName: 'dbName',
-      label: '数据库名称：',
-      componentProps: {
-        allowClear: true,
-        placeholder: '请输入数据库名称',
-      },
-    },
     {
       component: 'Select',
       fieldName: 'dbType',
@@ -72,6 +58,17 @@ const formOptions: VbenFormProps = {
         return {
           options: dbTypeList,
           placeholder: '请输入数据库类型',
+        };
+      },
+    },
+    {
+      component: 'Select',
+      fieldName: 'javaType',
+      label: '映射类型：',
+      componentProps: () => {
+        return {
+          options: javaTypeList,
+          placeholder: '请输入JAVA映射类型',
           fieldNames: { label: 'label', value: 'label' },
         };
       },
@@ -134,10 +131,6 @@ async function refresh(bool: boolean) {
     : gridApi.query(queryParams));
 }
 
-const formatTestConn = (row: RowType) => {
-  return row.testConn === '1' ? '成功' : '失败';
-};
-
 // 自定义方法
 const deleteRow = (row: RowType) => {
   deleteById(row.id).then(() => {
@@ -147,37 +140,44 @@ const deleteRow = (row: RowType) => {
   });
 };
 
-// 测试链接
-const testConnSource = (row: RowType) => {
-  testConn(row).then((res) => {
-    if (res.testConn === '1') {
-      message.success('连接成功');
-    } else {
-      message.error('连接失败');
-    }
-    row.testConnTime = res.testConnTime;
-    row.testConn = res.testConn;
-    editForm.value.updateConnState(row);
-  });
-};
-
 // 表单处理完成做刷新处理
 const formDone = () => {
   refresh(true);
 };
 
-onMounted(() => {
-  // 加载数据库类型
-  selectDbSources().then((res) => {
+// 下拉初始化
+const selectInit = () => {
+  // 加载数据库类型数据
+  selectDbTypes().then((res) => {
     dbTypeList.value = res;
   });
+  // 加载JavaType数据
+  selectJavaTypes().then((res) => {
+    javaTypeList.value = res;
+  });
+};
+
+onMounted(() => {
+  selectInit();
 });
 </script>
 
 <template>
   <Page auto-content-height>
-    <AddForm ref="addForm" @done="formDone" :db-type-list="dbTypeList" />
-    <EditForm ref="editForm" @done="formDone" :db-type-list="dbTypeList" />
+    <AddForm
+      ref="addForm"
+      :db-type-list="dbTypeList"
+      :java-type-list="javaTypeList"
+      :width="500"
+      @done="formDone"
+    />
+    <EditForm
+      ref="editForm"
+      :db-type-list="dbTypeList"
+      :java-type-list="javaTypeList"
+      :width="500"
+      @done="formDone"
+    />
     <Grid>
       <template #toolbar-actions>
         <a-button
@@ -186,21 +186,12 @@ onMounted(() => {
           type="primary"
           @click="addForm.openModal()"
         >
-          新建数据源
+          新建字段映射
         </a-button>
-      </template>
-      <template #testConn="{ row }">
-        <a-tag :color="row.testConn === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatTestConn(row) }}
-        </a-tag>
       </template>
       <template #action="{ row }">
         <a-button class="px-0" type="link" @click="editForm.openModal(row)">
           编辑
-        </a-button>
-        <a-divider type="vertical" />
-        <a-button class="px-0" type="link" @click="testConnSource(row)">
-          测试连接
         </a-button>
         <a-divider type="vertical" />
         <a-popconfirm

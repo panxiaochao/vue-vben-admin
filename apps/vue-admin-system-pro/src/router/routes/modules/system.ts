@@ -187,33 +187,6 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
-        name: 'SystemDatabase',
-        path: '/system/database',
-        meta: {
-          icon: 'mdi:database-outline',
-          title: '数据库管理',
-        },
-        children: [
-          {
-            name: 'SystemDatabaseSource',
-            path: '/system/database/datasource',
-            component: () =>
-              import('#/views/system/database/datasource/index.vue'),
-            meta: {
-              title: '数据源',
-            },
-          },
-          {
-            name: 'SystemDatabaseField',
-            path: '/system/database/field',
-            component: () => import('#/views/system/database/field/index.vue'),
-            meta: {
-              title: '字段类型',
-            },
-          },
-        ],
-      },
-      {
         name: 'SystemDevelopment',
         path: '/system/development',
         meta: {
@@ -221,6 +194,24 @@ const routes: RouteRecordRaw[] = [
           title: '开发管理',
         },
         children: [
+          {
+            name: 'SystemDatabaseSource',
+            path: '/system/development/datasource',
+            component: () =>
+              import('#/views/system/development/datasource/index.vue'),
+            meta: {
+              title: '数据源',
+            },
+          },
+          {
+            name: 'SystemDatabaseField',
+            path: '/system/development/field',
+            component: () =>
+              import('#/views/system/development/field/index.vue'),
+            meta: {
+              title: '字段类型',
+            },
+          },
           {
             name: 'SystemCodeGen',
             path: '/system/development/codegen',

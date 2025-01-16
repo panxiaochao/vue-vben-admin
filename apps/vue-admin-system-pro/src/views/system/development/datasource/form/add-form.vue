@@ -3,7 +3,7 @@ import { defineEmits, reactive, ref, toRaw } from 'vue';
 
 import { Form, message } from 'ant-design-vue';
 
-import { save, testConn } from '#/api/system/database/datasource';
+import { save, testConn } from '#/api/system/development/datasource';
 
 defineOptions({
   name: 'AddForm',
@@ -87,8 +87,8 @@ const handleCancel = () => {
 // 数据类型下拉数据变换解析
 const handleDbTypeChange = (value: any, option: any) => {
   // 数据库驱动
-  modelRef.dbDriver = value;
-  validate(['dbHost', 'dbPort']).then(() => {
+  modelRef.dbDriver = option.driver;
+  validate(['dbName', 'dbHost', 'dbPort']).then(() => {
     // 设置数据源地址
     modelRef.dbJdbcUrl = option.url.replaceAll(
       /\{(\w+)\}/g,
@@ -97,7 +97,7 @@ const handleDbTypeChange = (value: any, option: any) => {
       },
     );
     // 设置数据库类型
-    modelRef.dbType = option.title;
+    modelRef.dbType = value;
   });
 };
 
@@ -155,9 +155,6 @@ defineExpose({
       <a-form-item label="端口" name="dbPort" v-bind="validateInfos.dbPort">
         <a-input v-model:value="modelRef.dbPort" allow-clear />
       </a-form-item>
-      <a-form-item label="数据库驱动" name="dbDriver">
-        <a-input v-model:value="modelRef.dbDriver" />
-      </a-form-item>
       <a-form-item
         label="数据库类型"
         name="dbType"
@@ -173,6 +170,9 @@ defineExpose({
       </a-form-item>
       <a-form-item label="数据源地址" name="dbJdbcUrl">
         <a-textarea v-model:value="modelRef.dbJdbcUrl" :rows="4" allow-clear />
+      </a-form-item>
+      <a-form-item label="数据库驱动" name="dbDriver">
+        <a-input v-model:value="modelRef.dbDriver" />
       </a-form-item>
       <a-form-item
         label="用户名"
