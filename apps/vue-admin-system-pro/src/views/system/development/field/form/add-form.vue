@@ -33,7 +33,6 @@ const modelRef = reactive({
 });
 
 const rulesRef = reactive({
-  dbType: [{ type: 'string', required: true, message: '请输入数据库类型' }],
   columnType: [
     { type: 'string', required: true, message: '请输入数据库字段类型' },
   ],

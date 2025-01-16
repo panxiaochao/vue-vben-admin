@@ -127,6 +127,7 @@ defineExpose({
 <template>
   <a-modal
     :body-style="{ padding: '20px' }"
+    style="top: 5%"
     :mask-closable="false"
     :open="open"
     :width="width"

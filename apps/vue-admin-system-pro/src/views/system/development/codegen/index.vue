@@ -64,17 +64,6 @@ const columns = [
 const formOptions: VbenFormProps = {
   schema: [
     {
-      component: 'Select',
-      fieldName: 'dbName',
-      label: '数据源：',
-      componentProps: () => {
-        return {
-          options: dataSourceList,
-          placeholder: '请输入数据源',
-        };
-      },
-    },
-    {
       component: 'Input',
       fieldName: 'tableName',
       label: '表名：',
