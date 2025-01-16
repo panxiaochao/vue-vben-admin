@@ -14,7 +14,6 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   deleteById,
   page,
-  selectDbTypes,
   selectJavaTypes,
 } from '#/api/system/development/fieldtype';
 
@@ -24,15 +23,12 @@ import EditForm from './form/edit-form.vue';
 
 const addForm = ref();
 const editForm = ref();
-// 数据库类型下拉
-const dbTypeList = ref([]);
 // JavaType下拉
 const javaTypeList = ref([]);
 
 // 字段对象
 interface RowType {
   id: string;
-  dbTypeStr: string;
   columnType: string;
   javaType: string;
   packageName: number;
@@ -40,7 +36,6 @@ interface RowType {
 
 // 字段定义
 const columns = [
-  { field: 'dbTypeStr', title: '数据库类型' },
   { field: 'columnType', title: '数据库字段类型' },
   { field: 'javaType', title: 'JAVA映射类型' },
   { field: 'packageName', title: 'JAVA包名' },
@@ -50,17 +45,6 @@ const columns = [
 // 搜索表单定义
 const formOptions: VbenFormProps = {
   schema: [
-    {
-      component: 'Select',
-      fieldName: 'dbType',
-      label: '数据库类型：',
-      componentProps: () => {
-        return {
-          options: dbTypeList,
-          placeholder: '请输入数据库类型',
-        };
-      },
-    },
     {
       component: 'Select',
       fieldName: 'javaType',
@@ -147,10 +131,6 @@ const formDone = () => {
 
 // 下拉初始化
 const selectInit = () => {
-  // 加载数据库类型数据
-  selectDbTypes().then((res) => {
-    dbTypeList.value = res;
-  });
   // 加载JavaType数据
   selectJavaTypes().then((res) => {
     javaTypeList.value = res;
@@ -166,14 +146,12 @@ onMounted(() => {
   <Page auto-content-height>
     <AddForm
       ref="addForm"
-      :db-type-list="dbTypeList"
       :java-type-list="javaTypeList"
       :width="500"
       @done="formDone"
     />
     <EditForm
       ref="editForm"
-      :db-type-list="dbTypeList"
       :java-type-list="javaTypeList"
       :width="500"
       @done="formDone"

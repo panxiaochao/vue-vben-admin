@@ -48,8 +48,6 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
-const dbTypeList = defineModel('dbTypeList', { type: Array, default: [] });
-
 const javaTypeList = defineModel('javaTypeList', { type: Array, default: [] });
 
 const openModal = () => {
@@ -85,23 +83,11 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
-    title="新建岗位"
+    title="新建字段类型"
     @cancel="handleCancel"
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
-      <a-form-item
-        label="数据库类型"
-        name="dbType"
-        v-bind="validateInfos.dbType"
-      >
-        <a-select
-          v-model:value="modelRef.dbType"
-          :options="dbTypeList"
-          allow-clear
-          placeholder="请选择数据库类型"
-        />
-      </a-form-item>
       <a-form-item
         label="字段类型"
         name="columnType"
