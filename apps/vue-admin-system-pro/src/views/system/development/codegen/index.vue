@@ -4,7 +4,6 @@ import type { VbenFormProps } from '@vben/common-ui';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
 import { h, onMounted, reactive, ref, toRaw } from 'vue';
-import { useRouter } from 'vue-router';
 
 import { Page } from '@vben/common-ui';
 
@@ -17,13 +16,15 @@ import { deleteById, page } from '#/api/system/development/gen-table';
 
 // 自定义组件
 import ImportTable from './form/import-table.vue';
+import GenIndex from './gen/gen-index.vue';
 
 const importTable = ref();
+const genIndex = ref();
 
 const dataSourceList = ref([]);
 
 // 定义变量内容
-const router = useRouter();
+// const router = useRouter();
 
 const defaultQueryParams = {
   pageNo: 1,
@@ -132,15 +133,15 @@ const deleteRow = (row: RowType) => {
   });
 };
 
-const openGenTab = (row: RowType) => {
-  router.push({
-    path: '/system/development/codegen/gen',
-    query: {
-      tableName: row.tableName,
-      dsName: queryParams?.dbName,
-    },
-  });
-};
+// const openGenTab = (row: RowType) => {
+//   router.push({
+//     path: '/system/development/codegen/gen',
+//     query: {
+//       tableName: row.tableName,
+//       dsName: queryParams?.dbName,
+//     },
+//   });
+// };
 
 const formatGeneratorType = (row: RowType) => {
   return row.generatorType === '1' ? '自定义' : 'ZIP压缩';
@@ -163,10 +164,10 @@ onMounted(() => {
   <Page auto-content-height>
     <ImportTable
       ref="importTable"
-      :with="800"
       @done="formDone"
       :data-source-list="dataSourceList"
     />
+    <GenIndex ref="genIndex" :width="1200" @done="formDone" />
     <Grid>
       <template #toolbar-actions>
         <a-button
@@ -184,7 +185,7 @@ onMounted(() => {
         </a-tag>
       </template>
       <template #action="{ row }">
-        <a-button class="px-0" type="link" @click="openGenTab(row)">
+        <a-button class="px-0" type="link" @click="genIndex.openModal(row.id)">
           编辑
         </a-button>
         <a-divider type="vertical" />

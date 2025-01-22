@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import type { VbenFormProps } from '@vben/common-ui';
+
+import type { VxeGridProps } from '#/adapter/vxe-table';
+
 import { h, reactive, ref, toRaw } from 'vue';
 
-import { Page, type VbenFormProps } from '@vben/common-ui';
+import { Page } from '@vben/common-ui';
 
 import { FormOutlined } from '@ant-design/icons-vue';
 import { Button, message } from 'ant-design-vue';
 
-import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteById, page } from '#/api/system/tenant/user';
 
 // 自定义组件

@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import type { VbenFormProps } from '@vben/common-ui';
+
+import type { VxeGridProps } from '#/adapter/vxe-table';
+
 import { reactive, toRaw } from 'vue';
 
-import { Page, type VbenFormProps } from '@vben/common-ui';
+import { Page } from '@vben/common-ui';
 
-import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { page } from '#/api/system/log/login';
 
 // 字段对象
@@ -123,7 +127,7 @@ const formatState = (row: RowType) => {
   <Page auto-content-height>
     <Grid>
       <template #loginType="{ row }">
-        <a-tag :color="row.loginType === 1 ? 'green' : 'red'" class="mr-0">
+        <a-tag :color="row.loginType === 1 ? 'green' : 'orange'" class="mr-0">
           {{ formatLoginType(row) }}
         </a-tag>
       </template>

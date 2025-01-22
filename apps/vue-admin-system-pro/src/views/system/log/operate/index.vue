@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { VxeGridProps } from '#/adapter/vxe-table';
+
 import { reactive, toRaw } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { page } from '#/api/system/log/operate';
 
 // 字段对象

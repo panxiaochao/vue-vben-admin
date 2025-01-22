@@ -11,6 +11,12 @@ export async function page(params: object) {
   );
 }
 
+export async function get(id: string) {
+  return requestClient.get(
+    `${VITE_PROJECT_API_URL}/development/v1/gentable/${id}`,
+  );
+}
+
 export async function queryDsTablePage(params: object) {
   return requestClient.get(
     `${VITE_PROJECT_API_URL}/development/v1/gentable/queryDsTablePage`,

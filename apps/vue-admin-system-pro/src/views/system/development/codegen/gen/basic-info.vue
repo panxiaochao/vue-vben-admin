@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { nextTick, reactive } from 'vue';
 
 import { Form } from 'ant-design-vue';
+import { pick } from 'lodash-es';
+
+import { get } from '#/api/system/development/gen-table';
 
 defineOptions({
   name: 'BasicInfo',
@@ -21,7 +24,27 @@ const formItemLayout = {
   },
 };
 
-const modelRef = reactive({
+// 字段对象
+interface FormState {
+  id: string | undefined;
+  tableName: string | undefined;
+  className: string | undefined;
+  tableComment: string | undefined;
+  author: string | undefined;
+  email: string | undefined;
+  packageName: string | undefined;
+  version: string | undefined;
+  style: string | undefined;
+  generatorType: string | undefined;
+  backendPath: string | undefined;
+  moduleName: string | undefined;
+  functionName: string | undefined;
+  formLayout: string | undefined;
+  datasourceId: string | undefined;
+}
+
+const defaultModel = {
+  id: undefined,
   tableName: undefined,
   className: undefined,
   tableComment: undefined,
@@ -36,13 +59,31 @@ const modelRef = reactive({
   functionName: undefined,
   formLayout: undefined,
   datasourceId: undefined,
-});
+};
+
+const modelRef = reactive<FormState>({ ...defaultModel });
 
 const rulesRef = reactive({
   tableName: [{ type: 'string', required: true, message: '请输入表名' }],
 });
 
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
+
+// 赋值
+const updateForm = (tableId: string) => {
+  console.log(tableId);
+  get(tableId).then((res) => {
+    nextTick(() => {
+      const fieldNames = Object.keys(defaultModel) ?? [];
+      Object.assign(modelRef, pick(res, fieldNames));
+    });
+  });
+};
+
+// 暴露方法
+defineExpose({
+  updateForm,
+});
 </script>
 
 <template>

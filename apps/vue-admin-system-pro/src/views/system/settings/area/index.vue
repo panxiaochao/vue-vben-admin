@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { VxeGridProps } from '#/adapter/vxe-table';
+
 import { onMounted, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { listTree, selectAreaLevels } from '#/api/system/settings/area';
 
 // 自定义组件

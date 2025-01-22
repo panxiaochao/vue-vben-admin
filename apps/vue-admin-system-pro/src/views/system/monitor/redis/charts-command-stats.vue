@@ -1,14 +1,11 @@
 <script lang="ts">
-import {
-  defineComponent,
-  type PropType,
-  reactive,
-  type Ref,
-  ref,
-  watchEffect,
-} from 'vue';
+import type { ECOption } from '@pxc/framework/echarts';
 
-import { type ECOption, useEcharts } from '@pxc/framework/echarts';
+import type { PropType, Ref } from 'vue';
+
+import { defineComponent, reactive, ref, watchEffect } from 'vue';
+
+import { useEcharts } from '@pxc/framework/echarts';
 import { cloneDeep } from 'lodash-es';
 
 export default defineComponent({

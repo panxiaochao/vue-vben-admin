@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { reactive, toRaw } from 'vue';
+import type { VbenFormProps } from '@vben/common-ui';
 
-import { type VbenFormProps } from '@vben/common-ui';
+import type { VxeGridListeners, VxeGridProps } from '#/adapter/vxe-table';
+
+import { reactive, toRaw } from 'vue';
 
 import { message } from 'ant-design-vue';
 import { map } from 'lodash-es';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { selectNoExistsTenantUserPage } from '#/api/system/permission/user';
 import { saveTenantUsers } from '#/api/system/tenant/tenant-user';
 

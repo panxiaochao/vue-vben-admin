@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { VxeGridProps } from '#/adapter/vxe-table';
+
 import { h, onMounted, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
@@ -6,7 +8,7 @@ import { Page } from '@vben/common-ui';
 import { FormOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
-import { useVbenVxeGrid, type VxeGridProps } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteById, tableTree } from '#/api/system/permission/menu';
 
 // 自定义组件

@@ -1,14 +1,12 @@
 <script setup lang="ts">
+import type { VxeGridListeners, VxeGridProps } from '#/adapter/vxe-table';
+
 import { h, reactive, ref, toRaw } from 'vue';
 
 import { FormOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteById, page } from '#/api/system/settings/dict-item';
 
 import AddForm from './form/add-form.vue';
