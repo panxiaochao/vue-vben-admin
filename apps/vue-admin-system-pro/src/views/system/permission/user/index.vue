@@ -18,10 +18,12 @@ import { rolesByUserId } from '#/api/system/permission/user-role';
 import AddForm from './form/add-form.vue';
 import EditForm from './form/edit-form.vue';
 import GrantRole from './form/grant-role.vue';
+import PasswordTable from './form/password-table.vue';
 
 const addForm = ref();
 const editForm = ref();
 const grantRole = ref();
+const passwordTable = ref();
 
 const userRoleIds = ref([]);
 
@@ -167,6 +169,7 @@ const formDone = () => {
   <Page auto-content-height>
     <AddForm ref="addForm" :width="900" @done="formDone" />
     <EditForm ref="editForm" :width="900" @done="formDone" />
+    <PasswordTable ref="passwordTable" :width="900" @done="formDone" />
     <GrantRole ref="grantRole" :user-role-ids="userRoleIds" :width="500" />
     <Grid>
       <template #toolbar-actions>
@@ -208,7 +211,7 @@ const formDone = () => {
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a>密码管理</a>
+                <a @click="passwordTable.openModal(row)">密码管理</a>
               </a-menu-item>
               <a-menu-item>
                 <a @click="selectRoles(row)">授权角色</a>

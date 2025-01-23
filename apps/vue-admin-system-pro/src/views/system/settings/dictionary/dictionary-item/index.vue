@@ -54,6 +54,7 @@ const queryParams = reactive({
 
 const gridOptions: VxeGridProps<RowType> = {
   columns,
+  height: 'auto',
   data: [],
   pagerConfig: {
     currentPage: 1,
@@ -145,7 +146,7 @@ defineExpose({
 
 <template>
   <a-modal
-    :body-style="{ padding: '20px' }"
+    :body-style="{ padding: '20px', height: '380px' }"
     :footer="null"
     :mask-closable="false"
     :open="open"
