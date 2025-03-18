@@ -1,7 +1,7 @@
 import type { App } from 'vue';
+
 // 注册所有 ICON
 import * as antIcons from '@ant-design/icons-vue';
-
 // base antd library
 import {
   Affix,

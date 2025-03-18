@@ -63,11 +63,11 @@ async function bootstrap(namespace: string) {
   // 配置路由及路由守卫
   app.use(router);
 
-  // 配置Motion插件
-  app.use(MotionPlugin);
-
   // 配置@tanstack/vue-query
   app.use(VueQueryPlugin);
+
+  // 配置Motion插件
+  app.use(MotionPlugin);
 
   // 动态更新标题
   watchEffect(() => {
