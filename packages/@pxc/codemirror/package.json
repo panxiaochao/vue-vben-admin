@@ -1,0 +1,42 @@
+{
+  "name": "@pxc/codemirror",
+  "version": "1.0.0",
+  "description": "自定义框架组件库",
+  "homepage": "https://github.com/panxiaochao/vue-admin-system-pro",
+  "bugs": "https://github.com/panxiaochao/vue-admin-system-pro/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panxiaochao/vue-admin-system-pro.git",
+    "directory": "packages/@pxc/codemirror"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "author": {
+    "name": "Lypxc",
+    "email": "545685602@qq.com",
+    "url": "https://github.com/panxiaochao"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "vue-codemirror": "catalog:",
+    "@codemirror/lang-html": "catalog:",
+    "@codemirror/lang-java":"catalog:",
+    "@codemirror/lang-javascript":"catalog:",
+    "@codemirror/lang-json": "catalog:",
+    "@codemirror/lang-xml":"catalog:",
+    "@codemirror/lang-vue": "catalog:",
+    "@codemirror/theme-one-dark": "catalog:",
+    "@codemirror/view": "catalog:",
+    "@codemirror/commands": "catalog:",
+    "@codemirror/language": "catalog:",
+    "vue": "catalog:"
+  }
+}

@@ -7,7 +7,7 @@ const routes: RouteRecordRaw[] = [
   {
     component: BasicLayout,
     meta: {
-      icon: 'ic:baseline-settings',
+      icon: 'ion:settings-outline',
       keepAlive: true,
       order: 1001,
       title: $t('system-plus.manage.title'),
@@ -231,6 +231,26 @@ const routes: RouteRecordRaw[] = [
               import('#/views/system-plus/development/codegen/index.vue'),
             meta: {
               title: '代码生成',
+            },
+          },
+          {
+            name: 'SystemPlusTemplate',
+            path: '/system-plus/development/template',
+            component: () =>
+              import('#/views/system-plus/development/template/index.vue'),
+            meta: {
+              title: '模版管理',
+            },
+          },
+          {
+            name: 'SystemPlusTemplateGroup',
+            path: '/system-plus/development/template-group',
+            component: () =>
+              import(
+                '#/views/system-plus/development/template-group/index.vue'
+              ),
+            meta: {
+              title: '模版分组',
             },
           },
         ],

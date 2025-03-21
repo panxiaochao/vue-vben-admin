@@ -1,4 +1,7 @@
 import type { Ref } from 'vue';
+
+import type { ECOption } from './config';
+
 import { computed, nextTick, ref, unref, watch } from 'vue';
 
 import { usePreferences } from '@vben/preferences';
@@ -10,11 +13,10 @@ import {
   useTimeoutFn,
   useWindowSize,
 } from '@vueuse/core';
-
 // 可以根据需要选用只用到的渲染器
 import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
 
-import echarts, { type ECOption } from './echarts';
+import echarts from './config';
 
 type EchartsThemeType = 'dark' | 'light' | null;
 

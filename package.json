@@ -39,7 +39,6 @@
     "clean": "node ./scripts/clean.mjs",
     "commit": "czg",
     "dev": "turbo-run dev",
-    "dev:antd": "pnpm -F @vben/web-antd run dev",
     "dev:play": "pnpm -F @vben/playground run dev",
     "dev:system-admin": "pnpm -F @vben/admin-system-pro dev",
     "format": "vsh lint --format",
