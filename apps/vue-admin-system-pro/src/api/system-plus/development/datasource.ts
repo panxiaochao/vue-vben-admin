@@ -7,6 +7,7 @@ export function selectDbSources() {
     `${VITE_PROJECT_API_URL}/development/v1/databasesource/selectDbSources`,
   );
 }
+
 export function selectDataSourceList() {
   return requestClient.get(
     `${VITE_PROJECT_API_URL}/development/v1/databasesource/selectDataSourceList`,

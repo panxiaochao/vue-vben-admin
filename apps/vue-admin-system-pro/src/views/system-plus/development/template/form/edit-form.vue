@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { defineEmits, nextTick, reactive, toRaw } from 'vue';
+import type { LanguageType } from '@pxc/codemirror';
 
-import { Form } from 'ant-design-vue';
+import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
+
+// 自定义组件
+import { CodeEdit } from '@pxc/codemirror';
+import { Form, message } from 'ant-design-vue';
 import { pick } from 'lodash-es';
 
-import { update } from '#/api/system-plus/development/fieldtype';
+import { update } from '#/api/system-plus/development/template';
 
 defineOptions({
   name: 'EditForm',
@@ -13,6 +17,10 @@ defineOptions({
 
 // 定义组件的事件
 const $emits = defineEmits(['done']);
+
+const codeEditRef = ref();
+
+const templateType = ref<LanguageType>('java');
 
 const useForm = Form.useForm;
 
@@ -30,36 +38,45 @@ const formItemLayout = {
 // 字段对象
 interface FormState {
   id: string | undefined;
-  dbType: string | undefined;
-  columnType: string | undefined;
-  packageName: string | undefined;
+  templateName: string | undefined;
+  generatorPath: string | undefined;
+  templateType: string | undefined;
+  templateDesc: string | undefined;
+  templateCode: string | undefined;
 }
 
 const defaultModel = {
   id: undefined,
-  dbType: undefined,
-  columnType: undefined,
-  packageName: undefined,
+  templateName: undefined,
+  generatorPath: undefined,
+  templateType: 'java',
+  templateDesc: undefined,
+  templateCode: '',
 };
 
 const modelRef = reactive<FormState>({ ...defaultModel });
 
 const rulesRef = reactive({
-  columnType: [
-    { type: 'string', required: true, message: '请输入数据库字段类型' },
+  templateName: [{ type: 'string', required: true, message: '请输入模板名称' }],
+  generatorPath: [
+    { type: 'string', required: true, message: '请输入模板路径' },
   ],
-  packageName: [
-    { type: 'string', required: true, message: '请输入JAVA映射类型' },
-  ],
+  templateType: [{ type: 'string', required: true, message: '请输入模板类型' }],
 });
 
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
 
 const open = defineModel('open', { type: Boolean, default: false });
 
-const width = defineModel('width', { type: Number, default: 800 });
+const width = defineModel('width', {
+  type: [String, Number],
+  default: 800 as number | string,
+});
 
-const javaTypeList = defineModel('javaTypeList', { type: Array, default: [] });
+const templateTypeList = defineModel('templateTypeList', {
+  type: Array,
+  default: [],
+});
 
 // 赋值
 const updateForm = (raw: FormState) => {
@@ -68,6 +85,8 @@ const updateForm = (raw: FormState) => {
     nextTick(() => {
       const fieldNames = Object.keys(defaultModel) ?? [];
       Object.assign(modelRef, pick(rawValues, fieldNames));
+      // 模版代码
+      codeEditRef.value.codeValue = modelRef.templateCode;
     });
   }
 };
@@ -80,18 +99,26 @@ const openModal = (raw: FormState) => {
 const handleOk = () => {
   validate().then(() => {
     const values = toRaw(modelRef);
-    update(values).then(() => {
-      resetFields();
-      open.value = false;
-      // 刷新
-      $emits('done');
-    });
+    const { codeValue } = codeEditRef.value;
+    if (codeValue) {
+      values.templateCode = codeValue;
+      update(values).then(() => {
+        resetFields();
+        codeEditRef.value.codeValue = '';
+        open.value = false;
+        // 刷新
+        $emits('done');
+      });
+    } else {
+      message.error('模版代码不能为空');
+    }
   });
 };
 
 const handleCancel = () => {
   resetFields();
   open.value = false;
+  codeEditRef.value.codeValue = '';
 };
 
 // 暴露方法
@@ -106,31 +133,87 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
-    title="编辑字段类型"
+    title="新建模版"
+    wrap-class-name="full-modal"
     @cancel="handleCancel"
     @ok="handleOk"
   >
-    <a-form v-bind="formItemLayout">
-      <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
-      <a-form-item
-        label="字段类型"
-        name="columnType"
-        v-bind="validateInfos.columnType"
-      >
-        <a-input v-model:value="modelRef.columnType" allow-clear />
-      </a-form-item>
-      <a-form-item
-        label="JAVA映射"
-        name="packageName"
-        v-bind="validateInfos.packageName"
-      >
-        <a-select
-          v-model:value="modelRef.packageName"
-          :options="javaTypeList"
-          allow-clear
-          placeholder="请选择JAVA映射类型"
-        />
-      </a-form-item>
-    </a-form>
+    <a-layout>
+      <a-layout>
+        <a-layout-sider width="350" style="background: #fff">
+          <a-form v-bind="formItemLayout">
+            <a-form-item
+              label="模版名称"
+              name="templateName"
+              v-bind="validateInfos.templateName"
+            >
+              <a-input v-model:value="modelRef.templateName" allow-clear />
+            </a-form-item>
+            <a-form-item
+              label="模版路径"
+              name="generatorPath"
+              v-bind="validateInfos.generatorPath"
+            >
+              <a-textarea
+                :rows="4"
+                v-model:value="modelRef.generatorPath"
+                allow-clear
+              />
+            </a-form-item>
+            <a-form-item
+              label="模版类型"
+              name="templateType"
+              v-bind="validateInfos.templateType"
+            >
+              <a-select
+                v-model:value="modelRef.templateType"
+                :options="templateTypeList"
+                allow-clear
+                placeholder="请选择模版类型"
+              />
+            </a-form-item>
+            <a-form-item label="模版描述" name="templateDesc">
+              <a-textarea
+                v-model:value="modelRef.templateDesc"
+                :rows="4"
+                allow-clear
+              />
+            </a-form-item>
+          </a-form>
+        </a-layout-sider>
+        <a-layout>
+          <a-layout-content>
+            <CodeEdit
+              ref="codeEditRef"
+              :language="modelRef.templateType"
+              :height="650"
+            />
+          </a-layout-content>
+        </a-layout>
+      </a-layout>
+    </a-layout>
   </a-modal>
 </template>
+
+<style lang="scss">
+.full-modal {
+  .ant-modal {
+    max-width: 100%;
+    top: 0;
+    padding-bottom: 0;
+    margin: 0;
+    height: 100%;
+    min-height: calc(100vh - 0px);
+  }
+
+  .ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh);
+  }
+
+  .ant-modal-body {
+    flex: 1;
+  }
+}
+</style>

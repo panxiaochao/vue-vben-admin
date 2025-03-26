@@ -21,9 +21,15 @@ catalogs:
     '@clack/prompts':
       specifier: ^0.9.1
       version: 0.9.1
+    '@codemirror/autocomplete':
+      specifier: ^6.18.6
+      version: 6.18.6
     '@codemirror/commands':
       specifier: ^6.8.0
       version: 6.8.0
+    '@codemirror/lang-css':
+      specifier: ^6.3.1
+      version: 6.3.1
     '@codemirror/lang-html':
       specifier: ^6.4.9
       version: 6.4.9
@@ -36,12 +42,18 @@ catalogs:
     '@codemirror/lang-json':
       specifier: ^6.0.1
       version: 6.0.1
+    '@codemirror/lang-python':
+      specifier: ^6.1.7
+      version: 6.1.7
     '@codemirror/lang-vue':
       specifier: ^0.1.3
       version: 0.1.3
     '@codemirror/lang-xml':
       specifier: ^6.1.0
       version: 6.1.0
+    '@codemirror/lang-yaml':
+      specifier: ^6.1.2
+      version: 6.1.2
     '@codemirror/language':
       specifier: ^6.11.0
       version: 6.11.0
@@ -1333,9 +1345,15 @@ importers:
 
   packages/@pxc/codemirror:
     dependencies:
+      '@codemirror/autocomplete':
+        specifier: 'catalog:'
+        version: 6.18.6
       '@codemirror/commands':
         specifier: 'catalog:'
         version: 6.8.0
+      '@codemirror/lang-css':
+        specifier: 'catalog:'
+        version: 6.3.1
       '@codemirror/lang-html':
         specifier: 'catalog:'
         version: 6.4.9
@@ -1348,12 +1366,18 @@ importers:
       '@codemirror/lang-json':
         specifier: 'catalog:'
         version: 6.0.1
+      '@codemirror/lang-python':
+        specifier: 'catalog:'
+        version: 6.1.7
       '@codemirror/lang-vue':
         specifier: 'catalog:'
         version: 0.1.3
       '@codemirror/lang-xml':
         specifier: 'catalog:'
         version: 6.1.0
+      '@codemirror/lang-yaml':
+        specifier: 'catalog:'
+        version: 6.1.2
       '@codemirror/language':
         specifier: 'catalog:'
         version: 6.11.0
@@ -2517,11 +2541,17 @@ packages:
   '@codemirror/lang-json@6.0.1':
     resolution: {integrity: sha512-+T1flHdgpqDDlJZ2Lkil/rLiRy684WMLc74xUnjJH48GQdfJo/pudlTRreZmKwzP8/tGdKf83wlbAdOCzlJOGQ==}
 
+  '@codemirror/lang-python@6.1.7':
+    resolution: {integrity: sha512-mZnFTsL4lW5p9ch8uKNKeRU3xGGxr1QpESLilfON2E3fQzOa/OygEMkaDvERvXDJWJA9U9oN/D4w0ZuUzNO4+g==}
+
   '@codemirror/lang-vue@0.1.3':
     resolution: {integrity: sha512-QSKdtYTDRhEHCfo5zOShzxCmqKJvgGrZwDQSdbvCRJ5pRLWBS7pD/8e/tH44aVQT6FKm0t6RVNoSUWHOI5vNug==}
 
   '@codemirror/lang-xml@6.1.0':
     resolution: {integrity: sha512-3z0blhicHLfwi2UgkZYRPioSgVTo9PV5GP5ducFH6FaHy0IAJRg+ixj5gTR1gnT/glAIC8xv4w2VL1LoZfs+Jg==}
+
+  '@codemirror/lang-yaml@6.1.2':
+    resolution: {integrity: sha512-dxrfG8w5Ce/QbT7YID7mWZFKhdhsaTNOYjOkSIMt1qmC4VQnXSDSYVHHHn8k6kJUfIhtLo8t1JJgltlxWdsITw==}
 
   '@codemirror/language@6.11.0':
     resolution: {integrity: sha512-A7+f++LodNNc1wGgoRDTt78cOwWm9KVezApgjOMp1W4hM0898nsqBXwF+sbePE7ZRcjN7Sa1Z5m2oN27XkmEjQ==}
@@ -3475,8 +3505,14 @@ packages:
   '@lezer/lr@1.4.2':
     resolution: {integrity: sha512-pu0K1jCIdnQ12aWNaAVU5bzi7Bd1w54J3ECgANPmYLtQKP0HBj2cE/5coBD66MT10xbtIuUr7tg0Shbsvk0mDA==}
 
+  '@lezer/python@1.1.16':
+    resolution: {integrity: sha512-ievIWylIZA5rNgAyHgA06/Y76vMUISKaYL9WrtjU8rCTTEzyZYo2jz9ER2YBdnN6dxCyS7eaK4HJCzamoAMKZw==}
+
   '@lezer/xml@1.0.6':
     resolution: {integrity: sha512-CdDwirL0OEaStFue/66ZmFSeppuL6Dwjlk8qk153mSQwiSH/Dlri4GNymrNWnUmPl2Um7QfV1FO9KFUyX3Twww==}
+
+  '@lezer/yaml@1.0.3':
+    resolution: {integrity: sha512-GuBLekbw9jDBDhGur82nuwkxKQ+a3W5H0GfaAthDXcAu+XdpS43VlnxA9E9hllkpSP5ellRDKjLLj7Lu9Wr6xA==}
 
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -10954,6 +10990,14 @@ snapshots:
       '@codemirror/language': 6.11.0
       '@lezer/json': 1.0.3
 
+  '@codemirror/lang-python@6.1.7':
+    dependencies:
+      '@codemirror/autocomplete': 6.18.6
+      '@codemirror/language': 6.11.0
+      '@codemirror/state': 6.5.2
+      '@lezer/common': 1.2.3
+      '@lezer/python': 1.1.16
+
   '@codemirror/lang-vue@0.1.3':
     dependencies:
       '@codemirror/lang-html': 6.4.9
@@ -10971,6 +11015,16 @@ snapshots:
       '@codemirror/view': 6.36.4
       '@lezer/common': 1.2.3
       '@lezer/xml': 1.0.6
+
+  '@codemirror/lang-yaml@6.1.2':
+    dependencies:
+      '@codemirror/autocomplete': 6.18.6
+      '@codemirror/language': 6.11.0
+      '@codemirror/state': 6.5.2
+      '@lezer/common': 1.2.3
+      '@lezer/highlight': 1.2.1
+      '@lezer/lr': 1.4.2
+      '@lezer/yaml': 1.0.3
 
   '@codemirror/language@6.11.0':
     dependencies:
@@ -11953,7 +12007,19 @@ snapshots:
     dependencies:
       '@lezer/common': 1.2.3
 
+  '@lezer/python@1.1.16':
+    dependencies:
+      '@lezer/common': 1.2.3
+      '@lezer/highlight': 1.2.1
+      '@lezer/lr': 1.4.2
+
   '@lezer/xml@1.0.6':
+    dependencies:
+      '@lezer/common': 1.2.3
+      '@lezer/highlight': 1.2.1
+      '@lezer/lr': 1.4.2
+
+  '@lezer/yaml@1.0.3':
     dependencies:
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1

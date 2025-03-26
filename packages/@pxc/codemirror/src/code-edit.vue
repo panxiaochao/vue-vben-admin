@@ -1,17 +1,30 @@
 <script lang="ts">
-import type { EditorView } from '@codemirror/view';
+import type { EditorView, ViewUpdate } from '@codemirror/view';
 
 import type { PropType } from 'vue';
 
 import { computed, defineComponent, ref, shallowRef, watch } from 'vue';
 import { Codemirror } from 'vue-codemirror';
 
+import { autocompletion } from '@codemirror/autocomplete';
+import { indentWithTab } from '@codemirror/commands';
+import { css } from '@codemirror/lang-css';
+import { html } from '@codemirror/lang-html';
+import { java } from '@codemirror/lang-java';
 import { javascript } from '@codemirror/lang-javascript';
+import { json } from '@codemirror/lang-json';
+import { python } from '@codemirror/lang-python';
+import { vue } from '@codemirror/lang-vue';
+import { xml } from '@codemirror/lang-xml';
+import { yaml } from '@codemirror/lang-yaml';
 import {
+  bracketMatching,
   defaultHighlightStyle,
+  foldGutter,
   syntaxHighlighting,
 } from '@codemirror/language';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { keymap } from '@codemirror/view';
 
 // 基础配置类型
 export interface CodeEditorOptions {
@@ -21,8 +34,18 @@ export interface CodeEditorOptions {
 }
 
 // 主题类型
-type ThemeType = 'dark' | 'light' | 'none';
-type LanguageType = 'css' | 'html' | 'javascript' | 'python';
+export type ThemeType = 'dark' | 'light' | 'none';
+export type LanguageType =
+  | 'css'
+  | 'html'
+  | 'java'
+  | 'javascript'
+  | 'json'
+  | 'python'
+  | 'typescript'
+  | 'vue'
+  | 'xml'
+  | 'yaml';
 
 export default defineComponent({
   // name: 'CodeEditor',
@@ -49,7 +72,7 @@ export default defineComponent({
       type: String as PropType<ThemeType>,
     },
   },
-  emits: ['update:modelValue', 'ready', 'change'],
+  emits: ['update:modelValue', 'change', 'ready'],
   setup(props, { emit }) {
     // 编辑器实例
     const view = shallowRef<EditorView>();
@@ -62,6 +85,7 @@ export default defineComponent({
 
     // 合并默认配置和传入配置
     const mergedOptions = computed<CodeEditorOptions>(() => ({
+      autofocus: true,
       indentUnit: 4,
       indentWithTabs: true,
       lineNumbers: true,
@@ -75,15 +99,36 @@ export default defineComponent({
     const languageExtensions = computed(() => {
       const lang = props.language.toLowerCase();
       switch (lang) {
+        case 'css': {
+          return [css()];
+        }
+        case 'html': {
+          return [html()];
+        }
+        case 'java': {
+          return [java()];
+        }
         case 'javascript': {
           return [javascript()];
         }
-        // case 'css':
-        //   return [css()];
-        // case 'html':
-        //   return [html()];
-        // case 'python':
-        //   return [python()];
+        case 'json': {
+          return [json()];
+        }
+        case 'python': {
+          return [python()];
+        }
+        case 'typescript': {
+          return [javascript()];
+        }
+        case 'vue': {
+          return [vue()];
+        }
+        case 'xml': {
+          return [xml()];
+        }
+        case 'yaml': {
+          return [yaml()];
+        }
         default: {
           return [javascript()];
         }
@@ -98,10 +143,11 @@ export default defineComponent({
     // 组合所有扩展
     const activeExtensions = computed(() => [
       languageExtensions.value,
-      ...themeExtensions.value,
-      // keymap.of([indentWithTab]),
-      // bracketMatching(),
-      // foldGutter(),
+      themeExtensions.value,
+      keymap.of([indentWithTab]),
+      bracketMatching(),
+      foldGutter(),
+      autocompletion(),
       syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
     ]);
 
@@ -112,10 +158,12 @@ export default defineComponent({
     };
 
     // 处理代码变化
-    const handleChange = (value: string) => {
-      if (value !== props.modelValue) {
-        emit('update:modelValue', value);
-        emit('change', value);
+    const handleUpdate = (value: ViewUpdate) => {
+      const newValue = value.state.doc.toString();
+      if (newValue !== props.modelValue) {
+        codeValue.value = newValue;
+        emit('update:modelValue', newValue);
+        emit('change', newValue);
       }
     };
 
@@ -133,8 +181,8 @@ export default defineComponent({
       activeExtensions,
       codeValue,
       containerHeight,
-      handleChange,
       handleReady,
+      handleUpdate,
       mergedOptions,
     };
   },
@@ -147,7 +195,7 @@ export default defineComponent({
       v-model="codeValue"
       :extensions="activeExtensions"
       :options="mergedOptions"
-      @update="handleChange"
+      @update="handleUpdate"
       @ready="handleReady"
     />
   </div>

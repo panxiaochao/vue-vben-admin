@@ -3,7 +3,7 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { h, reactive, ref, toRaw } from 'vue';
+import { h, onMounted, reactive, ref, toRaw } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
@@ -11,7 +11,11 @@ import { FormOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteById, page } from '#/api/system-plus/development/template';
+import {
+  deleteById,
+  page,
+  selectTemplateTypes,
+} from '#/api/system-plus/development/template';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -22,18 +26,28 @@ const editForm = ref();
 // 表单宽度
 const formWidth = ref('100%');
 
+// 模版类型下拉
+const templateTypeList = ref([]);
+
 // 字段对象
 interface RowType {
   id: string;
-  columnType: string;
-  javaType: string;
-  packageName: number;
+  templateName: string;
+  generatorPath: string;
+  templateDesc: string;
+  templateType: string;
+  createTime: string;
 }
 
 // 字段定义
 const columns = [
   { field: 'templateName', title: '模版名称' },
   { field: 'generatorPath', title: '模版路径' },
+  {
+    field: 'templateType',
+    title: '模版类型',
+    slots: { default: 'templateType' },
+  },
   { field: 'templateDesc', title: '模版描述' },
   { field: 'createTime', title: '创建时间' },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
@@ -49,6 +63,18 @@ const formOptions: VbenFormProps = {
       componentProps: {
         allowClear: true,
         placeholder: '请输入模版名称',
+      },
+    },
+    {
+      component: 'Select',
+      fieldName: 'templateType',
+      label: '模版类型：',
+      componentProps: () => {
+        return {
+          options: templateTypeList,
+          placeholder: '请输入模版类型',
+          fieldNames: { label: 'label', value: 'label' },
+        };
       },
     },
   ],
@@ -122,12 +148,29 @@ const deleteRow = (row: RowType) => {
 const formDone = () => {
   refresh(true);
 };
+
+onMounted(() => {
+  // 加载数据库类型
+  selectTemplateTypes().then((res) => {
+    templateTypeList.value = res;
+  });
+});
 </script>
 
 <template>
   <Page auto-content-height>
-    <AddForm ref="addForm" :width="formWidth" @done="formDone" />
-    <EditForm ref="editForm" :width="500" @done="formDone" />
+    <AddForm
+      ref="addForm"
+      :width="formWidth"
+      @done="formDone"
+      :template-type-list="templateTypeList"
+    />
+    <EditForm
+      ref="editForm"
+      :width="formWidth"
+      @done="formDone"
+      :template-type-list="templateTypeList"
+    />
     <Grid>
       <template #toolbar-actions>
         <a-button
@@ -138,6 +181,11 @@ const formDone = () => {
         >
           新建模版
         </a-button>
+      </template>
+      <template #templateType="{ row }">
+        <a-tag color="blue" class="mr-0">
+          {{ row.templateType }}
+        </a-tag>
       </template>
       <template #action="{ row }">
         <a-button class="px-0" type="link" @click="editForm.openModal(row)">
