@@ -8,7 +8,7 @@ import { CodeEdit } from '@pxc/codemirror';
 import { Form, message } from 'ant-design-vue';
 import { pick } from 'lodash-es';
 
-import { update } from '#/api/system-plus/development/template';
+import { update } from '#/api/system-plus/development/gen-template';
 
 defineOptions({
   name: 'EditForm',
@@ -19,8 +19,6 @@ defineOptions({
 const $emits = defineEmits(['done']);
 
 const codeEditRef = ref();
-
-const templateType = ref<LanguageType>('java');
 
 const useForm = Form.useForm;
 
@@ -40,7 +38,7 @@ interface FormState {
   id: string | undefined;
   templateName: string | undefined;
   generatorPath: string | undefined;
-  templateType: string | undefined;
+  templateType: LanguageType;
   templateDesc: string | undefined;
   templateCode: string | undefined;
 }
@@ -49,7 +47,7 @@ const defaultModel = {
   id: undefined,
   templateName: undefined,
   generatorPath: undefined,
-  templateType: 'java',
+  templateType: 'java' as LanguageType,
   templateDesc: undefined,
   templateCode: '',
 };
@@ -85,8 +83,6 @@ const updateForm = (raw: FormState) => {
     nextTick(() => {
       const fieldNames = Object.keys(defaultModel) ?? [];
       Object.assign(modelRef, pick(rawValues, fieldNames));
-      // 模版代码
-      codeEditRef.value.codeValue = modelRef.templateCode;
     });
   }
 };
@@ -103,8 +99,8 @@ const handleOk = () => {
     if (codeValue) {
       values.templateCode = codeValue;
       update(values).then(() => {
-        resetFields();
         codeEditRef.value.codeValue = '';
+        resetFields();
         open.value = false;
         // 刷新
         $emits('done');
@@ -147,7 +143,11 @@ defineExpose({
               name="templateName"
               v-bind="validateInfos.templateName"
             >
-              <a-input v-model:value="modelRef.templateName" allow-clear />
+              <a-input
+                disabled
+                v-model:value="modelRef.templateName"
+                allow-clear
+              />
             </a-form-item>
             <a-form-item
               label="模版路径"
@@ -185,6 +185,7 @@ defineExpose({
           <a-layout-content>
             <CodeEdit
               ref="codeEditRef"
+              :model-value="modelRef.templateCode"
               :language="modelRef.templateType"
               :height="650"
             />

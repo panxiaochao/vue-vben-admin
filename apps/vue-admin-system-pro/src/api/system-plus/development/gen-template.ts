@@ -42,3 +42,9 @@ export function selectTemplateTypes() {
     `${VITE_PROJECT_API_URL}/development/v1/gentemplate/selectTemplateTypes`,
   );
 }
+
+export function selectTemplateList() {
+  return requestClient.get(
+    `${VITE_PROJECT_API_URL}/development/v1/gentemplate/selectTemplateList`,
+  );
+}

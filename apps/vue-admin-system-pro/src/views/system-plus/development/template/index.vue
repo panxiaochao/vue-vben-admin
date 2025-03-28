@@ -15,7 +15,7 @@ import {
   deleteById,
   page,
   selectTemplateTypes,
-} from '#/api/system-plus/development/template';
+} from '#/api/system-plus/development/gen-template';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -43,13 +43,14 @@ interface RowType {
 const columns = [
   { field: 'templateName', title: '模版名称' },
   { field: 'generatorPath', title: '模版路径' },
+  { field: 'templateDesc', title: '模版描述' },
   {
     field: 'templateType',
     title: '模版类型',
     slots: { default: 'templateType' },
+    width: 80,
   },
-  { field: 'templateDesc', title: '模版描述' },
-  { field: 'createTime', title: '创建时间' },
+  { field: 'createTime', title: '创建时间', width: 180 },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
 ];
 

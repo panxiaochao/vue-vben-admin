@@ -3,7 +3,14 @@ import type { EditorView, ViewUpdate } from '@codemirror/view';
 
 import type { PropType } from 'vue';
 
-import { computed, defineComponent, ref, shallowRef, watch } from 'vue';
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  ref,
+  shallowRef,
+  watch,
+} from 'vue';
 import { Codemirror } from 'vue-codemirror';
 
 import { autocompletion } from '@codemirror/autocomplete';
@@ -76,7 +83,8 @@ export default defineComponent({
   setup(props, { emit }) {
     // 编辑器实例
     const view = shallowRef<EditorView>();
-    const codeValue = ref(props.modelValue);
+    const codeValue = ref(props.modelValue || '');
+    const updateState = ref(false);
 
     // 动态计算容器高度
     const containerHeight = computed(() =>
@@ -130,7 +138,7 @@ export default defineComponent({
           return [yaml()];
         }
         default: {
-          return [javascript()];
+          return [java()];
         }
       }
     });
@@ -154,16 +162,29 @@ export default defineComponent({
     // 处理编辑器就绪事件
     const handleReady = (payload: { view: EditorView }) => {
       view.value = payload.view;
+      // console.log('view:', view.value);
       emit('ready', payload.view);
     };
 
     // 处理代码变化
-    const handleUpdate = (value: ViewUpdate) => {
-      const newValue = value.state.doc.toString();
-      if (newValue !== props.modelValue) {
-        codeValue.value = newValue;
-        emit('update:modelValue', newValue);
-        emit('change', newValue);
+    const handleUpdate = (update: ViewUpdate) => {
+      // 忽略锁定期间的更新
+      if (update.docChanged && !updateState.value) {
+        const newValue = update.state.doc.toString();
+        // console.log(
+        //   'newValue:',
+        //   newValue,
+        //   'props.modelValue:',
+        //   props.modelValue,
+        // );
+        if (newValue !== props.modelValue) {
+          updateState.value = true;
+          codeValue.value = newValue;
+          emit('update:modelValue', newValue);
+          emit('change', newValue);
+          // 使用微任务解锁
+          Promise.resolve().then(() => (updateState.value = false));
+        }
       }
     };
 
@@ -171,8 +192,14 @@ export default defineComponent({
     watch(
       () => props.modelValue,
       (newVal) => {
-        if (newVal !== codeValue.value) {
+        if (updateState.value || !view.value) return;
+        const currentDoc = view.value.state.doc.toString();
+        // console.log('watch   newVal:', newVal, 'codeValue.value:', currentDoc);
+        if (newVal !== currentDoc) {
+          updateState.value = true;
           codeValue.value = newVal;
+          // 使用微任务解锁
+          nextTick(() => (updateState.value = false));
         }
       },
     );

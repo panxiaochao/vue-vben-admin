@@ -3,7 +3,7 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { h, onMounted, reactive, ref, toRaw } from 'vue';
+import { h, reactive, ref, toRaw } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
@@ -11,11 +11,7 @@ import { FormOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import {
-  deleteById,
-  page,
-  selectJavaTypes,
-} from '#/api/system-plus/development/fieldtype';
+import { deleteById, page } from '#/api/system-plus/development/gen-group';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -23,22 +19,20 @@ import EditForm from './form/edit-form.vue';
 
 const addForm = ref();
 const editForm = ref();
-// JavaType下拉
-const javaTypeList = ref([]);
 
 // 字段对象
 interface RowType {
   id: string;
-  columnType: string;
-  javaType: string;
-  packageName: number;
+  groupName: string;
+  groupDesc: string;
+  createTime: string;
 }
 
 // 字段定义
 const columns = [
-  { field: 'columnType', title: '数据库字段类型' },
-  { field: 'javaType', title: 'JAVA映射类型' },
-  { field: 'packageName', title: 'JAVA包名' },
+  { field: 'groupName', title: '分组名称' },
+  { field: 'groupDesc', title: '分组描述' },
+  { field: 'createTime', title: '创建时间' },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
 ];
 
@@ -46,15 +40,12 @@ const columns = [
 const formOptions: VbenFormProps = {
   schema: [
     {
-      component: 'Select',
-      fieldName: 'javaType',
-      label: '映射类型：',
-      componentProps: () => {
-        return {
-          options: javaTypeList,
-          placeholder: '请输入JAVA映射类型',
-          fieldNames: { label: 'label', value: 'label' },
-        };
+      component: 'Input',
+      fieldName: 'groupName',
+      label: '分组名称：',
+      componentProps: {
+        allowClear: true,
+        placeholder: '请输入分组名称',
       },
     },
   ],
@@ -128,34 +119,12 @@ const deleteRow = (row: RowType) => {
 const formDone = () => {
   refresh(true);
 };
-
-// 下拉初始化
-const selectInit = () => {
-  // 加载JavaType数据
-  selectJavaTypes().then((res) => {
-    javaTypeList.value = res;
-  });
-};
-
-onMounted(() => {
-  selectInit();
-});
 </script>
 
 <template>
   <Page auto-content-height>
-    <AddForm
-      ref="addForm"
-      :java-type-list="javaTypeList"
-      :width="500"
-      @done="formDone"
-    />
-    <EditForm
-      ref="editForm"
-      :java-type-list="javaTypeList"
-      :width="500"
-      @done="formDone"
-    />
+    <AddForm ref="addForm" :width="650" @done="formDone" />
+    <EditForm ref="editForm" :width="650" @done="formDone" />
     <Grid>
       <template #toolbar-actions>
         <a-button
@@ -164,7 +133,7 @@ onMounted(() => {
           type="primary"
           @click="addForm.openModal()"
         >
-          新建字段映射
+          新建分组
         </a-button>
       </template>
       <template #action="{ row }">

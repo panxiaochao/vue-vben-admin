@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { defineEmits, reactive, toRaw } from 'vue';
+import { defineEmits, reactive, ref, toRaw } from 'vue';
 
 import { Form } from 'ant-design-vue';
 
-import { save } from '#/api/system-plus/development/fieldtype';
+import { save } from '#/api/system-plus/development/gen-group';
+import { selectTemplateList } from '#/api/system-plus/development/gen-template';
 
 defineOptions({
   name: 'AddForm',
@@ -14,6 +15,8 @@ defineOptions({
 const $emits = defineEmits(['done']);
 
 const useForm = Form.useForm;
+
+const templateList = ref([]);
 
 const formItemLayout = {
   labelCol: {
@@ -27,18 +30,14 @@ const formItemLayout = {
 };
 
 const modelRef = reactive({
-  dbType: undefined,
-  columnType: undefined,
-  packageName: undefined,
+  groupName: undefined,
+  groupDesc: undefined,
+  templateIds: [],
 });
 
 const rulesRef = reactive({
-  columnType: [
-    { type: 'string', required: true, message: '请输入数据库字段类型' },
-  ],
-  packageName: [
-    { type: 'string', required: true, message: '请输入JAVA映射类型' },
-  ],
+  groupName: [{ type: 'string', required: true, message: '请输入分组名称' }],
+  templateIds: [{ type: 'array', required: true, message: '请输入模版类型' }],
 });
 
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
@@ -47,10 +46,13 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
-const javaTypeList = defineModel('javaTypeList', { type: Array, default: [] });
-
 const openModal = () => {
   open.value = true;
+  // 加载模版类型
+  templateList.value = [];
+  selectTemplateList().then((res) => {
+    templateList.value = res;
+  });
 };
 
 const handleOk = () => {
@@ -82,29 +84,33 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
-    title="新建字段类型"
+    title="新建分组"
     @cancel="handleCancel"
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
       <a-form-item
-        label="字段类型"
-        name="columnType"
-        v-bind="validateInfos.columnType"
+        label="分组名称"
+        name="groupName"
+        v-bind="validateInfos.groupName"
       >
-        <a-input v-model:value="modelRef.columnType" allow-clear />
+        <a-input v-model:value="modelRef.groupName" allow-clear />
       </a-form-item>
       <a-form-item
-        label="JAVA映射"
-        name="packageName"
-        v-bind="validateInfos.packageName"
+        label="模本类型"
+        name="templateIds"
+        v-bind="validateInfos.templateIds"
       >
         <a-select
-          v-model:value="modelRef.packageName"
-          :options="javaTypeList"
+          v-model:value="modelRef.templateIds"
+          :options="templateList"
           allow-clear
-          placeholder="请选择JAVA映射类型"
+          mode="multiple"
+          placeholder="请选择模版类型"
         />
+      </a-form-item>
+      <a-form-item label="分组描述" name="groupDesc">
+        <a-textarea v-model:value="modelRef.groupDesc" :rows="4" allow-clear />
       </a-form-item>
     </a-form>
   </a-modal>

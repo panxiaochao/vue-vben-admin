@@ -243,12 +243,10 @@ const routes: RouteRecordRaw[] = [
             },
           },
           {
-            name: 'SystemPlusTemplateGroup',
-            path: '/system-plus/development/template-group',
+            name: 'SystemPlusGroup',
+            path: '/system-plus/development/group',
             component: () =>
-              import(
-                '#/views/system-plus/development/template-group/index.vue'
-              ),
+              import('#/views/system-plus/development/group/index.vue'),
             meta: {
               title: '模版分组',
             },

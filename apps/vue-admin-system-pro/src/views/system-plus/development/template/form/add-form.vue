@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import type { LanguageType } from '@pxc/codemirror';
+
 import { defineEmits, reactive, ref, toRaw } from 'vue';
 
 // 自定义组件
 import { CodeEdit } from '@pxc/codemirror';
 import { Form, message } from 'ant-design-vue';
 
-import { save } from '#/api/system-plus/development/template';
+import { save } from '#/api/system-plus/development/gen-template';
 
 defineOptions({
   name: 'AddForm',
@@ -33,7 +35,7 @@ const formItemLayout = {
 const modelRef = reactive({
   templateName: undefined,
   generatorPath: undefined,
-  templateType: 'java',
+  templateType: 'java' as LanguageType,
   templateDesc: undefined,
   templateCode: '',
 });
@@ -71,8 +73,8 @@ const handleOk = () => {
     if (codeValue) {
       values.templateCode = codeValue;
       save(values).then(() => {
-        resetFields();
         codeEditRef.value.codeValue = '';
+        resetFields();
         open.value = false;
         // 刷新
         $emits('done');
