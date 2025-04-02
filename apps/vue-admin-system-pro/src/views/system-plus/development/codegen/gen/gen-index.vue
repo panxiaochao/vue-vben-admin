@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { StepProps } from 'ant-design-vue';
 
-import { nextTick, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 // 自定义组件
 import BasicInfo from './basic-info.vue';
+import CodePreview from './code-preview.vue';
 import FieldInfo from './field-info.vue';
 import ResultInfo from './result-info.vue';
 
@@ -16,9 +17,16 @@ defineOptions({
 const basicInfo = ref();
 const fieldInfo = ref();
 const resultInfo = ref();
+const codePreview = ref();
 
 // 当前步骤
 const current = ref<number>(0);
+
+// 表单id 表ID
+const currentTableId = ref<string>('');
+
+// 预览model宽度
+const modelWidth = ref('100%');
 
 // 选项卡内容
 const defaultItem: StepProps[] = [
@@ -36,7 +44,21 @@ const defaultItem: StepProps[] = [
 const item = reactive<StepProps[]>(defaultItem);
 
 // 跳转步骤
-const go = (activeSteps: number) => {
+const go = async (activeSteps: number) => {
+  if (activeSteps === 0) {
+    // 等待子组件加载完成
+    // await nextTick(() => {
+    //   basicInfo.value.updateForm(currentTableId.value);
+    // });
+  } else if (activeSteps === 1) {
+    const isValid = await basicInfo.value.handleOk();
+    if (!isValid) {
+      return;
+    }
+    // await nextTick(() => {
+    //   fieldInfo.value.loadData(currentTableId.value);
+    // });
+  }
   current.value = activeSteps;
 };
 
@@ -46,14 +68,21 @@ const width = defineModel('width', { type: Number, default: 800 });
 
 const openModal = (tableId: string) => {
   open.value = true;
+  currentTableId.value = tableId;
   // 等待子组件加载完成
-  nextTick(() => {
-    basicInfo.value.updateForm(tableId);
-  });
+  // nextTick(() => {
+  //   basicInfo.value.updateForm(tableId);
+  // });
 };
 
 const onClose = () => {
   open.value = false;
+  current.value = 0;
+};
+
+// 预览
+const preview = async () => {
+  codePreview.value.openModal();
 };
 
 // 暴露方法
@@ -68,33 +97,50 @@ defineExpose({
     :open="open"
     :width="width"
     placement="right"
-    title="编辑"
+    title="生成代码"
     @close="onClose"
   >
-    <a-card>
-      <a-steps
-        class="stepsCls"
-        :current="current"
-        label-placement="vertical"
-        :items="item"
-      />
-    </a-card>
-    <a-card class="mt-5">
-      <div class="content">
-        <BasicInfo ref="basicInfo" v-if="current === 0" />
-        <FieldInfo v-if="current === 1" />
-        <ResultInfo v-if="current === 2" />
+    <CodePreview
+      ref="codePreview"
+      :width="modelWidth"
+      :table-id="currentTableId"
+    />
+    <a-steps
+      class="stepsCls"
+      :current="current"
+      label-placement="vertical"
+      :items="item"
+    />
 
-        <div style="text-align: center">
+    <div class="content">
+      <BasicInfo
+        ref="basicInfo"
+        :table-id="currentTableId"
+        v-if="current === 0"
+      />
+      <FieldInfo
+        ref="fieldInfo"
+        :table-id="currentTableId"
+        v-if="current === 1"
+      />
+      <ResultInfo ref="resultInfo" v-if="current === 2" />
+
+      <div style="text-align: center" class="pb-5">
+        <a-space>
           <a-button type="primary" @click="go(1)" v-if="current === 0">
             下一步
           </a-button>
-          <a-button @click="go(0)" v-if="current === 1 || 2"> 上一步 </a-button>
-          <a-button @click="go(2)" v-if="current === 1"> 保存并预览 </a-button>
+          <a-button type="primary" @click="go(0)" v-if="current === 1">
+            上一步
+          </a-button>
+          <a-button @click="go(2)" v-if="current === 1"> 仅保存 </a-button>
+          <a-button @click="preview" v-if="current === 1">
+            保存并预览
+          </a-button>
           <a-button @click="go(2)" v-if="current === 1"> 保存并生成 </a-button>
-        </div>
+        </a-space>
       </div>
-    </a-card>
+    </div>
   </a-drawer>
 </template>
 

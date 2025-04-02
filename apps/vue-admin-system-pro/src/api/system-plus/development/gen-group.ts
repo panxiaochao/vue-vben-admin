@@ -36,3 +36,9 @@ export async function deleteById(id: Array<number | string> | number | string) {
     `${VITE_PROJECT_API_URL}/development/v1/gengroup/${id}`,
   );
 }
+
+export function selectGroupList() {
+  return requestClient.get(
+    `${VITE_PROJECT_API_URL}/development/v1/gengroup/selectGroupList`,
+  );
+}

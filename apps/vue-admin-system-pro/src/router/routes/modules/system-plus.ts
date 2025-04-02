@@ -207,6 +207,15 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
           {
+            name: 'SystemPlusCodeGen',
+            path: '/system-plus/development/codegen',
+            component: () =>
+              import('#/views/system-plus/development/codegen/index.vue'),
+            meta: {
+              title: '代码生成',
+            },
+          },
+          {
             name: 'SystemPlusDatabaseSource',
             path: '/system-plus/development/datasource',
             component: () =>
@@ -222,15 +231,6 @@ const routes: RouteRecordRaw[] = [
               import('#/views/system-plus/development/field/index.vue'),
             meta: {
               title: '字段类型',
-            },
-          },
-          {
-            name: 'SystemPlusCodeGen',
-            path: '/system-plus/development/codegen',
-            component: () =>
-              import('#/views/system-plus/development/codegen/index.vue'),
-            meta: {
-              title: '代码生成',
             },
           },
           {

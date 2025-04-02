@@ -1,61 +1,131 @@
 <script lang="ts" setup>
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
+import { onMounted, reactive } from "vue";
+
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getExampleTableApi } from '#/api';
+import {
+  queryTableColumnList,
+  selectAttrTypes,
+} from '#/api/system-plus/development/gen-column';
 
 defineOptions({
   name: 'FieldInfo',
   inheritAttrs: false,
 });
 
+// attrType下拉
+const attrTypeList = reactive([]);
+
+const fillList = reactive([
+  { label: 'DEFAULT', value: 'DEFAULT' },
+  { label: 'INSERT', value: 'INSERT' },
+  { label: 'UPDATE', value: 'UPDATE' },
+  { label: 'INSERT_UPDATE', value: 'INSERT_UPDATE' },
+]);
+
+const tableId = defineModel('tableId', { type: String, default: '' });
+
+// 字段对象
 interface RowType {
-  category: string;
-  color: string;
   id: string;
-  price: string;
-  productName: string;
-  releaseDate: string;
+  tableId: string | undefined;
+  tableName: string | undefined;
+  fieldName: string | undefined;
+  fieldType: string | undefined;
+  fieldComment: string | undefined;
+  attrName: string | undefined;
+  attrType: string | undefined;
+  packageName: string | undefined;
+  sort: string | undefined;
+  autoFill: string | undefined;
+  primaryPk: string | undefined;
+  checked: boolean;
 }
 
 const gridOptions: VxeGridProps<RowType> = {
   columns: [
     { title: '序号', type: 'seq', width: 50 },
-    { editRender: { name: 'input' }, field: 'category', title: 'Category' },
-    { editRender: { name: 'input' }, field: 'color', title: 'Color' },
+    { type: 'checkbox', title: '主键' },
+    { field: 'fieldName', title: '字段名' },
+    { editRender: { name: 'input' }, field: 'fieldComment', title: '说明' },
+    {
+      field: 'fieldType',
+      title: '字段类型',
+    },
     {
       editRender: { name: 'input' },
-      field: 'productName',
-      title: 'Product Name',
+      field: 'attrName',
+      title: '属性名',
     },
-    { field: 'price', title: 'Price' },
-    { field: 'releaseDate', formatter: 'formatDateTime', title: 'Date' },
+    {
+      editRender: { name: 'select', options: attrTypeList },
+      field: 'attrType',
+      title: '属性类型',
+    },
+    {
+      editRender: { name: 'select', options: fillList },
+      field: 'autoFill',
+      title: '自动填充',
+    },
   ],
+  data: [],
   editConfig: {
-    mode: 'cell',
+    mode: 'row',
     trigger: 'click',
   },
-  // height: 'auto',
+  checkboxConfig: {
+    checkField: 'checked',
+  },
+  height: '500px',
   pagerConfig: {
-    currentPage: 1,
-    pageSize: 10,
-    total: 0,
-    pageSizes: [10, 15, 20, 50, 100],
+    enabled: false,
   },
-  proxyConfig: {
-    ajax: {
-      query: async ({ page }) => {
-        return await getExampleTableApi({
-          page: page.currentPage,
-          pageSize: page.pageSize,
-        });
-      },
-    },
-  },
-  showOverflow: true,
+  // showOverflow: true,
 };
 
-const [Grid] = useVbenVxeGrid({ gridOptions });
+const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
+
+// 加载数据
+async function loadData() {
+  fetchData(tableId.value);
+  selectInit();
+}
+
+// 远程获取数据
+function fetchData(tableId: string) {
+  queryTableColumnList(tableId).then((res) => {
+    const modifiedData = res.map((item: RowType) => {
+      if (item.primaryPk === '1') {
+        return {
+          ...item,
+          checked: true,
+        };
+      }
+      return item;
+    });
+    gridApi.setGridOptions({
+      data: modifiedData,
+    });
+  });
+}
+
+// 下拉初始化
+const selectInit = () => {
+  // 加载attrType数据
+  selectAttrTypes().then((res) => {
+    Object.assign(attrTypeList, res);
+  });
+};
+
+// 暴露方法
+defineExpose({
+  loadData,
+});
+
+onMounted(() => {
+  loadData();
+});
 </script>
 
 <template>

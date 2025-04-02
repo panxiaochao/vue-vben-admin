@@ -186,7 +186,7 @@ onMounted(() => {
       </template>
       <template #action="{ row }">
         <a-button class="px-0" type="link" @click="genIndex.openModal(row.id)">
-          编辑
+          生成代码
         </a-button>
         <a-divider type="vertical" />
         <a-popconfirm
