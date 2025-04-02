@@ -48,3 +48,9 @@ export function selectTemplateList() {
     `${VITE_PROJECT_API_URL}/development/v1/gentemplate/selectTemplateList`,
   );
 }
+
+export async function copy(id: string) {
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/development/v1/gentemplate/copy/${id}`,
+  );
+}

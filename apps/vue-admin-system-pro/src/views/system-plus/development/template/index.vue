@@ -12,6 +12,7 @@ import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
+  copy,
   deleteById,
   page,
   selectTemplateTypes,
@@ -145,6 +146,14 @@ const deleteRow = (row: RowType) => {
   });
 };
 
+const copyRow = (row: RowType) => {
+  copy(row.id).then(() => {
+    message.success('复制成功');
+    // reload
+    refresh(true);
+  });
+};
+
 // 表单处理完成做刷新处理
 const formDone = () => {
   refresh(true);
@@ -193,8 +202,12 @@ onMounted(() => {
           编辑
         </a-button>
         <a-divider type="vertical" />
+        <a-button class="px-0" type="link" @click="copyRow(row)">
+          复制
+        </a-button>
+        <a-divider type="vertical" />
         <a-popconfirm
-          placement="top"
+          placement="topLeft"
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
