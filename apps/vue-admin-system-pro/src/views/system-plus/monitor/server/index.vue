@@ -3,7 +3,10 @@ import { onMounted, reactive, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { monitorInfo, networkInterfaces } from '#/api/system-plus/monitor/server';
+import {
+  monitorInfo,
+  networkInterfaces,
+} from '#/api/system-plus/monitor/server';
 
 const spinning = ref(false);
 const networkSpinning = ref(false);

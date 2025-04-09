@@ -3,6 +3,7 @@ import type { LanguageType } from '@pxc/codemirror';
 
 import { ref } from 'vue';
 
+import { FileTextOutlined } from '@ant-design/icons-vue';
 import { CodeEdit } from '@pxc/codemirror';
 
 import { preview } from '#/api/system-plus/development/gen';
@@ -53,7 +54,7 @@ const openModal = () => {
     res.forEach((item: PreviewEntity) => fileOriginal.push(item.filePath));
     fileTree.value = handleFileOriginal(fileOriginal);
     if (res.length > 0) {
-      activeKey.value = res[0]?.id;
+      activeKey.value = res[0]?.fileName;
     }
   });
 };
@@ -115,6 +116,13 @@ const findChild = (
   return node.children.find((child) => child.title === name);
 };
 
+const onSelect = (keys: string[], e: { node: TreeNode }) => {
+  const node = e.node;
+  if (node.isFile) {
+    activeKey.value = node.title;
+  }
+};
+
 const handleCancel = () => {
   open.value = false;
 };
@@ -134,18 +142,26 @@ defineExpose({
     title="预览"
     wrap-class-name="full-modal"
     @cancel="handleCancel"
+    :footer="null"
   >
     <a-layout>
       <a-layout>
-        <a-layout-sider width="20%" style="background: #fff">
-          <a-tree :tree-data="fileTree" class="compact-tree" />
+        <a-layout-sider width="25%" style="background: #fff">
+          <a-tree :tree-data="fileTree" class="compact-tree" @select="onSelect">
+            <template #title="{ dataRef }">
+              <template v-if="dataRef.isFile">
+                <FileTextOutlined class="mr-1" />
+              </template>
+              <span>{{ dataRef.title }}</span>
+            </template>
+          </a-tree>
         </a-layout-sider>
         <a-layout>
           <a-layout-content style="background: #fff">
             <a-tabs v-model:active-key="activeKey">
               <a-tab-pane
                 v-for="item in previewData"
-                :key="item.id"
+                :key="item.fileName"
                 :tab="item.fileName"
               >
                 <CodeEdit
@@ -188,19 +204,28 @@ defineExpose({
 // 新增紧凑样式
 .compact-tree {
   .ant-tree-node-content-wrapper {
-    min-height: 16px;
-    line-height: 16px;
+    min-height: 20px;
+    line-height: 20px;
+    border-radius: 4px;
   }
+
+  .ant-tree-node-content-wrapper.ant-tree-node-selected {
+    background-color: #8cd6ff;
+  }
+
   .ant-tree-switcher {
     width: 14px;
     height: 14px;
     line-height: 14px;
   }
+
   .ant-tree-indent-unit {
     width: 12px;
   }
+
   .ant-tree-treenode {
-    margin: 2px 0;
+    margin: 1px 0;
+    padding: 0;
   }
 }
 </style>

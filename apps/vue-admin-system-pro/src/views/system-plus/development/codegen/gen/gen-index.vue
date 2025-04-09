@@ -3,6 +3,11 @@ import type { StepProps } from 'ant-design-vue';
 
 import { reactive, ref } from 'vue';
 
+import { downloadFileFromBlob } from '@vben/utils';
+
+import { download } from '#/api/system-plus/development/gen';
+import { parseContentDispositionForFileName } from '#/utils/download-helper';
+
 // 自定义组件
 import BasicInfo from './basic-info.vue';
 import CodePreview from './code-preview.vue';
@@ -85,6 +90,24 @@ const preview = async () => {
   codePreview.value.openModal();
 };
 
+// 下载ZIP包
+const generatorCode = async () => {
+  download({ tableIds: currentTableId.value }).then((res) => {
+    const { headers } = res;
+    // 尝试不同的大小写组合
+    const contentDisposition =
+      headers['content-disposition'] ||
+      headers['Content-Disposition'] ||
+      headers['CONTENT-DISPOSITION'];
+    const fileName = parseContentDispositionForFileName(
+      contentDisposition,
+      'GeneratorCode.zip',
+    );
+    // 通过Blob下载文件
+    downloadFileFromBlob({ fileName, source: res.data });
+  });
+};
+
 // 暴露方法
 defineExpose({
   openModal,
@@ -133,11 +156,13 @@ defineExpose({
           <a-button type="primary" @click="go(0)" v-if="current === 1">
             上一步
           </a-button>
-          <a-button @click="go(2)" v-if="current === 1"> 仅保存 </a-button>
+          <a-button @click="go(2)" v-if="current === 1"> 仅保存</a-button>
           <a-button @click="preview" v-if="current === 1">
             保存并预览
           </a-button>
-          <a-button @click="go(2)" v-if="current === 1"> 保存并生成 </a-button>
+          <a-button @click="generatorCode" v-if="current === 1">
+            保存并生成
+          </a-button>
         </a-space>
       </div>
     </div>

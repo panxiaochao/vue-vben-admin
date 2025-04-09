@@ -1,6 +1,6 @@
 import { notification } from 'ant-design-vue';
 
-export function catchFailed(err) {
+export function catchFailed(err: object) {
   notification.error({
     message: '错误',
     description: err.message || '请求出现错误，请稍后再试',
