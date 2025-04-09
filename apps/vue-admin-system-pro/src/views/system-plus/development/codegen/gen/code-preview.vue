@@ -8,7 +8,6 @@ import { CodeEdit } from '@pxc/codemirror';
 import { preview } from '#/api/system-plus/development/gen';
 
 // 自定义组件
-
 defineOptions({
   name: 'CodePreview',
   inheritAttrs: false,
@@ -18,14 +17,24 @@ const codeEditRef = ref();
 
 const activeKey = ref('');
 
-const previewData = ref<
-  {
-    codeType: LanguageType;
-    content: string;
-    fileName: string;
-    id: string;
-  }[]
->([]);
+interface PreviewEntity {
+  codeType: LanguageType;
+  content: string;
+  fileName: string;
+  filePath: string;
+  id: string;
+}
+
+const previewData = ref<PreviewEntity[]>([]);
+
+interface TreeNode {
+  key: string;
+  children: TreeNode[];
+  title: string;
+  isFile: boolean;
+}
+
+const fileTree = ref<TreeNode[]>([]);
 
 const tableId = defineModel('tableId', { type: String, default: '' });
 
@@ -38,12 +47,72 @@ const width = defineModel('width', {
 
 const openModal = () => {
   open.value = true;
+  const fileOriginal: string[] = [];
   preview(tableId.value).then((res) => {
     previewData.value = res;
+    res.forEach((item: PreviewEntity) => fileOriginal.push(item.filePath));
+    fileTree.value = handleFileOriginal(fileOriginal);
     if (res.length > 0) {
       activeKey.value = res[0]?.id;
     }
   });
+};
+
+const handleFileOriginal = (fileOriginal: string[]): TreeNode[] => {
+  const root: TreeNode = {
+    key: 'root',
+    children: [] as TreeNode[],
+    title: '代码目录',
+    isFile: false,
+  };
+
+  // 边界条件：输入为空时直接返回根节点
+  if (fileOriginal.length === 0) {
+    return [root];
+  }
+
+  // 缓存子节点以优化查找性能
+  const childMap: Map<string, TreeNode> = new Map();
+
+  fileOriginal.forEach((path) => {
+    const parts = path.split('/');
+    let currentNode: TreeNode = root;
+
+    parts.forEach((part, index) => {
+      const isFile = index === parts.length - 1;
+      let childNode: TreeNode | undefined = findChild(
+        currentNode,
+        part,
+        childMap,
+      );
+
+      if (!childNode) {
+        childNode = {
+          key: part,
+          title: part,
+          children: [] as TreeNode[],
+          isFile,
+        };
+        currentNode.children.push(childNode ?? []);
+        // 更新缓存
+        childMap.set(`${currentNode.key}/${part}`, childNode);
+      }
+      currentNode = childNode;
+    });
+  });
+  return [root];
+};
+
+const findChild = (
+  node: TreeNode,
+  name: string,
+  childMap: Map<string, TreeNode>,
+): TreeNode | undefined => {
+  const cachedKey = `${node.key}/${name}`;
+  if (childMap.has(cachedKey)) {
+    return childMap.get(cachedKey)!;
+  }
+  return node.children.find((child) => child.title === name);
 };
 
 const handleCancel = () => {
@@ -69,7 +138,7 @@ defineExpose({
     <a-layout>
       <a-layout>
         <a-layout-sider width="20%" style="background: #fff">
-          tree
+          <a-tree :tree-data="fileTree" class="compact-tree" />
         </a-layout-sider>
         <a-layout>
           <a-layout-content style="background: #fff">
@@ -113,6 +182,25 @@ defineExpose({
 
   .ant-modal-body {
     flex: 1;
+  }
+}
+
+// 新增紧凑样式
+.compact-tree {
+  .ant-tree-node-content-wrapper {
+    min-height: 16px;
+    line-height: 16px;
+  }
+  .ant-tree-switcher {
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+  }
+  .ant-tree-indent-unit {
+    width: 12px;
+  }
+  .ant-tree-treenode {
+    margin: 2px 0;
   }
 }
 </style>
