@@ -49,6 +49,13 @@ export async function update(data: object) {
   );
 }
 
+export async function updateBatch(data: object) {
+  return requestClient.put(
+    `${VITE_PROJECT_API_URL}/development/v1/gentablecolumn/updateBatch`,
+    data,
+  );
+}
+
 export async function deleteById(id: Array<number | string> | number | string) {
   return requestClient.delete(
     `${VITE_PROJECT_API_URL}/development/v1/gentablecolumn/${id}`,

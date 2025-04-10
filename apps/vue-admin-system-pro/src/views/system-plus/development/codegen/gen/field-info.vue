@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   queryTableColumnList,
   selectAttrTypes,
+  updateBatch,
 } from '#/api/system-plus/development/gen-column';
 
 defineOptions({
@@ -16,6 +17,8 @@ defineOptions({
 
 // attrType下拉
 const attrTypeList = reactive([]);
+
+const spinning = ref(false);
 
 const fillList = reactive([
   { label: 'DEFAULT', value: 'DEFAULT' },
@@ -110,6 +113,18 @@ function fetchData(tableId: string) {
   });
 }
 
+// 提交数据
+const submitHandler = () => {
+  return new Promise((resolve) => {
+    spinning.value = true;
+    const data = gridApi.grid.getData();
+    updateBatch(data).then(() => {
+      spinning.value = false;
+      resolve(true);
+    });
+  });
+};
+
 // 下拉初始化
 const selectInit = () => {
   // 加载attrType数据
@@ -120,7 +135,7 @@ const selectInit = () => {
 
 // 暴露方法
 defineExpose({
-  loadData,
+  submitHandler,
 });
 
 onMounted(() => {
@@ -129,5 +144,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Grid />
+  <a-spin :spinning="spinning">
+    <Grid />
+  </a-spin>
 </template>

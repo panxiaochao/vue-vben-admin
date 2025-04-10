@@ -78,16 +78,18 @@ const tableId = defineModel('tableId', { type: String, default: '' });
 
 const rulesRef = reactive({
   tableName: [{ type: 'string', required: true, message: '请输入表名' }],
-  className: [{ type: 'string', required: true, message: '请输入表名' }],
-  tableComment: [{ type: 'string', required: true, message: '请输入表名' }],
-  author: [{ type: 'string', required: true, message: '请输入表名' }],
-  packageName: [{ type: 'string', required: true, message: '请输入表名' }],
-  email: [{ type: 'string', required: true, message: '请输入表名' }],
-  version: [{ type: 'string', required: true, message: '请输入表名' }],
-  style: [{ type: 'string', required: true, message: '请输入表名' }],
-  generatorType: [{ type: 'string', required: true, message: '请输入表名' }],
-  moduleName: [{ type: 'string', required: true, message: '请输入表名' }],
-  functionName: [{ type: 'string', required: true, message: '请输入表名' }],
+  className: [{ type: 'string', required: true, message: '请输入类名' }],
+  tableComment: [{ type: 'string', required: true, message: '请输入说明' }],
+  author: [{ type: 'string', required: true, message: '请输入作者' }],
+  packageName: [{ type: 'string', required: true, message: '请输入项目包名' }],
+  email: [{ type: 'string', required: true, message: '请输入邮箱' }],
+  version: [{ type: 'string', required: true, message: '请输入项目版本号' }],
+  style: [{ type: 'string', required: true, message: '请输入代码风格' }],
+  generatorType: [
+    { type: 'string', required: true, message: '请输入生成方式' },
+  ],
+  moduleName: [{ type: 'string', required: true, message: '请输入模块名' }],
+  functionName: [{ type: 'string', required: true, message: '请输入功能名' }],
 });
 
 const { validate, validateInfos } = useForm(modelRef, rulesRef);
@@ -258,7 +260,7 @@ onMounted(() => {
           >
             <a-radio-group v-model:value="modelRef.generatorType">
               <a-radio value="0">zip压缩包</a-radio>
-              <a-radio value="1">自定义目录</a-radio>
+              <!--              <a-radio value="1">自定义目录</a-radio>-->
             </a-radio-group>
           </a-form-item>
         </a-col>
