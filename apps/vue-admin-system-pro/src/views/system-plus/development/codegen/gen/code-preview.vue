@@ -125,6 +125,7 @@ const onSelect = (keys: string[], e: { node: TreeNode }) => {
 
 const handleCancel = () => {
   open.value = false;
+  fileTree.value = [];
 };
 
 // 暴露方法
@@ -139,6 +140,7 @@ defineExpose({
     :mask-closable="false"
     :open="open"
     :width="width"
+    :destroy-on-close="true"
     title="预览"
     wrap-class-name="full-modal"
     @cancel="handleCancel"
@@ -169,6 +171,9 @@ defineExpose({
                   :model-value="item.content"
                   :language="item.codeType"
                   :height="650"
+                  :options="{
+                    disabled: true,
+                  }"
                 />
               </a-tab-pane>
             </a-tabs>

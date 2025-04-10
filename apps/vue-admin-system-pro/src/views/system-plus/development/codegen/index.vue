@@ -12,7 +12,11 @@ import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { selectDataSourceList } from '#/api/system-plus/development/datasource';
-import { deleteById, page } from '#/api/system-plus/development/gen-table';
+import {
+  deleteById,
+  page,
+  syncTable,
+} from '#/api/system-plus/development/gen-table';
 
 // 自定义组件
 import ImportTable from './form/import-table.vue';
@@ -133,15 +137,14 @@ const deleteRow = (row: RowType) => {
   });
 };
 
-// const openGenTab = (row: RowType) => {
-//   router.push({
-//     path: '/system/development/codegen/gen',
-//     query: {
-//       tableName: row.tableName,
-//       dsName: queryParams?.dbName,
-//     },
-//   });
-// };
+// 同步表
+const syncRow = (row: RowType) => {
+  syncTable(row.id).then(() => {
+    message.success('同步成功');
+    // reload
+    refresh(true);
+  });
+};
 
 const formatGeneratorType = (row: RowType) => {
   return row.generatorType === '1' ? '自定义' : 'ZIP压缩';
@@ -185,6 +188,14 @@ onMounted(() => {
         </a-tag>
       </template>
       <template #action="{ row }">
+        <a-popconfirm
+          placement="top"
+          title="确定要同步吗?"
+          @confirm="() => syncRow(row)"
+        >
+          <a-button class="px-0" type="link">同步</a-button>
+        </a-popconfirm>
+        <a-divider type="vertical" />
         <a-button class="px-0" type="link" @click="genIndex.openModal(row.id)">
           生成代码
         </a-button>

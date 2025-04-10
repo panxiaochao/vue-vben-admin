@@ -143,11 +143,7 @@ defineExpose({
               name="templateName"
               v-bind="validateInfos.templateName"
             >
-              <a-input
-                disabled
-                v-model:value="modelRef.templateName"
-                allow-clear
-              />
+              <a-input v-model:value="modelRef.templateName" allow-clear />
             </a-form-item>
             <a-form-item
               label="模版路径"

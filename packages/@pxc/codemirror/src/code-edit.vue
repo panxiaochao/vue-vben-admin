@@ -35,8 +35,10 @@ import { keymap } from '@codemirror/view';
 
 // 基础配置类型
 export interface CodeEditorOptions {
-  lineWrapping?: boolean;
-  readOnly?: boolean;
+  autofocus?: boolean;
+  disabled?: boolean;
+  indentWithTabs?: boolean;
+  placeholder?: string;
   tabSize?: number;
 }
 
@@ -94,11 +96,9 @@ export default defineComponent({
     // 合并默认配置和传入配置
     const mergedOptions = computed<CodeEditorOptions>(() => ({
       autofocus: true,
-      indentUnit: 4,
+      disabled: false,
       indentWithTabs: true,
-      lineNumbers: true,
-      lineWrapping: false,
-      readOnly: false,
+      placeholder: '',
       tabSize: 4,
       ...props.options,
     }));
@@ -221,7 +221,11 @@ export default defineComponent({
     <Codemirror
       v-model="codeValue"
       :extensions="activeExtensions"
-      :options="mergedOptions"
+      :disabled="mergedOptions.disabled"
+      :autofocus="mergedOptions.autofocus"
+      :indent-with-tabs="mergedOptions.indentWithTabs"
+      :tab-size="mergedOptions.tabSize"
+      :placeholder="mergedOptions.placeholder"
       @update="handleUpdate"
       @ready="handleReady"
     />

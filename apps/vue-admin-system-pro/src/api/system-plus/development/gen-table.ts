@@ -61,3 +61,9 @@ export async function importTables(databaseId: string, data: object) {
     data,
   );
 }
+
+export async function syncTable(id: Array<number | string> | number | string) {
+  return requestClient.get(
+    `${VITE_PROJECT_API_URL}/development/v1/gentable/syncTable/${id}`,
+  );
+}
