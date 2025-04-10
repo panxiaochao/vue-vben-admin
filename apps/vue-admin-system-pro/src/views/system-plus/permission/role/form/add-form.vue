@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import type { FormState } from './form';
+
 import { defineEmits, reactive, ref, toRaw } from 'vue';
 
-import { Form } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 
 import { save, selectDataScopes } from '#/api/system-plus/permission/role';
+
+import { defaultModel, formItemLayout, useRoleForm } from './form';
 
 defineOptions({
   name: 'AddForm',
@@ -13,50 +17,36 @@ defineOptions({
 // 定义组件的事件
 const $emits = defineEmits(['done']);
 
-const useForm = Form.useForm;
-
 const dataScopeList = ref([]);
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-};
+// 数据权限加载状态
+const selectLoading = ref(false);
 
-const modelRef = reactive({
-  roleName: undefined,
-  roleCode: undefined,
-  dataScope: '1',
-  remark: undefined,
-  sort: 0,
-  state: '1',
-});
+const modelRef = reactive<FormState>({ ...defaultModel });
 
-const rulesRef = reactive({
-  roleName: [{ type: 'string', required: true, message: '请输入角色名称' }],
-  roleCode: [{ type: 'string', required: true, message: '请输入角色编码' }],
-});
-
-const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
+const { resetFields, validate, validateInfos } = useRoleForm(modelRef);
 
 const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
-const openModal = () => {
+// 打开模态框
+const openModal = async () => {
   open.value = true;
   // 加载岗位数据
   dataScopeList.value = [];
-  selectDataScopes().then((res) => {
-    dataScopeList.value = res;
-  });
+  selectLoading.value = true;
+  try {
+    // 异步获取数据权限列表
+    dataScopeList.value = await selectDataScopes();
+  } catch {
+    message.error('加载数据权限失败，请稍后重试');
+  } finally {
+    selectLoading.value = false; // 结束加载
+  }
 };
 
+// 确认操作
 const handleOk = () => {
   validate().then(() => {
     const values = toRaw(modelRef);
@@ -69,9 +59,11 @@ const handleOk = () => {
   });
 };
 
+// 取消操作
 const handleCancel = () => {
   resetFields();
   open.value = false;
+  dataScopeList.value = [];
 };
 
 // 暴露方法
@@ -112,6 +104,7 @@ defineExpose({
       >
         <a-select
           v-model:value="modelRef.dataScope"
+          :loading="selectLoading"
           :options="dataScopeList"
           allow-clear
           placeholder="请选择数据权限"

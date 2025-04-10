@@ -1,65 +1,30 @@
 <script setup lang="ts">
+import type { FormState } from './form';
+
 import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
-import { Form } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 import { pick } from 'lodash-es';
 
 import { selectDataScopes, update } from '#/api/system-plus/permission/role';
+
+import { defaultModel, formItemLayout, useRoleForm } from './form';
 
 defineOptions({
   name: 'EditForm',
   inheritAttrs: false,
 });
 
-// 定义组件的事件
 const $emits = defineEmits(['done']);
-
-const useForm = Form.useForm;
 
 const dataScopeList = ref([]);
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-};
+// 数据权限加载状态
+const selectLoading = ref(false);
 
-// 字段对象
-interface FormState {
-  id: string | undefined;
-  roleName: string | undefined;
-  roleCode: string | undefined;
-  dataScope: string | undefined;
-  remark: string | undefined;
-  sort: number;
-  state: string | undefined;
-}
+const modelRef = reactive<FormState>({ ...defaultModel });
 
-const defaultModel = {
-  id: undefined,
-  roleName: undefined,
-  roleCode: undefined,
-  dataScope: '1',
-  remark: undefined,
-  sort: 0,
-  state: '1',
-};
-
-const modelRef = reactive<FormState>({
-  ...defaultModel,
-});
-
-const rulesRef = reactive({
-  roleName: [{ type: 'string', required: true, message: '请输入角色名称' }],
-  roleCode: [{ type: 'string', required: true, message: '请输入角色编码' }],
-});
-
-const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
+const { resetFields, validate, validateInfos } = useRoleForm(modelRef);
 
 const open = defineModel('open', { type: Boolean, default: false });
 
@@ -76,13 +41,19 @@ const updateForm = (raw: FormState) => {
   }
 };
 
-const openModal = (raw: FormState) => {
+const openModal = async (raw: FormState) => {
   open.value = true;
   // 加载岗位数据
   dataScopeList.value = [];
-  selectDataScopes().then((res) => {
-    dataScopeList.value = res;
-  });
+  selectLoading.value = true;
+  try {
+    // 异步获取数据权限列表
+    dataScopeList.value = await selectDataScopes();
+  } catch {
+    message.error('加载数据权限失败，请稍后重试');
+  } finally {
+    selectLoading.value = false; // 结束加载
+  }
   updateForm(raw);
 };
 
@@ -142,6 +113,7 @@ defineExpose({
       >
         <a-select
           v-model:value="modelRef.dataScope"
+          :loading="selectLoading"
           :options="dataScopeList"
           allow-clear
           placeholder="请选择数据权限"

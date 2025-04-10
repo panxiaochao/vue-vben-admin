@@ -2,6 +2,7 @@
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { VxeGridProps } from '#/adapter/vxe-table';
+import type { RowType } from '#/views/system-plus/permission/role/index';
 
 import { h, reactive, ref, toRaw } from 'vue';
 
@@ -12,6 +13,7 @@ import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteById, page } from '#/api/system-plus/permission/role';
+import { columns } from '#/views/system-plus/permission/role/index';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -21,26 +23,6 @@ import GrantRoleResource from './form/grant-role-resource.vue';
 const addForm = ref();
 const editForm = ref();
 const grantRoleResource = ref();
-
-// 字段对象
-interface RowType {
-  id: string;
-  roleName: string;
-  roleCode: string;
-  remark: string;
-  sort: number;
-  state: string;
-}
-
-// 字段定义
-const columns = [
-  { field: 'roleName', title: '角色名称' },
-  { field: 'roleCode', title: '角色编码' },
-  { field: 'remark', title: '描述' },
-  { field: 'sort', title: '排序' },
-  { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
-  { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
-];
 
 // 搜索表单定义
 const formOptions: VbenFormProps = {
