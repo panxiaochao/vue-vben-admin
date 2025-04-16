@@ -30,8 +30,9 @@ import {
   foldGutter,
   syntaxHighlighting,
 } from '@codemirror/language';
-import { oneDark } from '@codemirror/theme-one-dark';
 import { keymap } from '@codemirror/view';
+
+import * as Themes from './themes';
 
 // 基础配置类型
 export interface CodeEditorOptions {
@@ -43,7 +44,6 @@ export interface CodeEditorOptions {
 }
 
 // 主题类型
-export type ThemeType = 'dark' | 'light' | 'none';
 export type LanguageType =
   | 'css'
   | 'html'
@@ -77,8 +77,8 @@ export default defineComponent({
       type: Object as PropType<CodeEditorOptions>,
     },
     theme: {
-      default: 'dark',
-      type: String as PropType<ThemeType>,
+      default: Themes.oneDark,
+      // type: Themes,
     },
   },
   emits: ['update:modelValue', 'change', 'ready'],
@@ -145,7 +145,8 @@ export default defineComponent({
 
     // 主题扩展
     const themeExtensions = computed(() => {
-      return props.theme === 'dark' ? [oneDark] : [];
+      // return props.theme === 'dark' ? [themes.oneDark] : [];
+      return props.theme;
     });
 
     // 组合所有扩展
@@ -162,7 +163,6 @@ export default defineComponent({
     // 处理编辑器就绪事件
     const handleReady = (payload: { view: EditorView }) => {
       view.value = payload.view;
-      // console.log('view:', view.value);
       emit('ready', payload.view);
     };
 

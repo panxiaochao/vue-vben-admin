@@ -4,7 +4,7 @@ import type { LanguageType } from '@pxc/codemirror';
 import { defineEmits, reactive, ref, toRaw } from 'vue';
 
 // 自定义组件
-import { CodeEdit } from '@pxc/codemirror';
+import { CodeEdit, Themes } from '@pxc/codemirror';
 import { Form, message } from 'ant-design-vue';
 
 import { save } from '#/api/system-plus/development/gen-template';
@@ -156,6 +156,7 @@ defineExpose({
             <CodeEdit
               ref="codeEditRef"
               :language="modelRef.templateType"
+              :theme="Themes.dracula"
               :height="650"
             />
           </a-layout-content>

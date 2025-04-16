@@ -41,6 +41,7 @@
     "@codemirror/view": "catalog:",
     "@codemirror/commands": "catalog:",
     "@codemirror/language": "catalog:",
+    "thememirror": "catalog:",
     "vue": "catalog:"
   }
 }

@@ -146,41 +146,73 @@ defineExpose({
     @cancel="handleCancel"
     :footer="null"
   >
-    <a-layout>
-      <a-layout>
-        <a-layout-sider width="25%" style="background: #fff">
-          <a-tree :tree-data="fileTree" class="compact-tree" @select="onSelect">
-            <template #title="{ dataRef }">
-              <template v-if="dataRef.isFile">
-                <FileTextOutlined class="mr-1" />
-              </template>
-              <span>{{ dataRef.title }}</span>
+    <!--    <a-layout>-->
+    <!--      <a-layout>-->
+    <!--        <a-layout-sider width="25%">-->
+    <!--          <a-tree :tree-data="fileTree" class="compact-tree" @select="onSelect">-->
+    <!--            <template #title="{ dataRef }">-->
+    <!--              <template v-if="dataRef.isFile">-->
+    <!--                <FileTextOutlined class="mr-1" />-->
+    <!--              </template>-->
+    <!--              <span>{{ dataRef.title }}</span>-->
+    <!--            </template>-->
+    <!--          </a-tree>-->
+    <!--        </a-layout-sider>-->
+    <!--        <a-layout>-->
+    <!--          <a-layout-content>-->
+    <!--            <a-tabs v-model:active-key="activeKey">-->
+    <!--              <a-tab-pane-->
+    <!--                v-for="item in previewData"-->
+    <!--                :key="item.fileName"-->
+    <!--                :tab="item.fileName"-->
+    <!--              >-->
+    <!--                <CodeEdit-->
+    <!--                  ref="codeEditRef"-->
+    <!--                  :model-value="item.content"-->
+    <!--                  :language="item.codeType"-->
+    <!--                  :height="650"-->
+    <!--                  :options="{-->
+    <!--                    disabled: true,-->
+    <!--                  }"-->
+    <!--                />-->
+    <!--              </a-tab-pane>-->
+    <!--            </a-tabs>-->
+    <!--          </a-layout-content>-->
+    <!--        </a-layout>-->
+    <!--      </a-layout>-->
+    <!--    </a-layout>-->
+    <a-row>
+      <a-col :span="6">
+        <a-tree :tree-data="fileTree" class="compact-tree" @select="onSelect">
+          -->
+          <template #title="{ dataRef }">
+            <template v-if="dataRef.isFile">
+              <FileTextOutlined class="mr-1" />
             </template>
-          </a-tree>
-        </a-layout-sider>
-        <a-layout>
-          <a-layout-content style="background: #fff">
-            <a-tabs v-model:active-key="activeKey">
-              <a-tab-pane
-                v-for="item in previewData"
-                :key="item.fileName"
-                :tab="item.fileName"
-              >
-                <CodeEdit
-                  ref="codeEditRef"
-                  :model-value="item.content"
-                  :language="item.codeType"
-                  :height="650"
-                  :options="{
-                    disabled: true,
-                  }"
-                />
-              </a-tab-pane>
-            </a-tabs>
-          </a-layout-content>
-        </a-layout>
-      </a-layout>
-    </a-layout>
+            <span>{{ dataRef.title }}</span>
+          </template>
+        </a-tree>
+      </a-col>
+      <a-col :span="18">
+        <a-tabs v-model:active-key="activeKey">
+          <a-tab-pane
+            v-for="item in previewData"
+            :key="item.fileName"
+            :tab="item.fileName"
+          >
+            <CodeEdit
+              ref="codeEditRef"
+              :model-value="item.content"
+              :language="item.codeType"
+              :height="650"
+              :options="{
+                disabled: true,
+              }"
+            />
+          </a-tab-pane>
+        </a-tabs>
+      </a-col>
+    </a-row>
   </a-modal>
 </template>
 
