@@ -98,6 +98,8 @@ const { validate, validateInfos } = useForm(modelRef, rulesRef);
 const updateForm = () => {
   // 加载模版类型
   groupList.value = [];
+  // fix(basic-info.vue)[2025-04-18 10:03:13]: 修复表单ID保留上次的结果，需要每次进来重置表单
+  Object.assign(modelRef, defaultModel);
   selectGroupList().then((res) => {
     groupList.value = res;
     get(tableId.value).then((res) => {

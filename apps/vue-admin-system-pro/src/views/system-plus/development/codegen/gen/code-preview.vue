@@ -94,13 +94,29 @@ const handleFileOriginal = (fileOriginal: string[]): TreeNode[] => {
           children: [] as TreeNode[],
           isFile,
         };
-        currentNode.children.push(childNode ?? []);
+        currentNode.children.push(childNode);
         // 更新缓存
         childMap.set(`${currentNode.key}/${part}`, childNode);
       }
       currentNode = childNode;
     });
   });
+
+  // 递归排序函数
+  const sortTree = (node: TreeNode) => {
+    if (node.children.length > 0) {
+      // 排序：文件夹优先
+      node.children.sort((a, b) => {
+        if (a.isFile === b.isFile) return 0;
+        return a.isFile ? 1 : -1;
+      });
+      // 递归排序子节点
+      node.children.forEach((node: TreeNode) => {
+        sortTree(node);
+      });
+    }
+  };
+  sortTree(root);
   return [root];
 };
 
@@ -110,14 +126,14 @@ const findChild = (
   childMap: Map<string, TreeNode>,
 ): TreeNode | undefined => {
   const cachedKey = `${node.key}/${name}`;
-  if (childMap.has(cachedKey)) {
-    return childMap.get(cachedKey)!;
-  }
-  return node.children.find((child) => child.title === name);
+  return (
+    childMap.get(cachedKey) ??
+    node.children.find((child) => child.title === name)
+  );
 };
 
 const onSelect = (keys: string[], e: { node: TreeNode }) => {
-  const node = e.node;
+  const node = e?.node;
   if (node.isFile) {
     activeKey.value = node.title;
   }
@@ -126,6 +142,7 @@ const onSelect = (keys: string[], e: { node: TreeNode }) => {
 const handleCancel = () => {
   open.value = false;
   fileTree.value = [];
+  previewData.value = [];
 };
 
 // 暴露方法

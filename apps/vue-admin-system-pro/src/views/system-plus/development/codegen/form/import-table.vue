@@ -169,7 +169,7 @@ const handleImport = () => {
       submitLoading.value = true;
       importTables(modelRef.databaseId, tableNames)
         .then(() => {
-          message.info('success');
+          message.info('导入成功');
           onReset();
           open.value = false;
           // 刷新
