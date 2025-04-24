@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref } from 'vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
@@ -40,6 +40,7 @@ interface RowType {
   attrName: string | undefined;
   attrType: string | undefined;
   packageName: string | undefined;
+  autoIncrement: string | undefined;
   sort: string | undefined;
   autoFill: string | undefined;
   primaryPk: string | undefined;
@@ -50,6 +51,12 @@ const gridOptions: VxeGridProps<RowType> = {
   columns: [
     { title: '序号', type: 'seq', width: 50 },
     { type: 'checkbox', title: '主键' },
+    {
+      field: 'autoIncrement',
+      title: '自增',
+      width: 70,
+      slots: { default: 'autoIncrement' },
+    },
     { field: 'fieldName', title: '字段名' },
     { editRender: { name: 'input' }, field: 'fieldComment', title: '说明' },
     {
@@ -113,6 +120,10 @@ function fetchData(tableId: string) {
   });
 }
 
+const formatAutoIncrement = (row: RowType) => {
+  return row.autoIncrement === '1' ? '是' : '否';
+};
+
 // 提交数据
 const submitHandler = () => {
   return new Promise((resolve) => {
@@ -145,6 +156,15 @@ onMounted(() => {
 
 <template>
   <a-spin :spinning="spinning">
-    <Grid />
+    <Grid>
+      <template #autoIncrement="{ row }">
+        <a-tag
+          :color="row.autoIncrement === '1' ? 'red' : 'default'"
+          class="mr-0"
+        >
+          {{ formatAutoIncrement(row) }}
+        </a-tag>
+      </template>
+    </Grid>
   </a-spin>
 </template>

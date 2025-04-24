@@ -19,3 +19,12 @@ export async function download(params: object) {
     },
   );
 }
+
+export async function generatorCode(params: object) {
+  return requestClient.download<RequestResponse<Blob>>(
+    `${VITE_PROJECT_API_URL}/development/v1/gen/generatorCode`,
+    {
+      params,
+    },
+  );
+}

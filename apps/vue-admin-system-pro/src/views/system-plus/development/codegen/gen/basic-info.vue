@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref, toRaw } from 'vue';
+import { nextTick, onMounted, reactive, ref, toRaw, watch } from 'vue';
 
 import { Form } from 'ant-design-vue';
 import { pick } from 'lodash-es';
@@ -92,7 +92,7 @@ const rulesRef = reactive({
   functionName: [{ type: 'string', required: true, message: '请输入功能名' }],
 });
 
-const { validate, validateInfos } = useForm(modelRef, rulesRef);
+const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
 
 // 赋值
 const updateForm = () => {
@@ -119,13 +119,20 @@ const handleOk = async () => {
     const valid = await validate();
     if (valid) {
       const values = toRaw(modelRef);
-      update(values).then(() => {});
+      update(values).then(() => {
+        resetFields();
+      });
     }
     return !!valid;
   } catch {
     return false;
   }
 };
+// fix(basic-info.vue)[2025-04-24 11:23:57]: 解决父组件更新，子组件没有更新的问题
+// 监听 tableId 变化
+watch(tableId, () => {
+  updateForm();
+});
 
 // 暴露方法
 defineExpose({
@@ -262,8 +269,17 @@ onMounted(() => {
           >
             <a-radio-group v-model:value="modelRef.generatorType">
               <a-radio value="0">zip压缩包</a-radio>
-              <!--              <a-radio value="1">自定义目录</a-radio>-->
+              <a-radio value="1">自定义目录</a-radio>
             </a-radio-group>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item
+            label="后端生成路径"
+            name="backendPath"
+            v-if="modelRef.generatorType === '1'"
+          >
+            <a-input v-model:value="modelRef.backendPath" allow-clear />
           </a-form-item>
         </a-col>
       </a-row>

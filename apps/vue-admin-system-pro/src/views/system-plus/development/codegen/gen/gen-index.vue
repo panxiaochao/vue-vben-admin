@@ -7,7 +7,7 @@ import { downloadFileFromBlob } from '@vben/utils';
 
 import { message } from 'ant-design-vue';
 
-import { download } from '#/api/system-plus/development/gen';
+import { download, generatorCode } from '#/api/system-plus/development/gen';
 import { parseContentDispositionForFileName } from '#/utils/download-helper';
 
 // 自定义组件
@@ -64,6 +64,7 @@ const open = defineModel('open', { type: Boolean, default: false });
 const width = defineModel('width', { type: Number, default: 800 });
 
 const openModal = (tableId: string) => {
+  console.log(tableId);
   open.value = true;
   currentTableId.value = tableId;
 };
@@ -80,29 +81,39 @@ const preview = async () => {
 };
 
 // 下载ZIP包
-const generatorCode = async () => {
+const generatorHandler = async () => {
   btnLoading.value = true;
   message
     .loading('正在生成中...', 1.5)
     .then(() => {
-      download({ tableIds: currentTableId.value }).then((res) => {
-        const { headers } = res;
-        // 尝试不同的大小写组合
-        const contentDisposition =
-          headers['content-disposition'] ||
-          headers['Content-Disposition'] ||
-          headers['CONTENT-DISPOSITION'];
-        const fileName = parseContentDispositionForFileName(
-          contentDisposition,
-          'GeneratorCode.zip',
-        );
-        // 通过Blob下载文件
-        downloadFileFromBlob({ fileName, source: res.data });
-      });
+      generatorCodeApi();
     })
     .then(() => {
       btnLoading.value = false;
     });
+};
+
+const downBlobFile = () => {
+  download({ tableIds: currentTableId.value }).then((res) => {
+    const { headers } = res;
+    // 尝试不同的大小写组合
+    const contentDisposition =
+      headers['content-disposition'] ||
+      headers['Content-Disposition'] ||
+      headers['CONTENT-DISPOSITION'];
+    const fileName = parseContentDispositionForFileName(
+      contentDisposition,
+      'GeneratorCode.zip',
+    );
+    // 通过Blob下载文件
+    downloadFileFromBlob({ fileName, source: res.data });
+  });
+};
+
+const generatorCodeApi = () => {
+  generatorCode({ tableIds: currentTableId.value }).then(() => {
+    message.success('导出到自定义路径成功');
+  });
 };
 
 // 暴露方法
@@ -156,7 +167,7 @@ defineExpose({
             保存并预览
           </a-button>
           <a-button
-            @click="generatorCode"
+            @click="generatorHandler"
             :loading="btnLoading"
             v-if="current === 1"
           >

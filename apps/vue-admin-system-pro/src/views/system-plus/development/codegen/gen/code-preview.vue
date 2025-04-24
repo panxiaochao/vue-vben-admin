@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LanguageType } from '@pxc/codemirror';
 
-import { ref } from 'vue';
+import { ref, unref } from 'vue';
 
 import { FileTextOutlined } from '@ant-design/icons-vue';
 import { CodeEdit } from '@pxc/codemirror';
@@ -36,6 +36,12 @@ interface TreeNode {
 }
 
 const fileTree = ref<TreeNode[]>([]);
+// 展开指定的树节点
+const expandedKeys = ref<string[]>([]);
+// 所有菜单ID
+const allTreeKeys = ref<string[]>([]);
+// 是否展开
+const expandCheck = ref(false);
 
 const tableId = defineModel('tableId', { type: String, default: '' });
 
@@ -53,6 +59,18 @@ const openModal = () => {
     previewData.value = res;
     res.forEach((item: PreviewEntity) => fileOriginal.push(item.filePath));
     fileTree.value = handleFileOriginal(fileOriginal);
+    // 定义递归函数来获取所有节点的 key
+    const getAllKeys = (nodes: TreeNode[]): string[] => {
+      let keys: string[] = [];
+      nodes.forEach((node) => {
+        keys.push(node.key);
+        if (node.children && node.children.length > 0) {
+          keys = [...keys, ...getAllKeys(node.children)];
+        }
+      });
+      return keys;
+    };
+    allTreeKeys.value = getAllKeys(fileTree.value);
     if (res.length > 0) {
       activeKey.value = res[0]?.fileName;
     }
@@ -61,7 +79,7 @@ const openModal = () => {
 
 const handleFileOriginal = (fileOriginal: string[]): TreeNode[] => {
   const root: TreeNode = {
-    key: 'root',
+    key: '',
     children: [] as TreeNode[],
     title: '代码目录',
     isFile: false,
@@ -89,7 +107,7 @@ const handleFileOriginal = (fileOriginal: string[]): TreeNode[] => {
 
       if (!childNode) {
         childNode = {
-          key: part,
+          key: `${currentNode.key}/${part}`,
           title: part,
           children: [] as TreeNode[],
           isFile,
@@ -139,10 +157,19 @@ const onSelect = (keys: string[], e: { node: TreeNode }) => {
   }
 };
 
+// 展开
+const expandClick = (checked: boolean | number | string) => {
+  expandedKeys.value = checked ? allTreeKeys.value : [];
+  console.log(unref(fileTree.value));
+};
+
 const handleCancel = () => {
   open.value = false;
   fileTree.value = [];
   previewData.value = [];
+  expandedKeys.value = [];
+  allTreeKeys.value = [];
+  expandCheck.value = false;
 };
 
 // 暴露方法
@@ -200,7 +227,18 @@ defineExpose({
     <!--    </a-layout>-->
     <a-row>
       <a-col :span="6">
-        <a-tree :tree-data="fileTree" class="compact-tree" @select="onSelect">
+        <div style="margin-bottom: 16px">
+          <div style="margin-bottom: 16px">
+            是否展开:
+            <a-switch v-model:checked="expandCheck" @click="expandClick" />
+          </div>
+        </div>
+        <a-tree
+          :tree-data="fileTree"
+          class="compact-tree"
+          @select="onSelect"
+          v-model:expanded-keys="expandedKeys"
+        >
           -->
           <template #title="{ dataRef }">
             <template v-if="dataRef.isFile">
