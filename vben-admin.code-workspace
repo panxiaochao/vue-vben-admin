@@ -5,20 +5,8 @@
       "path": "apps/backend-mock",
     },
     {
-      "name": "@vben/web-antd",
-      "path": "apps/web-antd",
-    },
-    {
-      "name": "@vben/web-ele",
-      "path": "apps/web-ele",
-    },
-    {
-      "name": "@vben/web-naive",
-      "path": "apps/web-naive",
-    },
-    {
-      "name": "@vben/docs",
-      "path": "docs",
+      "name": "@vben/admin-system-pro",
+      "path": "apps/vue-admin-system-pro",
     },
     {
       "name": "@vben/commitlint-config",
@@ -99,6 +87,14 @@
     {
       "name": "@vben-core/tabs-ui",
       "path": "packages/@core/ui-kit/tabs-ui",
+    },
+    {
+      "name": "@pxc/codemirror",
+      "path": "packages/@pxc/codemirror",
+    },
+    {
+      "name": "@pxc/echarts",
+      "path": "packages/@pxc/echarts",
     },
     {
       "name": "@vben/constants",

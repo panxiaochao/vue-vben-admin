@@ -123,7 +123,6 @@ catalog:
   lodash.clonedeep: ^4.5.0
   lodash.get: ^4.4.2
   lodash.isequal: ^4.5.0
-  lucide-vue-next: ^0.469.0
   lodash-es: ^4.17.21
   lodash.set: ^4.3.2
   lucide-vue-next: ^0.507.0

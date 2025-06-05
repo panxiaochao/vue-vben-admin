@@ -49,6 +49,7 @@
     "@types/lodash-es": "catalog:",
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
+    "json-bigint": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
