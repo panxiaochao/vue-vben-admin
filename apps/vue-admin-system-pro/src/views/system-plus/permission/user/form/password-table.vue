@@ -170,8 +170,8 @@ defineExpose({
     @cancel="handleCancel"
     :footer="null"
   >
-    <PasswordAddForm ref="passwordAddForm" :width="900" @done="formDone" />
-    <PasswordEditForm ref="passwordEditForm" :width="900" @done="formDone" />
+    <PasswordAddForm ref="passwordAddForm" :width="600" @done="formDone" />
+    <PasswordEditForm ref="passwordEditForm" :width="600" @done="formDone" />
     <Grid>
       <template #toolbar-actions>
         <a-button

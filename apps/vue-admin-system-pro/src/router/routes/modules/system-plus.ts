@@ -35,7 +35,8 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'SystemPlusOrg',
             path: '/system-plus/permission/org',
-            component: () => import('#/views/_core/fallback/not-found.vue'),
+            component: () =>
+              import('#/views/system-plus/permission/org/index.vue'),
             meta: {
               title: '机构管理',
             },

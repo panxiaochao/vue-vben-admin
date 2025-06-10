@@ -216,6 +216,9 @@ const formDone = () => {
               <a-menu-item>
                 <a @click="selectRoles(row)">授权角色</a>
               </a-menu-item>
+              <a-menu-item>
+                <a>设置机构</a>
+              </a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>

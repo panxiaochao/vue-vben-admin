@@ -27,7 +27,7 @@ const columns = [
   { field: 'opTitle', title: '名称' },
   { field: 'ip', title: 'IP', width: 150 },
   { field: 'address', title: '地址' },
-  { field: 'method', title: '类方法', width: 250 },
+  { field: 'method', title: '类方法', width: 250, showOverflow: false },
   { field: 'browser', title: '浏览器' },
   { field: 'os', title: '设备' },
   { field: 'costTime', title: '耗时(ms)', width: 80 },

@@ -7,7 +7,6 @@ import { initStores } from '@vben/stores';
 import '@vben/styles';
 import '@vben/styles/antd';
 
-import { VueQueryPlugin } from '@tanstack/vue-query';
 import { useTitle } from '@vueuse/core';
 
 import {

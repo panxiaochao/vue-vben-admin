@@ -11,7 +11,11 @@ import { FormOutlined, PullRequestOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteById, page, publishedData } from '#/api/system-plus/settings/dict';
+import {
+  deleteById,
+  page,
+  publishedData,
+} from '#/api/system-plus/settings/dict';
 
 // 自定义组件
 import DictionaryItem from './dictionary-item/index.vue';
@@ -113,6 +117,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
 
 // 加载远程数据
 async function loadData() {
+  Object.assign(queryParams, {
+    state: '1',
+  });
   return page(toRaw(queryParams));
 }
 

@@ -27,3 +27,16 @@ export function listTree(params: object) {
     },
   );
 }
+
+export function tableTree(params: object) {
+  return requestClient.get(
+    `${VITE_PROJECT_API_URL}/system/v1/sysorg/tableTree`,
+    { params },
+  );
+}
+
+export function selectOrgCategoryList() {
+  return requestClient.get(
+    `${VITE_PROJECT_API_URL}/system/v1/sysorg/selectOrgCategoryList`,
+  );
+}
