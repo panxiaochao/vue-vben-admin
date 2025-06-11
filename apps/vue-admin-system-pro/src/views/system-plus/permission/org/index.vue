@@ -40,22 +40,8 @@ onMounted(() => {
         >
           新建机构
         </a-button>
-        <a-button
-          :icon="h(FormOutlined)"
-          class="mr-2"
-          type="primary"
-          @click="expandAll"
-        >
-          展开所有
-        </a-button>
-        <a-button
-          :icon="h(FormOutlined)"
-          class="mr-2"
-          type="primary"
-          @click="collapseAll"
-        >
-          折叠所有
-        </a-button>
+        <a-button class="mr-2" @click="expandAll"> 展开所有 </a-button>
+        <a-button class="mr-2" @click="collapseAll"> 折叠所有 </a-button>
       </template>
       <template #orgCategoryStr="{ row }">
         <a-tag>
