@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { defineEmits, reactive, ref, toRaw } from 'vue';
+import type { SystemPlusOrgModuleNs } from '#/views/system-plus/permission/org/config';
+
+import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
 import {
   listTree,
@@ -34,7 +36,7 @@ const modelRef = reactive({ ...defaultModel });
 
 const { resetFields, validate, validateInfos } = useFormApi(modelRef);
 
-const openModal = () => {
+const openModal = (raw?: SystemPlusOrgModuleNs.SystemPlusOrg) => {
   open.value = true;
   // 加载机构数据
   treeData.value = [];
@@ -45,6 +47,12 @@ const openModal = () => {
   orgCategoryList.value = [];
   selectOrgCategoryList().then((res) => {
     orgCategoryList.value = res;
+  });
+  nextTick(() => {
+    if (raw) {
+      // 设置上级机构ID = 本条数据ID
+      modelRef.parentId = raw.id;
+    }
   });
 };
 

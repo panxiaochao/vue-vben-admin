@@ -1,44 +1,9 @@
-import type { VbenFormProps } from '#/adapter/form';
-import type { VxeGridProps, VxeTableGridOptions } from '#/adapter/vxe-table';
+import type { VxeGridProps } from '#/adapter/vxe-table';
 
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteById, tableTree } from '#/api/system-plus/permission/org';
-
-/**
- * 获取编辑表单的字段配置。如果没有使用多语言，可以直接export一个数组常量
- */
-const formOptions: VbenFormProps = {
-  // 默认展开
-  collapsed: false,
-  schema: [
-    {
-      component: 'Input',
-      fieldName: 'orgName',
-      label: '机构名称：',
-      componentProps: {
-        allowClear: true,
-        placeholder: '请输入机构名称',
-      },
-    },
-    {
-      component: 'Input',
-      fieldName: 'orgCode',
-      label: '机构编码：',
-      componentProps: {
-        allowClear: true,
-        placeholder: '请输入机构编码',
-      },
-    },
-  ],
-  // 控制表单是否显示折叠按钮
-  showCollapseButton: false,
-  // 是否在字段值改变时提交表单
-  submitOnChange: true,
-  // 按下回车时是否提交表单
-  submitOnEnter: false,
-};
+import { deleteById, list } from '#/api/system-plus/permission/org';
 
 export namespace SystemPlusOrgModuleNs {
   export interface SystemPlusOrg {
@@ -68,6 +33,7 @@ export namespace SystemPlusOrgModuleNs {
  */
 function useColumns(): VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg>['columns'] {
   return [
+    { type: 'seq', width: 70 },
     {
       title: '机构名称',
       field: 'orgName',
@@ -101,39 +67,42 @@ function useColumns(): VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg>['column
     {
       field: 'action',
       title: '操作',
-      width: 120,
+      width: 200,
       slots: { default: 'action' },
     },
   ];
 }
 
-const gridOptions: VxeTableGridOptions<SystemPlusOrgModuleNs.SystemPlusOrg> = {
+const gridOptions: VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg> = {
   columns: useColumns(),
   data: [],
   // loading: false,
   height: 'auto',
-  keepSource: true,
+  stripe: true,
   pagerConfig: {
     enabled: false,
   },
   toolbarConfig: {
     custom: true,
-    refresh: true,
+    refresh: {
+      queryMethod: (params) => {
+        return loadData(params);
+      },
+    },
     resizable: true,
-    search: true,
     zoom: true,
   },
   treeConfig: {
     // 对于同一级的节点，每次只能展开一个
-    accordion: true,
-    parentField: 'parentId',
+    // 重点：accordion这个字段和setAllTreeExpand有冲突，因为accordion为true时，只能展示一层
+    // accordion: true,
     rowField: 'id',
-    childrenField: 'children',
+    parentField: 'parentId',
+    transform: true,
   },
 };
 
 export const [Grid, gridApi] = useVbenVxeGrid({
-  formOptions,
   gridOptions,
 });
 
@@ -149,9 +118,9 @@ export const onDelete = (row: SystemPlusOrgModuleNs.SystemPlusOrg) => {
   });
 };
 
-export const loadData = () => {
+export const loadData = (params?: object) => {
   gridApi.setLoading(true);
-  tableTree({})
+  list(params)
     .then((res) => {
       gridApi.setGridOptions({ data: res });
     })
@@ -163,4 +132,14 @@ export const loadData = () => {
 // 表单处理完成做刷新处理
 export const formDone = () => {
   loadData();
+};
+
+// 展开所有
+export const expandAll = () => {
+  gridApi.grid?.setAllTreeExpand(true);
+};
+
+// 收缩所有
+export const collapseAll = () => {
+  gridApi.grid?.clearTreeExpand();
 };

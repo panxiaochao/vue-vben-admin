@@ -6,6 +6,8 @@ import { Page } from '@vben/common-ui';
 import { FormOutlined } from '@ant-design/icons-vue';
 
 import {
+  collapseAll,
+  expandAll,
   formatState,
   formDone,
   Grid,
@@ -38,6 +40,22 @@ onMounted(() => {
         >
           新建机构
         </a-button>
+        <a-button
+          :icon="h(FormOutlined)"
+          class="mr-2"
+          type="primary"
+          @click="expandAll"
+        >
+          展开所有
+        </a-button>
+        <a-button
+          :icon="h(FormOutlined)"
+          class="mr-2"
+          type="primary"
+          @click="collapseAll"
+        >
+          折叠所有
+        </a-button>
       </template>
       <template #orgCategoryStr="{ row }">
         <a-tag>
@@ -50,12 +68,16 @@ onMounted(() => {
         </a-tag>
       </template>
       <template #action="{ row }">
+        <a-button class="px-0" type="link" @click="addForm.openModal(row)">
+          添加下级
+        </a-button>
+        <a-divider type="vertical" />
         <a-button class="px-0" type="link" @click="editForm.openModal(row)">
           编辑
         </a-button>
         <a-divider type="vertical" />
         <a-popconfirm
-          placement="top"
+          placement="topLeft"
           title="删除本菜单与下级？"
           @confirm="() => onDelete(row)"
         >

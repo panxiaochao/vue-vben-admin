@@ -1,4 +1,4 @@
-import type { SystemPlusOrgModuleNs } from '#/views/system-plus/permission/org/index';
+import type { SystemPlusOrgModuleNs } from '#/views/system-plus/permission/org/config';
 import type { FormState } from '#/views/system-plus/permission/role/form/form';
 
 import { reactive } from 'vue';
