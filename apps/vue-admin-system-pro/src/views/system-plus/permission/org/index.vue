@@ -1,19 +1,17 @@
 <script lang="ts" setup>
-import type { SystemPlusOrgModuleNs } from '#/views/system-plus/permission/org/index';
-
 import { h, onMounted, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
 import { FormOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
 
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteById, tableTree } from '#/api/system-plus/permission/org';
 import {
   formatState,
-  gridOptions,
-} from '#/views/system-plus/permission/org/index';
+  formDone,
+  Grid,
+  loadData,
+  onDelete,
+} from '#/views/system-plus/permission/org/config';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -21,31 +19,6 @@ import EditForm from './form/edit-form.vue';
 
 const addForm = ref();
 const editForm = ref();
-
-const [Grid, gridApi] = useVbenVxeGrid({
-  gridOptions,
-});
-
-// 自定义方法
-const deleteRow = (row: SystemPlusOrgModuleNs.SystemPlusOrg) => {
-  deleteById(row.id).then(() => {
-    message.success('删除成功');
-    loadData();
-  });
-};
-
-const loadData = () => {
-  gridApi.setLoading(true);
-  tableTree({}).then((res) => {
-    gridApi.setGridOptions({ data: res });
-    gridApi.setLoading(false);
-  });
-};
-
-// 表单处理完成做刷新处理
-const formDone = () => {
-  loadData();
-};
 
 onMounted(() => {
   loadData();
@@ -84,7 +57,7 @@ onMounted(() => {
         <a-popconfirm
           placement="top"
           title="删除本菜单与下级？"
-          @confirm="() => deleteRow(row)"
+          @confirm="() => onDelete(row)"
         >
           <a-button class="px-0" danger type="link">删除</a-button>
         </a-popconfirm>

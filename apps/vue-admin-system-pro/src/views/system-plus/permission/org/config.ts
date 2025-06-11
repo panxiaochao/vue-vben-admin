@@ -1,75 +1,49 @@
-import type { VbenFormSchema } from '#/adapter/form';
-import type { VxeGridProps } from '#/adapter/vxe-table';
+import type { VbenFormProps } from '#/adapter/form';
+import type { VxeGridProps, VxeTableGridOptions } from '#/adapter/vxe-table';
 
-import { z } from '#/adapter/form';
-import { getDeptList } from '#/api/system/dept';
-import { $t } from '#/locales';
+import { message } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteById, tableTree } from '#/api/system-plus/permission/org';
 
 /**
  * 获取编辑表单的字段配置。如果没有使用多语言，可以直接export一个数组常量
  */
-export function useSchema(): VbenFormSchema[] {
-  return [
+const formOptions: VbenFormProps = {
+  // 默认展开
+  collapsed: false,
+  schema: [
     {
       component: 'Input',
-      fieldName: 'name',
-      label: $t('system.dept.deptName'),
-      rules: z
-        .string()
-        .min(2, $t('ui.formRules.minLength', [$t('system.dept.deptName'), 2]))
-        .max(
-          20,
-          $t('ui.formRules.maxLength', [$t('system.dept.deptName'), 20]),
-        ),
-    },
-    {
-      component: 'ApiTreeSelect',
+      fieldName: 'orgName',
+      label: '机构名称：',
       componentProps: {
         allowClear: true,
-        api: getDeptList,
-        class: 'w-full',
-        labelField: 'name',
-        valueField: 'id',
-        childrenField: 'children',
+        placeholder: '请输入机构名称',
       },
-      fieldName: 'pid',
-      label: $t('system.dept.parentDept'),
     },
     {
-      component: 'RadioGroup',
+      component: 'Input',
+      fieldName: 'orgCode',
+      label: '机构编码：',
       componentProps: {
-        buttonStyle: 'solid',
-        options: [
-          { label: $t('common.enabled'), value: 1 },
-          { label: $t('common.disabled'), value: 0 },
-        ],
-        optionType: 'button',
+        allowClear: true,
+        placeholder: '请输入机构编码',
       },
-      defaultValue: 1,
-      fieldName: 'status',
-      label: $t('system.dept.status'),
     },
-    {
-      component: 'Textarea',
-      componentProps: {
-        maxLength: 50,
-        rows: 3,
-        showCount: true,
-      },
-      fieldName: 'remark',
-      label: $t('system.dept.remark'),
-      rules: z
-        .string()
-        .max(50, $t('ui.formRules.maxLength', [$t('system.dept.remark'), 50]))
-        .optional(),
-    },
-  ];
-}
+  ],
+  // 控制表单是否显示折叠按钮
+  showCollapseButton: false,
+  // 是否在字段值改变时提交表单
+  submitOnChange: true,
+  // 按下回车时是否提交表单
+  submitOnEnter: false,
+};
 
 export namespace SystemPlusOrgModuleNs {
   export interface SystemPlusOrg {
     [key: string]: any;
-    id: string;
+    id: string | undefined;
     parentId: string | undefined;
     areaId?: string | undefined;
     areaCode?: string | undefined;
@@ -95,7 +69,7 @@ export namespace SystemPlusOrgModuleNs {
 function useColumns(): VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg>['columns'] {
   return [
     {
-      title: '名称',
+      title: '机构名称',
       field: 'orgName',
       treeNode: true,
       width: 200,
@@ -115,7 +89,7 @@ function useColumns(): VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg>['column
       width: 100,
     },
     {
-      title: '编码CODE',
+      title: '机构编码',
       field: 'orgCode',
     },
     {
@@ -133,7 +107,7 @@ function useColumns(): VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg>['column
   ];
 }
 
-export const gridOptions: VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg> = {
+const gridOptions: VxeTableGridOptions<SystemPlusOrgModuleNs.SystemPlusOrg> = {
   columns: useColumns(),
   data: [],
   // loading: false,
@@ -144,6 +118,9 @@ export const gridOptions: VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg> = {
   },
   toolbarConfig: {
     custom: true,
+    refresh: true,
+    resizable: true,
+    search: true,
     zoom: true,
   },
   treeConfig: {
@@ -155,6 +132,35 @@ export const gridOptions: VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg> = {
   },
 };
 
+export const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions,
+  gridOptions,
+});
+
 export const formatState = (row: SystemPlusOrgModuleNs.SystemPlusOrg) => {
   return row.state === '1' ? '正常' : '禁用';
+};
+
+// 自定义方法
+export const onDelete = (row: SystemPlusOrgModuleNs.SystemPlusOrg) => {
+  deleteById(row.id).then(() => {
+    message.success('删除成功');
+    loadData();
+  });
+};
+
+export const loadData = () => {
+  gridApi.setLoading(true);
+  tableTree({})
+    .then((res) => {
+      gridApi.setGridOptions({ data: res });
+    })
+    .finally(() => {
+      gridApi.setLoading(false);
+    });
+};
+
+// 表单处理完成做刷新处理
+export const formDone = () => {
+  loadData();
 };

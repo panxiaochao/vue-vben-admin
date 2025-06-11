@@ -15,7 +15,7 @@ export async function update(data: object) {
   return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sysorg`, data);
 }
 
-export async function deleteById(id: string) {
+export async function deleteById(id: number | string | undefined) {
   return requestClient.delete(`${VITE_PROJECT_API_URL}/system/v1/sysorg/${id}`);
 }
 

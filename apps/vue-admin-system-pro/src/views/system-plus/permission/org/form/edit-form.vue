@@ -14,7 +14,7 @@ import {
   defaultModel,
   formItemLayout,
   useFormApi,
-} from '#/views/system-plus/permission/org/form/form';
+} from '#/views/system-plus/permission/org/form/form-config';
 
 defineOptions({
   name: 'EditForm',
