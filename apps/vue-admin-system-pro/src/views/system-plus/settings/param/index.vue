@@ -11,7 +11,11 @@ import { FormOutlined, PullRequestOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteById, page, publishedData } from '#/api/system-plus/settings/param';
+import {
+  deleteById,
+  page,
+  publishedData,
+} from '#/api/system-plus/settings/param';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
