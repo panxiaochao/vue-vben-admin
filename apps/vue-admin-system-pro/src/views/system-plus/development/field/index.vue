@@ -69,8 +69,6 @@ const queryParams = reactive({
 
 const gridOptions: VxeGridProps<RowType> = {
   columns,
-  data: [],
-  // loading: false,
   height: 'auto',
   pagerConfig: {
     currentPage: 1,

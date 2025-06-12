@@ -79,7 +79,6 @@ const gridOptions: VxeGridProps<RowType> = {
       title: '自动填充',
     },
   ],
-  data: [],
   editConfig: {
     mode: 'row',
     trigger: 'click',

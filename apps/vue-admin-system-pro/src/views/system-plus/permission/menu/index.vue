@@ -80,8 +80,6 @@ const columns = [
 
 const gridOptions: VxeGridProps<RowType> = {
   columns,
-  data: [],
-  // loading: false,
   height: 'auto',
   pagerConfig: {
     enabled: false,

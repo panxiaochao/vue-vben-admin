@@ -69,8 +69,6 @@ const loadChildren = ({ row }: { row: RowType }) => {
 
 const gridOptions: VxeGridProps<RowType> = {
   columns,
-  data: [],
-  // loading: false,
   height: 'auto',
   pagerConfig: {
     enabled: false,

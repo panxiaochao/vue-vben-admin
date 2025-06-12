@@ -75,8 +75,6 @@ const formOptions: VbenFormProps = {
 
 const gridOptions: VxeGridProps<RowType> = {
   columns,
-  data: [],
-  // loading: false,
   height: 'auto',
   pagerConfig: {
     currentPage: 1,
