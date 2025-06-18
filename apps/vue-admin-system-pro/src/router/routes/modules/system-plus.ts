@@ -208,21 +208,30 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
           {
-            name: 'SystemPlusCodeGen',
-            path: '/system-plus/development/codegen',
-            component: () =>
-              import('#/views/system-plus/development/codegen/index.vue'),
-            meta: {
-              title: '代码生成',
-            },
-          },
-          {
             name: 'SystemPlusDatabaseSource',
             path: '/system-plus/development/datasource',
             component: () =>
               import('#/views/system-plus/development/datasource/index.vue'),
             meta: {
               title: '数据源',
+            },
+          },
+          {
+            name: 'SystemPlusOnlineTable',
+            path: '/system-plus/development/online-table',
+            component: () =>
+              import('#/views/system-plus/development/onlinetable/index.vue'),
+            meta: {
+              title: '在线数据表',
+            },
+          },
+          {
+            name: 'SystemPlusCodeGen',
+            path: '/system-plus/development/codegen',
+            component: () =>
+              import('#/views/system-plus/development/codegen/index.vue'),
+            meta: {
+              title: '代码生成',
             },
           },
           {

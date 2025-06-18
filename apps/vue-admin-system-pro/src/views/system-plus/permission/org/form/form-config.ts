@@ -1,5 +1,4 @@
 import type { SystemPlusOrgModuleNs } from '#/views/system-plus/permission/org/config';
-import type { FormState } from '#/views/system-plus/permission/role/form/form';
 
 import { reactive } from 'vue';
 
@@ -39,6 +38,6 @@ export const rulesRef = reactive({
   orgCategory: [{ type: 'number', required: true, message: '请输入机构类别' }],
 });
 
-export const useFormApi = (modelRef: FormState) => {
+export const useFormApi = (modelRef: SystemPlusOrgModuleNs.SystemPlusOrg) => {
   return Form.useForm(modelRef, rulesRef);
 };

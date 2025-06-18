@@ -8,7 +8,10 @@ import { reactive, ref } from 'vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { importTables, queryDsTable } from '#/api/system-plus/development/gen-table';
+import {
+  importTables,
+  queryDsTable,
+} from '#/api/system-plus/development/gen-table';
 
 defineOptions({
   name: 'ImportTable',
@@ -227,7 +230,7 @@ defineExpose({
 
 .footer-bottom-button {
   position: relative;
-  bottom: 0;
   right: 0;
+  bottom: 0;
 }
 </style>

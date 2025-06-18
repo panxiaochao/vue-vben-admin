@@ -26,7 +26,7 @@ export async function queryDsTablePage(params: object) {
   );
 }
 
-export async function queryDsTable(params: object) {
+export async function queryDsTable(params: object | undefined) {
   return requestClient.get(
     `${VITE_PROJECT_API_URL}/development/v1/gentable/queryDsTable`,
     {

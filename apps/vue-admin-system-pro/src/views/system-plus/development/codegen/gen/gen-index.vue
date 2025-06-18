@@ -64,7 +64,6 @@ const open = defineModel('open', { type: Boolean, default: false });
 const width = defineModel('width', { type: Number, default: 800 });
 
 const openModal = (tableId: string) => {
-  console.log(tableId);
   open.value = true;
   currentTableId.value = tableId;
 };
