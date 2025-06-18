@@ -347,9 +347,10 @@ onMounted(async () => {
 .monitor-center-row-col-card {
   text-align: center;
 }
-/*.vxe-cell {
+
+/* .vxe-cell {
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;
-}*/
+} */
 </style>
