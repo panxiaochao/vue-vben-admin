@@ -236,6 +236,9 @@ onMounted(async () => {
             <a-descriptions-item label="CPU逻辑核心数">
               {{ cpuInfo.logicalProcessorCount }}
             </a-descriptions-item>
+            <a-descriptions-item label="CPU性能核心数">
+              {{ cpuInfo.performanceCount }}
+            </a-descriptions-item>
             <a-descriptions-item label="CPU能效核心数">
               {{ cpuInfo.efficiencyCount }}
             </a-descriptions-item>
