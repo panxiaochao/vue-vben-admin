@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { defineEmits, nextTick, reactive, toRaw } from 'vue';
+import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
 import { Form } from 'ant-design-vue';
 import { pick } from 'lodash-es';
 
+import { selectDbSources } from '#/api/system-plus/development/datasource';
 import { update } from '#/api/system-plus/development/fieldtype';
 
 defineOptions({
@@ -13,6 +14,9 @@ defineOptions({
 
 // 定义组件的事件
 const $emits = defineEmits(['done']);
+
+// 标签下拉列表
+const tagsList = ref([]);
 
 const useForm = Form.useForm;
 
@@ -33,6 +37,7 @@ interface FormState {
   dbType: string | undefined;
   columnType: string | undefined;
   packageName: string | undefined;
+  tags: string[];
 }
 
 const defaultModel = {
@@ -40,6 +45,7 @@ const defaultModel = {
   dbType: undefined,
   columnType: undefined,
   packageName: undefined,
+  tags: [],
 };
 
 const modelRef = reactive<FormState>({ ...defaultModel });
@@ -51,6 +57,7 @@ const rulesRef = reactive({
   packageName: [
     { type: 'string', required: true, message: '请输入JAVA映射类型' },
   ],
+  tags: [{ required: true, message: '请输入数据库标签' }],
 });
 
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
@@ -74,6 +81,11 @@ const updateForm = (raw: FormState) => {
 
 const openModal = (raw: FormState) => {
   open.value = true;
+  // 加载数据库类型
+  tagsList.value = [];
+  selectDbSources().then((res) => {
+    tagsList.value = res;
+  });
   updateForm(raw);
 };
 
@@ -129,6 +141,15 @@ defineExpose({
           :options="javaTypeList"
           allow-clear
           placeholder="请选择JAVA映射类型"
+        />
+      </a-form-item>
+      <a-form-item label="数据库标签" name="tags" v-bind="validateInfos.tags">
+        <a-select
+          v-model:value="modelRef.tags"
+          :options="tagsList"
+          allow-clear
+          mode="multiple"
+          placeholder="请选择数据库标签"
         />
       </a-form-item>
     </a-form>

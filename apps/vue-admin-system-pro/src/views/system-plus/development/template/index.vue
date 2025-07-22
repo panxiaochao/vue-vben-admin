@@ -43,7 +43,7 @@ interface RowType {
 // 字段定义
 const columns = [
   { field: 'templateName', title: '模版名称' },
-  { field: 'generatorPath', title: '模版路径' },
+  { field: 'generatorPath', title: '模版路径', showOverflow: false },
   { field: 'templateDesc', title: '模版描述' },
   {
     field: 'templateType',

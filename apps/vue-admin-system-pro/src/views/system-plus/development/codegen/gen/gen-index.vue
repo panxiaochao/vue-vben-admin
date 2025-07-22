@@ -82,10 +82,12 @@ const preview = async () => {
 // 下载ZIP包
 const generatorHandler = async () => {
   btnLoading.value = true;
+  // 提交字段信息
+  await fieldInfo.value.submitHandler();
   message
     .loading('正在生成中...', 1.5)
     .then(() => {
-      generatorCodeApi();
+      downBlobFile();
     })
     .then(() => {
       btnLoading.value = false;

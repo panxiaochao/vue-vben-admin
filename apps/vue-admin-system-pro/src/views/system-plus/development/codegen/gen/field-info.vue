@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, toRaw } from 'vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
@@ -58,13 +58,13 @@ const gridOptions: VxeGridProps<RowType> = {
       slots: { default: 'autoIncrement' },
     },
     { field: 'fieldName', title: '字段名' },
-    { editRender: { name: 'input' }, field: 'fieldComment', title: '说明' },
+    { editRender: { name: 'VxeInput' }, field: 'fieldComment', title: '说明' },
     {
       field: 'fieldType',
       title: '字段类型',
     },
     {
-      editRender: { name: 'input' },
+      editRender: { name: 'VxeInput' },
       field: 'attrName',
       title: '属性名',
     },
@@ -127,8 +127,8 @@ const formatAutoIncrement = (row: RowType) => {
 const submitHandler = () => {
   return new Promise((resolve) => {
     spinning.value = true;
-    const data = gridApi.grid.getData();
-    updateBatch(data).then(() => {
+    const data = gridApi.grid.getFullData();
+    updateBatch(toRaw(data)).then(() => {
       spinning.value = false;
       resolve(true);
     });

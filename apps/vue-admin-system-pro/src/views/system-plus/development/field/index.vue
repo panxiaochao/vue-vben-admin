@@ -39,6 +39,7 @@ const columns = [
   { field: 'columnType', title: '数据库字段类型' },
   { field: 'javaType', title: 'JAVA映射类型' },
   { field: 'packageName', title: 'JAVA包名' },
+  { field: 'tags', title: '数据库标签', slots: { default: 'tags' } },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
 ];
 
@@ -164,6 +165,11 @@ onMounted(() => {
         >
           新建字段映射
         </a-button>
+      </template>
+      <template #tags="{ row }">
+        <a-tag v-for="(tag, index) in row.tags" :key="index" color="blue">
+          {{ tag }}
+        </a-tag>
       </template>
       <template #action="{ row }">
         <a-button class="px-0" type="link" @click="editForm.openModal(row)">
