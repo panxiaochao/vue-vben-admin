@@ -8,8 +8,7 @@ import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { selectDataSourceList } from '#/api/system-plus/development/datasource';
-import { page } from '#/api/system-plus/development/online-table';
-import { deleteById } from '#/api/system-plus/permission/org';
+import { deleteById, page } from '#/api/system-plus/development/online-table';
 
 export namespace SystemPlusOnlineTableModuleNs {
   export interface SystemPlusOnlineTable {
@@ -127,12 +126,12 @@ export const formatState = (
 };
 
 // 自定义方法
-export const onDelete = (
+export const deleteRow = (
   row: SystemPlusOnlineTableModuleNs.SystemPlusOnlineTable,
 ) => {
   deleteById(row.id).then(() => {
     message.success('删除成功');
-    loadData();
+    refresh(true);
   });
 };
 
@@ -142,6 +141,14 @@ export async function loadData() {
   return page(toRaw(queryParams)).finally(() => {
     gridApi.setLoading(false);
   });
+}
+
+// 强制刷新
+async function refresh(bool: boolean) {
+  // reload: 强制刷新到第一页 query: 刷新当前页
+  await (bool
+    ? gridApi.reload(Object.assign(queryParams, { pageNo: 1 }))
+    : gridApi.query(queryParams));
 }
 
 // 初始化数据源数据
@@ -155,15 +162,15 @@ export function loadDataSourceList() {
 
 // 表单处理完成做刷新处理
 export const formDone = () => {
-  loadData();
+  refresh(true);
 };
 
 function onSubmit(values: Record<string, any>) {
   Object.assign(queryParams, values);
-  loadData();
+  refresh(true);
 }
 
 function onReset() {
   gridApi.formApi.resetForm();
-  gridApi.setGridOptions({ data: [] });
+  refresh(true);
 }
