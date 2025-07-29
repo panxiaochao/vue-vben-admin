@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { SystemPlusOnlineTableModuleNs } from '#/views/system-plus/development/onlinetable/config';
-
 import { defineEmits, reactive, ref, toRaw } from 'vue';
 
+import { saveTableAndColumns } from '#/api/system-plus/development/online-table';
 import {
   defaultModel,
   formItemLayout,
@@ -29,26 +28,37 @@ const open = defineModel('open', { type: Boolean, default: false });
 // 响应式数据 width 控制模态框的宽度
 const width = defineModel('width', { type: Number, default: 800 });
 
+// 响应式数据 dataSourceList 存储数据源列表
+const dataSourceList = defineModel('dataSourceList', {
+  type: Array,
+  default: [],
+});
+
 const modelRef = reactive({ ...defaultModel });
 
 const { resetFields, validate, validateInfos } = useFormApi(modelRef);
 
-const openModal = (
-  raw?: SystemPlusOnlineTableModuleNs.SystemPlusOnlineTable,
-) => {
+const openModal = () => {
   open.value = true;
+  // 初始化下拉
+  fieldTable.value.loadJdbcType();
+};
+
+// 数据库类型下拉数据变换解析
+const handleDataSourceChange = (value: any) => {
+  fieldTable.value.loadJdbcType(value);
 };
 
 const handleOk = () => {
   validate().then(() => {
     const values = toRaw(modelRef);
-    // save(values).then(() => {
-    //   resetFields();
-    //   open.value = false;
-    //   // 刷新
-    //   $emits('done');
-    // });
-    fieldTable.value.submitHandler();
+    values.columns = fieldTable.value.submitHandler();
+    saveTableAndColumns(values).then(() => {
+      resetFields();
+      open.value = false;
+      // 刷新
+      $emits('done');
+    });
   });
 };
 
@@ -75,7 +85,22 @@ defineExpose({
   >
     <a-form v-bind="formItemLayout">
       <a-row :gutter="24">
-        <a-col :span="12">
+        <a-col :span="8">
+          <a-form-item
+            label="数据源"
+            name="dataSourceId"
+            v-bind="validateInfos.datasourceId"
+          >
+            <a-select
+              v-model:value="modelRef.datasourceId"
+              :options="dataSourceList"
+              allow-clear
+              placeholder="请选择数据源"
+              @change="handleDataSourceChange"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="8">
           <a-form-item
             label="表名"
             name="tableName"
@@ -84,7 +109,7 @@ defineExpose({
             <a-input v-model:value="modelRef.tableName" allow-clear />
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="8">
           <a-form-item
             label="表注释"
             name="tableComment"

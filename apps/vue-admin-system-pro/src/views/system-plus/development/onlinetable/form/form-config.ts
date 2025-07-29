@@ -6,7 +6,7 @@ import { Form } from 'ant-design-vue';
 
 export const defaultModel: SystemPlusOnlineTableModuleNs.SystemPlusOnlineTable =
   {
-    databaseId: undefined,
+    datasourceId: undefined,
     tableName: undefined,
     catalog: undefined,
     schema: undefined,
@@ -25,6 +25,7 @@ export const formItemLayout = {
 };
 
 export const rulesRef = reactive({
+  datasourceId: [{ type: 'string', required: true, message: '请输入数据源' }],
   tableName: [{ type: 'string', required: true, message: '请输入表名' }],
   tableComment: [{ type: 'string', required: true, message: '请输入表注释' }],
 });

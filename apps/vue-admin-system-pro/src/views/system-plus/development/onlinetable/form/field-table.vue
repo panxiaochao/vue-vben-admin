@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { h, nextTick, onMounted, reactive, toRaw } from 'vue';
+import { h, onMounted, reactive, toRaw } from 'vue';
 
 import { PlusCircleOutlined } from '@ant-design/icons-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { selectAttrTypes } from '#/api/system-plus/development/gen-column';
+import { selectFieldTypeByDataSourceId } from '#/api/system-plus/development/field-tag';
 import { FIELD_TABLE_DATA } from '#/views/system-plus/development/onlinetable/form/field-table-data';
 
 defineOptions({
@@ -39,10 +39,7 @@ const nullableCheckBox = {
 // 字段类型 下拉框组件
 const jdbcTypeSelect = reactive({
   name: 'select',
-  options: [
-    { label: '女', value: 'Women' },
-    { label: '男', value: 'Man' },
-  ],
+  options: [],
   optionProps: {
     label: 'label',
     value: 'value',
@@ -53,26 +50,26 @@ const gridOptions: VxeGridProps<RowType> = {
   columns: [
     { title: '序号', type: 'seq', width: 50 },
     {
-      field: 'columnName',
+      field: 'fieldName',
       title: '字段名称',
       dragSort: true,
       align: 'left',
       editRender: { name: 'VxeInput' },
     },
     {
-      field: 'columnComment',
+      field: 'fieldComment',
       title: '注释',
       align: 'left',
       editRender: { name: 'VxeInput' },
     },
     {
-      field: 'jdbcTypeName',
+      field: 'fieldType',
       title: '字段类型',
       width: 135,
       editRender: jdbcTypeSelect,
     },
     {
-      field: 'columnLength',
+      field: 'columnSize',
       title: '字段长度',
       width: 110,
       editRender: { name: 'VxeNumberInput' },
@@ -129,19 +126,22 @@ const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
 function loadData() {
   // 加载默认数据
   gridApi.setGridOptions({ data: FIELD_TABLE_DATA });
-  nextTick(() => {
-    // 加载 attrType 数据
-    selectAttrTypes().then((res) => {
-      Object.assign(jdbcTypeSelect.options, res);
-      console.log(jdbcTypeSelect);
-    });
-  });
 }
 
 // 提交数据
 const submitHandler = () => {
-  const data = gridApi.grid.getFullData();
-  console.log(data);
+  return gridApi.grid.getFullData();
+};
+
+// 加载 jdbcType 数据
+const loadJdbcType = (dataSourceId?: string) => {
+  if (dataSourceId === null || dataSourceId === undefined) {
+    jdbcTypeSelect.options = [];
+  } else {
+    selectFieldTypeByDataSourceId({ dataSourceId }).then((res) => {
+      Object.assign(jdbcTypeSelect.options, res);
+    });
+  }
 };
 
 // 添加字段
@@ -174,6 +174,7 @@ const deleteColumn = (row: RowType) => {
 // 暴露方法
 defineExpose({
   submitHandler,
+  loadJdbcType,
 });
 
 onMounted(() => {

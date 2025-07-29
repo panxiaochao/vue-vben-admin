@@ -147,16 +147,24 @@ const deleteRow = (row: RowType) => {
 
 // 测试链接
 const testConnSource = (row: RowType) => {
-  testConn(row).then((res) => {
-    if (res.testConn === '1') {
-      message.success('连接成功');
-    } else {
-      message.error('连接失败');
-    }
-    row.testConnTime = res.testConnTime;
-    row.testConn = res.testConn;
-    editForm.value.updateConnState(row);
-  });
+  const hideLoading = message.loading(`测试连接【${row.dbName}】`, 0);
+  testConn(row)
+    .then((res) => {
+      if (res.testConn === '1') {
+        message.success('连接成功');
+      } else {
+        message.error('连接失败');
+      }
+      // 关闭 loading 提示
+      hideLoading();
+      row.testConnTime = res.testConnTime;
+      row.testConn = res.testConn;
+      editForm.value.updateConnState(row);
+    })
+    .catch(() => {
+      // 关闭 loading 提示
+      hideLoading();
+    });
 };
 
 // 表单处理完成做刷新处理

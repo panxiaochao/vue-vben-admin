@@ -2,19 +2,19 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { ref, toRaw } from 'vue';
+import { reactive, ref, toRaw } from 'vue';
 
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { selectDataSourceList } from '#/api/system-plus/development/datasource';
-import { queryDsTable } from '#/api/system-plus/development/gen-table';
+import { page } from '#/api/system-plus/development/online-table';
 import { deleteById } from '#/api/system-plus/permission/org';
 
 export namespace SystemPlusOnlineTableModuleNs {
   export interface SystemPlusOnlineTable {
     [key: string]: any;
-    databaseId: string | undefined;
+    datasourceId: string | undefined;
     tableName: string | undefined;
     catalog: string | undefined;
     schema: string | undefined;
@@ -39,7 +39,7 @@ const formOptions: VbenFormProps = {
   schema: [
     {
       component: 'Select',
-      fieldName: 'databaseId',
+      fieldName: 'datasourceId',
       label: '数据源：',
       componentProps: () => {
         return {
@@ -67,10 +67,11 @@ const formOptions: VbenFormProps = {
  */
 function useColumns(): VxeGridProps<SystemPlusOnlineTableModuleNs.SystemPlusOnlineTable>['columns'] {
   return [
-    { field: 'catalog', title: '数据库目录' },
-    { field: 'schema', title: '数据库模式' },
+    { field: 'dbName', title: '数据源' },
+    { field: 'dbType', title: '数据库类型', slots: { default: 'dbType' } },
     { field: 'tableName', title: '表名' },
     { field: 'tableComment', title: '表注释' },
+    { field: 'createTime', title: '创建时间', width: 180 },
     {
       field: 'action',
       title: '操作',
@@ -80,12 +81,37 @@ function useColumns(): VxeGridProps<SystemPlusOnlineTableModuleNs.SystemPlusOnli
   ];
 }
 
+// 查询参数
+const queryParams = reactive({
+  pageNo: 1,
+  pageSize: 10,
+});
+
 const gridOptions: VxeGridProps<SystemPlusOnlineTableModuleNs.SystemPlusOnlineTable> =
   {
     columns: useColumns(),
     height: 'auto',
     pagerConfig: {
-      enabled: false,
+      currentPage: 1,
+      pageSize: 10,
+      total: 0,
+      pageSizes: [10, 15, 20, 50, 100],
+    },
+    proxyConfig: {
+      response: {
+        result: 'list',
+        total: 'pagination.total',
+      },
+      ajax: {
+        query: async ({ page }, formValues) => {
+          Object.assign(queryParams, {
+            pageNo: page.currentPage,
+            pageSize: page.pageSize,
+            ...formValues,
+          });
+          return await loadData();
+        },
+      },
     },
   };
 
@@ -111,22 +137,11 @@ export const onDelete = (
 };
 
 // 远程获取数据
-export function loadData(params?: object) {
+export async function loadData() {
   gridApi.setLoading(true);
-  queryDsTable(params)
-    .then((res) => {
-      gridApi.setGridOptions({
-        data: res,
-      });
-    })
-    .catch(() => {
-      gridApi.setGridOptions({
-        data: [],
-      });
-    })
-    .finally(() => {
-      gridApi.setLoading(false);
-    });
+  return page(toRaw(queryParams)).finally(() => {
+    gridApi.setLoading(false);
+  });
 }
 
 // 初始化数据源数据
@@ -144,11 +159,8 @@ export const formDone = () => {
 };
 
 function onSubmit(values: Record<string, any>) {
-  if ((values.databaseId ?? '') === '') {
-    message.error('请选择数据源！');
-  } else {
-    loadData(toRaw(values));
-  }
+  Object.assign(queryParams, values);
+  loadData();
 }
 
 function onReset() {
