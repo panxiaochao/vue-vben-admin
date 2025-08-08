@@ -17,7 +17,6 @@ const [Form, formApi] = useVbenForm({
   handleSubmit: onSubmit,
   // 垂直布局，label和input在不同行，值为vertical
   // 水平布局，label和input在同一行
-  scrollToFirstError: true,
   layout: 'horizontal',
   schema: [
     {

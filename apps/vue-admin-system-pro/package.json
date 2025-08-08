@@ -54,5 +54,8 @@
     "vue": "catalog:",
     "vue-router": "catalog:",
     "lodash-es": "catalog:"
+  },
+  "devDependencies": {
+    "@types/json-bigint": "catalog:"
   }
 }
