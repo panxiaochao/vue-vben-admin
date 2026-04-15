@@ -134,61 +134,57 @@ defineExpose({
     @cancel="handleCancel"
     @ok="handleOk"
   >
-    <a-layout>
-      <a-layout>
-        <a-layout-sider width="350" style="background: #fff">
-          <a-form v-bind="formItemLayout">
-            <a-form-item
-              label="模版名称"
-              name="templateName"
-              v-bind="validateInfos.templateName"
-            >
-              <a-input v-model:value="modelRef.templateName" allow-clear />
-            </a-form-item>
-            <a-form-item
-              label="模版路径"
-              name="generatorPath"
-              v-bind="validateInfos.generatorPath"
-            >
-              <a-textarea
-                :rows="4"
-                v-model:value="modelRef.generatorPath"
-                allow-clear
-              />
-            </a-form-item>
-            <a-form-item
-              label="模版类型"
-              name="templateType"
-              v-bind="validateInfos.templateType"
-            >
-              <a-select
-                v-model:value="modelRef.templateType"
-                :options="templateTypeList"
-                allow-clear
-                placeholder="请选择模版类型"
-              />
-            </a-form-item>
-            <a-form-item label="模版描述" name="templateDesc">
-              <a-textarea
-                v-model:value="modelRef.templateDesc"
-                :rows="4"
-                allow-clear
-              />
-            </a-form-item>
-          </a-form>
-        </a-layout-sider>
-        <a-layout>
-          <a-layout-content>
-            <CodeEdit
-              ref="codeEditRef"
-              :model-value="modelRef.templateCode"
-              :language="modelRef.templateType"
-              :theme="Themes.dracula"
-              :height="650"
+    <a-layout class="form-layout">
+      <a-layout-sider width="350" style="background: #fff; overflow: auto">
+        <a-form v-bind="formItemLayout">
+          <a-form-item
+            label="模版名称"
+            name="templateName"
+            v-bind="validateInfos.templateName"
+          >
+            <a-input v-model:value="modelRef.templateName" allow-clear />
+          </a-form-item>
+          <a-form-item
+            label="模版路径"
+            name="generatorPath"
+            v-bind="validateInfos.generatorPath"
+          >
+            <a-textarea
+              :rows="4"
+              v-model:value="modelRef.generatorPath"
+              allow-clear
             />
-          </a-layout-content>
-        </a-layout>
-      </a-layout>
+          </a-form-item>
+          <a-form-item
+            label="模版类型"
+            name="templateType"
+            v-bind="validateInfos.templateType"
+          >
+            <a-select
+              v-model:value="modelRef.templateType"
+              :options="templateTypeList"
+              allow-clear
+              placeholder="请选择模版类型"
+            />
+          </a-form-item>
+          <a-form-item label="模版描述" name="templateDesc">
+            <a-textarea
+              v-model:value="modelRef.templateDesc"
+              :rows="4"
+              allow-clear
+            />
+          </a-form-item>
+        </a-form>
+      </a-layout-sider>
+      <a-layout-content class="code-editor-wrapper">
+        <CodeEdit
+          ref="codeEditRef"
+          :model-value="modelRef.templateCode"
+          :language="modelRef.templateType"
+          :theme="Themes.dracula"
+          class="code-editor"
+        />
+      </a-layout-content>
     </a-layout>
   </a-modal>
 </template>
@@ -212,6 +208,39 @@ defineExpose({
 
   .ant-modal-body {
     flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.form-layout {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  background: #fff;
+
+  .ant-layout-sider {
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+
+  .code-editor-wrapper {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    .code-editor {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+
+      .cm-editor {
+        height: 100%;
+      }
+    }
   }
 }
 </style>
