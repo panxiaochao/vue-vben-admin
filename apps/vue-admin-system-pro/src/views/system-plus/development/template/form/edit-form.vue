@@ -135,7 +135,7 @@ defineExpose({
     @ok="handleOk"
   >
     <a-layout class="form-layout">
-      <a-layout-sider width="350" style="background: #fff; overflow: auto">
+      <a-layout-sider width="350" style="overflow: auto; background: #fff">
         <a-form v-bind="formItemLayout">
           <a-form-item
             label="模版名称"
@@ -192,12 +192,12 @@ defineExpose({
 <style lang="scss">
 .full-modal {
   .ant-modal {
-    max-width: 100%;
     top: 0;
-    padding-bottom: 0;
-    margin: 0;
+    max-width: 100%;
     height: 100%;
     min-height: calc(100vh - 0px);
+    padding-bottom: 0;
+    margin: 0;
   }
 
   .ant-modal-content {
@@ -207,17 +207,17 @@ defineExpose({
   }
 
   .ant-modal-body {
-    flex: 1;
-    overflow: hidden;
     display: flex;
+    flex: 1;
     flex-direction: column;
+    overflow: hidden;
   }
 }
 
 .form-layout {
   flex: 1;
-  overflow: hidden;
   height: 100%;
+  overflow: hidden;
   background: #fff;
 
   .ant-layout-sider {
@@ -226,11 +226,11 @@ defineExpose({
   }
 
   .code-editor-wrapper {
-    flex: 1;
-    overflow: hidden;
     display: flex;
+    flex: 1;
     flex-direction: column;
     min-width: 0;
+    overflow: hidden;
 
     .code-editor {
       flex: 1;
