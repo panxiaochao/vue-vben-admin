@@ -70,7 +70,7 @@ function useColumns(): VxeGridProps<SystemPlusOnlineTableModuleNs.SystemPlusOnli
     { field: 'dbType', title: '数据库类型', slots: { default: 'dbType' } },
     { field: 'tableName', title: '表名' },
     { field: 'tableComment', title: '表注释' },
-    { field: 'createTime', title: '创建时间', width: 180 },
+    { field: 'createAt', title: '创建时间', width: 180 },
     {
       field: 'action',
       title: '操作',

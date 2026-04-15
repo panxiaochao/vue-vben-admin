@@ -20,7 +20,7 @@ export const defaultModel = {
   dataScope: '1',
   remark: undefined,
   sort: 0,
-  state: '1',
+  status: '1',
 };
 
 export const rulesRef = reactive({

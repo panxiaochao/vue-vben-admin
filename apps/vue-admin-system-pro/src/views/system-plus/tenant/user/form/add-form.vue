@@ -42,7 +42,7 @@ const modelRef = reactive({
   companyDomain: undefined,
   mode: undefined,
   expireTime: undefined,
-  state: '1',
+  status: '1',
 });
 
 const rulesRef = reactive({
@@ -219,8 +219,8 @@ defineExpose({
       </a-row>
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-item label="状态" name="state">
-            <a-radio-group v-model:value="modelRef.state">
+          <a-form-item label="状态" name="status">
+            <a-radio-group v-model:value="modelRef.status">
               <a-radio value="1">正常</a-radio>
               <a-radio value="0">禁用</a-radio>
             </a-radio-group>

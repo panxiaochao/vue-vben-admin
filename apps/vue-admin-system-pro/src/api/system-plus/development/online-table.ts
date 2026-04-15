@@ -3,11 +3,9 @@ import { requestClient } from '#/api/request';
 const { VITE_PROJECT_API_URL } = import.meta.env;
 
 export async function page(params: object) {
-  return requestClient.get(
+  return requestClient.post(
     `${VITE_PROJECT_API_URL}/development/v1/online-table/page`,
-    {
-      params,
-    },
+    params,
   );
 }
 

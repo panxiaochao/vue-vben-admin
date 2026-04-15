@@ -34,7 +34,7 @@ interface RowType {
   dictCode: string;
   remark: string;
   sort: number;
-  createTime: string;
+  createAt: string;
   state: string;
 }
 
@@ -44,7 +44,7 @@ const columns = [
   { field: 'dictCode', title: '字典编码' },
   { field: 'remark', title: '描述' },
   { field: 'sort', title: '排序' },
-  { field: 'createTime', title: '创建时间' },
+  { field: 'createAt', title: '创建时间' },
   { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];
@@ -116,7 +116,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
 // 加载远程数据
 async function loadData() {
   Object.assign(queryParams, {
-    state: '1',
+    status: '1',
   });
   return page(toRaw(queryParams));
 }

@@ -25,14 +25,14 @@ interface RowType {
   id: string;
   groupName: string;
   groupDesc: string;
-  createTime: string;
+  createAt: string;
 }
 
 // 字段定义
 const columns = [
   { field: 'groupName', title: '分组名称' },
   { field: 'groupDesc', title: '分组描述' },
-  { field: 'createTime', title: '创建时间' },
+  { field: 'createAt', title: '创建时间' },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
 ];
 

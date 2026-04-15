@@ -18,7 +18,7 @@ interface RowType {
   address: string;
   browser: string;
   os: string;
-  createTime: string;
+  createAt: string;
   remark: string;
   loginType: number;
   state: string;
@@ -31,7 +31,7 @@ const columns = [
   { field: 'address', title: '地址' },
   { field: 'browser', title: '浏览器' },
   { field: 'os', title: '设备' },
-  { field: 'createTime', title: '创建时间' },
+  { field: 'createAt', title: '创建时间' },
   { field: 'remark', title: '内容', width: 300 },
   {
     field: 'loginType',

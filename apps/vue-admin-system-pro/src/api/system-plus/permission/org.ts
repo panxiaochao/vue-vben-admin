@@ -3,25 +3,28 @@ import { requestClient } from '#/api/request';
 const { VITE_PROJECT_API_URL } = import.meta.env;
 
 export async function page(params: object) {
-  return requestClient.get(`${VITE_PROJECT_API_URL}/system/v1/sysorg/page`, {
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-org/page`,
     params,
-  });
+  );
 }
 export async function save(data: object) {
-  return requestClient.post(`${VITE_PROJECT_API_URL}/system/v1/sysorg`, data);
+  return requestClient.post(`${VITE_PROJECT_API_URL}/system/v1/sys-org`, data);
 }
 
 export async function update(data: object) {
-  return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sysorg`, data);
+  return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sys-org`, data);
 }
 
 export async function deleteById(id: number | string | undefined) {
-  return requestClient.delete(`${VITE_PROJECT_API_URL}/system/v1/sysorg/${id}`);
+  return requestClient.delete(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-org/${id}`,
+  );
 }
 
 export function listTree(params: object) {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/sysorg/listTree`,
+    `${VITE_PROJECT_API_URL}/system/v1/sys-org/listTree`,
     {
       params,
     },
@@ -30,19 +33,19 @@ export function listTree(params: object) {
 
 export function tableTree(params: object | undefined) {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/sysorg/tableTree`,
+    `${VITE_PROJECT_API_URL}/system/v1/sys-org/tableTree`,
     { params },
   );
 }
 
 export function list(params: object | undefined) {
-  return requestClient.get(`${VITE_PROJECT_API_URL}/system/v1/sysorg/list`, {
+  return requestClient.get(`${VITE_PROJECT_API_URL}/system/v1/sys-org/list`, {
     params,
   });
 }
 
 export function selectOrgCategoryList() {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/sysorg/selectOrgCategoryList`,
+    `${VITE_PROJECT_API_URL}/system/v1/sys-org/selectOrgCategoryList`,
   );
 }

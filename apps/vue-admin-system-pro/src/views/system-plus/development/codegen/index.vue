@@ -48,7 +48,7 @@ interface RowType {
   tableComment: string;
   className: string;
   generatorType: string;
-  createTime: string;
+  createAt: string;
 }
 
 // 字段定义
@@ -61,7 +61,7 @@ const columns = [
     title: '生成方式',
     slots: { default: 'generatorType' },
   },
-  { field: 'createTime', title: '创建时间', width: 180 },
+  { field: 'createAt', title: '创建时间', width: 180 },
   { field: 'action', title: '操作', width: 180, slots: { default: 'action' } },
 ];
 

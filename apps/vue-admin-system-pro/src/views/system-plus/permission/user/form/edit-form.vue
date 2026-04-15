@@ -55,7 +55,7 @@ const defaultModel = {
   nickName: undefined,
   sex: '1',
   address: undefined,
-  state: '1',
+  status: '1',
   email: undefined,
   mobile: undefined,
   tel: undefined,
@@ -207,8 +207,8 @@ defineExpose({
       </a-row>
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-item label="人员状态" name="state">
-            <a-radio-group v-model:value="modelRef.state">
+          <a-form-item label="人员状态" name="status">
+            <a-radio-group v-model:value="modelRef.status">
               <a-radio value="1">正常</a-radio>
               <a-radio value="0">禁用</a-radio>
             </a-radio-group>

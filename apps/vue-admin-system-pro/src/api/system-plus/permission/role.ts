@@ -3,27 +3,28 @@ import { requestClient } from '#/api/request';
 const { VITE_PROJECT_API_URL } = import.meta.env;
 
 export async function page(params: object) {
-  return requestClient.get(`${VITE_PROJECT_API_URL}/system/v1/sysrole/page`, {
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-role/page`,
     params,
-  });
+  );
 }
 export async function save(data: object) {
-  return requestClient.post(`${VITE_PROJECT_API_URL}/system/v1/sysrole`, data);
+  return requestClient.post(`${VITE_PROJECT_API_URL}/system/v1/sys-role`, data);
 }
 
 export async function update(data: object) {
-  return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sysrole`, data);
+  return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sys-role`, data);
 }
 
 export async function deleteById(id: string) {
   return requestClient.delete(
-    `${VITE_PROJECT_API_URL}/system/v1/sysrole/${id}`,
+    `${VITE_PROJECT_API_URL}/system/v1/sys-role/${id}`,
   );
 }
 
 export function listRole(params: object) {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/sysrole/listRole`,
+    `${VITE_PROJECT_API_URL}/system/v1/sys-role/listRole`,
     {
       params,
     },
@@ -32,6 +33,6 @@ export function listRole(params: object) {
 
 export function selectDataScopes() {
   return requestClient.get(
-    `${VITE_PROJECT_API_URL}/system/v1/sysrole/selectDataScopes`,
+    `${VITE_PROJECT_API_URL}/system/v1/sys-role/selectDataScopes`,
   );
 }

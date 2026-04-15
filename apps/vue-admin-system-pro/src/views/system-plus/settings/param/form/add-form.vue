@@ -35,7 +35,7 @@ const modelRef = reactive({
   paramKey: undefined,
   paramValue: undefined,
   paramType: '1',
-  state: '1',
+  status: '1',
 });
 
 const rulesRef = reactive({
@@ -114,8 +114,8 @@ defineExpose({
       >
         <a-input v-model:value="modelRef.paramValue" allow-clear />
       </a-form-item>
-      <a-form-item label="状态" name="state">
-        <a-radio-group v-model:value="modelRef.state">
+      <a-form-item label="状态" name="status">
+        <a-radio-group v-model:value="modelRef.status">
           <a-radio value="1">正常</a-radio>
           <a-radio value="0">禁用</a-radio>
         </a-radio-group>

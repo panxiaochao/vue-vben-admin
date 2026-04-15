@@ -18,7 +18,7 @@ interface RowType {
   browser: string;
   os: string;
   costTime: string;
-  createTime: string;
+  createAt: string;
   opUser: string;
 }
 
@@ -31,7 +31,7 @@ const columns = [
   { field: 'browser', title: '浏览器' },
   { field: 'os', title: '设备' },
   { field: 'costTime', title: '耗时(ms)', width: 80 },
-  { field: 'createTime', title: '访问时间', width: 180 },
+  { field: 'createAt', title: '访问时间', width: 180 },
   { field: 'opUser', title: '操作人' },
 ];
 

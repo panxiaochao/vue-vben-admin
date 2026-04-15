@@ -31,7 +31,7 @@ interface RowType {
   packageName: string;
   modeStr: string;
   expireTime: string;
-  createTime: string;
+  createAt: string;
   state: string;
 }
 
@@ -43,7 +43,7 @@ const columns = [
   { field: 'packageName', title: '租户套餐' },
   { field: 'modeStr', title: '租户模式' },
   { field: 'expireTime', title: '过期时间' },
-  { field: 'createTime', title: '创建时间' },
+  { field: 'createAt', title: '创建时间' },
   { field: 'state', title: '状态', width: 100, slots: { default: 'state' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];

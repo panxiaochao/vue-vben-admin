@@ -14,7 +14,7 @@ import { removeToken, tokenPage } from '#/api/system-plus/settings/online';
 interface RowType {
   userName: string;
   ip: string;
-  loginTime: string;
+  loginAt: string;
   expireAtStr: string;
   accessToken: string;
 }
@@ -23,7 +23,7 @@ interface RowType {
 const columns = [
   { field: 'userName', title: '用户账号' },
   { field: 'ip', title: '登录IP' },
-  { field: 'loginTime', title: '登录时间' },
+  { field: 'loginAt', title: '登录时间' },
   { field: 'expireAtStr', title: '过期时间' },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];

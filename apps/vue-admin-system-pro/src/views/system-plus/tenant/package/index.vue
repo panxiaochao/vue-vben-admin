@@ -28,7 +28,7 @@ interface RowType {
   packageId: string;
   packageName: string;
   remark: string;
-  createTime: string;
+  createAt: string;
   state: string;
 }
 
@@ -37,7 +37,7 @@ const columns = [
   { field: 'packageId', title: '套餐编号' },
   { field: 'packageName', title: '套餐名称' },
   { field: 'remark', title: '备注' },
-  { field: 'createTime', title: '创建时间', width: 180 },
+  { field: 'createAt', title: '创建时间', width: 180 },
   { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];

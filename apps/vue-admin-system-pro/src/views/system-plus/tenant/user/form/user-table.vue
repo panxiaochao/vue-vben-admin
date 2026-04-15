@@ -47,7 +47,7 @@ interface RowType {
   realName: string;
   sex: string;
   mobile: string;
-  loginTime: string;
+  loginAt: string;
   state: string;
 }
 
@@ -58,7 +58,7 @@ const columns = [
   { field: 'nickName', title: '用户昵称' },
   { field: 'sex', title: '性别', slots: { default: 'sex' } },
   { field: 'mobile', title: '手机号码' },
-  { field: 'createTime', width: 180, title: '创建时间' },
+  { field: 'createAt', width: 180, title: '创建时间' },
 ];
 
 // 搜索表单定义

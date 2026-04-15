@@ -45,7 +45,7 @@ const modelRef = reactive({
   component: undefined,
   componentName: undefined,
   permissionCode: undefined,
-  state: '1',
+  status: '1',
   sort: 0,
 });
 
@@ -215,7 +215,7 @@ defineExpose({
           style="width: 100%"
         />
       </a-form-item>
-      <a-form-item name="state">
+      <a-form-item name="status">
         <template #label>
           <a-tooltip class="mr-1">
             <template #title> 选择禁用则路由将不会显示 </template>
@@ -223,7 +223,7 @@ defineExpose({
           </a-tooltip>
           显示状态
         </template>
-        <a-radio-group v-model:value="modelRef.state">
+        <a-radio-group v-model:value="modelRef.status">
           <a-radio value="1">正常</a-radio>
           <a-radio value="0">禁用</a-radio>
         </a-radio-group>

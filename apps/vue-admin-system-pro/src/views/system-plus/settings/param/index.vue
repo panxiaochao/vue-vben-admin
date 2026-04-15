@@ -32,7 +32,7 @@ interface RowType {
   paramKey: string;
   remark: string;
   sort: number;
-  createTime: string;
+  createAt: string;
   state: string;
 }
 
@@ -42,7 +42,7 @@ const columns = [
   { field: 'paramKey', title: '参数键' },
   { field: 'paramValue', title: '参数值' },
   { field: 'paramTypeStr', title: '参数类型' },
-  { field: 'createTime', title: '创建时间', width: 180 },
+  { field: 'createAt', title: '创建时间', width: 180 },
   { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];

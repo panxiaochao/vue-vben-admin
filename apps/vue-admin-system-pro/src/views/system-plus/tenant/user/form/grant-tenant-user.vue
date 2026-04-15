@@ -50,8 +50,8 @@ interface RowType {
   sex: string;
   mobile: string;
   email: string;
-  updateTime: string;
-  loginTime: string;
+  updateAt: string;
+  loginAt: string;
   state: string;
 }
 
@@ -61,7 +61,7 @@ const columns = [
   { field: 'nickName', title: '用户昵称' },
   { field: 'sex', title: '性别', slots: { default: 'sex' } },
   { field: 'mobile', title: '手机号码' },
-  { field: 'createTime', width: 180, title: '创建时间' },
+  { field: 'createAt', width: 180, title: '创建时间' },
   { field: 'action', title: '操作', width: 80, slots: { default: 'action' } },
 ];
 

@@ -37,7 +37,7 @@ interface RowType {
   dbUsername: number;
   testConn: string;
   testConnTime: string;
-  createTime: string;
+  createAt: string;
 }
 
 // 字段定义
@@ -48,7 +48,7 @@ const columns = [
   { field: 'dbUsername', title: '用户名' },
   { field: 'testConn', title: '连接状态', slots: { default: 'testConn' } },
   { field: 'testConnTime', title: '最近连接时间' },
-  { field: 'createTime', title: '创建时间' },
+  { field: 'createAt', title: '创建时间' },
   { field: 'action', title: '操作', width: 190, slots: { default: 'action' } },
 ];
 

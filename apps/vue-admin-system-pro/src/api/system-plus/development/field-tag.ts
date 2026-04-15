@@ -10,9 +10,9 @@ export function selectFieldTypeByDataSourceId(params: object) {
 }
 
 export function page(params: object) {
-  return requestClient.get(
+  return requestClient.post(
     `${VITE_PROJECT_API_URL}/development/v1/database-field-tag/page`,
-    { params },
+    params,
   );
 }
 

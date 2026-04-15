@@ -34,9 +34,9 @@ interface RowType {
   sex: string;
   mobile: string;
   email: string;
-  updateTime: string;
-  loginTime: string;
-  state: string;
+  updateAt: string;
+  loginAt: string;
+  status: string;
 }
 
 // 字段定义
@@ -46,9 +46,9 @@ const columns = [
   { field: 'sex', title: '性别', slots: { default: 'sex' } },
   { field: 'mobile', title: '手机号码' },
   { field: 'email', title: '邮箱' },
-  { field: 'createTime', title: '创建时间' },
-  { field: 'loginTime', title: '登录时间' },
-  { field: 'state', title: '状态', width: 100, slots: { default: 'state' } },
+  { field: 'createAt', title: '创建时间' },
+  { field: 'loginAt', title: '登录时间' },
+  { field: 'status', title: '状态', width: 100, slots: { default: 'status' } },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
 ];
 
@@ -111,7 +111,7 @@ const gridOptions: VxeGridProps<RowType> = {
 };
 
 // 定义表格
-const [Grid, gridApi] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid<RowType>({
   gridOptions,
   formOptions,
 });
@@ -134,8 +134,8 @@ const formatSex = (row: RowType) => {
   return row.sex === '1' ? '男' : '女';
 };
 
-const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '禁用';
+const formatStatus = (row: RowType) => {
+  return row.status === '1' ? '正常' : '禁用';
 };
 
 // 自定义方法
@@ -183,9 +183,9 @@ const formDone = () => {
       <template #sex="{ row }">
         <span>{{ formatSex(row) }}</span>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'success' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
       <template #action="{ row }">
