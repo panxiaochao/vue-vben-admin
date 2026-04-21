@@ -29,8 +29,8 @@ export async function update(data: object) {
   );
 }
 
-export async function deleteById(id: string) {
-  return requestClient.delete(
-    `${VITE_PROJECT_API_URL}/system/v1/sys-user-auths/${id}`,
+export async function deleteById(id: number) {
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-user-auths/delete?id=${id}`,
   );
 }

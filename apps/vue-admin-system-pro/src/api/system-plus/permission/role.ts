@@ -16,9 +16,9 @@ export async function update(data: object) {
   return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sys-role`, data);
 }
 
-export async function deleteById(id: string) {
-  return requestClient.delete(
-    `${VITE_PROJECT_API_URL}/system/v1/sys-role/${id}`,
+export async function deleteById(id: number) {
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-role/delete?id=${id}`,
   );
 }
 

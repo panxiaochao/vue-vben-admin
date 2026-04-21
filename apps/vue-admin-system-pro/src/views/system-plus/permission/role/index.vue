@@ -101,8 +101,8 @@ async function refresh(bool: boolean) {
     : gridApi.query(queryParams));
 }
 
-const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '禁用';
+const formatStatus = (row: RowType) => {
+  return row.status === '1' ? '正常' : '禁用';
 };
 
 // 自定义方法
@@ -136,9 +136,9 @@ const formDone = () => {
           新建角色
         </a-button>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'success' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
       <template #action="{ row }">

@@ -10,7 +10,7 @@ export interface FormState {
   dataScope?: string | undefined;
   remark?: string | undefined;
   sort?: number;
-  state?: string | undefined;
+  status?: string | undefined;
 }
 
 export const defaultModel = {

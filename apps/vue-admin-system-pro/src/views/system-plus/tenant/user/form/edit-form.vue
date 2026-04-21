@@ -44,7 +44,7 @@ interface FormState {
   companyAddress: string | undefined;
   companyDomain: string | undefined;
   mode: string | undefined;
-  expireTime: Dayjs | undefined;
+  expireAt: Dayjs | undefined;
   state: string | undefined;
 }
 
@@ -59,7 +59,7 @@ const defaultModel = {
   companyAddress: undefined,
   companyDomain: undefined,
   mode: undefined,
-  expireTime: undefined,
+  expireAt: undefined,
   status: '1',
 };
 
@@ -91,8 +91,8 @@ const updateForm = (raw: FormState) => {
     nextTick(() => {
       const fieldNames = Object.keys(defaultModel) ?? [];
       Object.assign(modelRef, pick(rawValues, fieldNames));
-      if (modelRef.expireTime) {
-        modelRef.expireTime = dayjs(modelRef.expireTime, 'YYYY-MM-DD HH:mm:ss');
+      if (modelRef.expireAt) {
+        modelRef.expireAt = dayjs(modelRef.expireAt, 'YYYY-MM-DD HH:mm:ss');
       }
     });
   }
@@ -116,9 +116,9 @@ const openModal = (raw: FormState) => {
 const handleOk = () => {
   validate().then(() => {
     const values = toRaw(modelRef);
-    if (values.expireTime) {
+    if (values.expireAt) {
       Object.assign(values, {
-        expireTime: dayjs(values.expireTime).format('YYYY-MM-DD HH:mm:ss'),
+        expireAt: dayjs(values.expireAt).format('YYYY-MM-DD HH:mm:ss'),
       });
     }
     update(values).then(() => {
@@ -247,9 +247,9 @@ defineExpose({
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="过期时间" name="expireTime">
+          <a-form-item label="过期时间" name="expireAt">
             <a-date-picker
-              v-model:value="modelRef.expireTime"
+              v-model:value="modelRef.expireAt"
               show-time
               style="width: 100%"
             />

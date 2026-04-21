@@ -30,7 +30,7 @@ interface RowType {
   contactPhone: string;
   packageName: string;
   modeStr: string;
-  expireTime: string;
+  expireAt: string;
   createAt: string;
   state: string;
 }
@@ -42,7 +42,7 @@ const columns = [
   { field: 'contactPhone', title: '联系电话' },
   { field: 'packageName', title: '租户套餐' },
   { field: 'modeStr', title: '租户模式' },
-  { field: 'expireTime', title: '过期时间' },
+  { field: 'expireAt', title: '过期时间' },
   { field: 'createAt', title: '创建时间' },
   { field: 'state', title: '状态', width: 100, slots: { default: 'state' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },

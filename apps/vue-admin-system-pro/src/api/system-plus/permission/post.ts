@@ -8,6 +8,7 @@ export async function page(params: object) {
     params,
   );
 }
+
 export async function save(data: object) {
   return requestClient.post(`${VITE_PROJECT_API_URL}/system/v1/sys-post`, data);
 }
@@ -17,8 +18,15 @@ export async function update(data: object) {
 }
 
 export async function deleteById(id: number | string) {
-  return requestClient.delete(
-    `${VITE_PROJECT_API_URL}/system/v1/sys-post/${id}`,
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-post/delete?id=${id}`,
+  );
+}
+
+export async function deleteByIds(idList: number[]) {
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-post/deleteBatch`,
+    idList,
   );
 }
 

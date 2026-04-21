@@ -32,13 +32,13 @@ const formItemLayout = {
 
 // 字段对象
 interface FormState {
-  id: string | undefined;
+  id: number | undefined;
   userId: string | undefined;
   identityType: string | undefined;
   identifier: string | undefined;
   credential: string | undefined;
   verified: string | undefined;
-  expireTime: Dayjs | undefined;
+  expireAt: Dayjs | undefined;
 }
 
 const defaultModel = reactive({
@@ -48,7 +48,7 @@ const defaultModel = reactive({
   identifier: undefined,
   credential: undefined,
   verified: '1',
-  expireTime: undefined,
+  expireAt: undefined,
 });
 
 const modelRef = reactive<FormState>({
@@ -74,8 +74,8 @@ const updateForm = (raw: FormState) => {
     nextTick(() => {
       const fieldNames = Object.keys(defaultModel) ?? [];
       Object.assign(modelRef, pick(rawValues, fieldNames));
-      if (modelRef.expireTime) {
-        modelRef.expireTime = dayjs(modelRef.expireTime, 'YYYY-MM-DD HH:mm:ss');
+      if (modelRef.expireAt) {
+        modelRef.expireAt = dayjs(modelRef.expireAt, 'YYYY-MM-DD HH:mm:ss');
       }
     });
   }
@@ -94,9 +94,9 @@ const openModal = (raw: FormState) => {
 const handleOk = () => {
   validate().then(() => {
     const values = toRaw(modelRef);
-    if (values.expireTime) {
+    if (values.expireAt) {
       Object.assign(values, {
-        expireTime: dayjs(values.expireTime).format('YYYY-MM-DD HH:mm:ss'),
+        expireAt: dayjs(values.expireAt).format('YYYY-MM-DD HH:mm:ss'),
       });
     }
     update(values).then(() => {
@@ -162,10 +162,10 @@ defineExpose({
           <a-radio value="0">未验证</a-radio>
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="失效时间" name="expireTime">
+      <a-form-item label="失效时间" name="expireAt">
         <a-date-picker
           show-time
-          v-model:value="modelRef.expireTime"
+          v-model:value="modelRef.expireAt"
           style="width: 100%"
         />
       </a-form-item>

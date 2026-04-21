@@ -29,7 +29,7 @@ const userRoleIds = ref([]);
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   realName: string;
   sex: string;
   mobile: string;

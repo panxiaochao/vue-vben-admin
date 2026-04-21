@@ -34,7 +34,7 @@ const formItemLayout = {
 
 // 字段对象
 interface FormState {
-  id: string | undefined;
+  id: number | undefined;
   realName: string | undefined;
   nickName: string | undefined;
   sex: string;

@@ -35,7 +35,7 @@ const modelRef = reactive({
   identifier: undefined,
   credential: undefined,
   verified: '1',
-  expireTime: undefined,
+  expireAt: undefined,
 });
 
 const rulesRef = reactive({
@@ -63,9 +63,9 @@ const openModal = (userId: string) => {
 const handleOk = () => {
   validate().then(() => {
     const values = toRaw(modelRef);
-    if (values.expireTime) {
+    if (values.expireAt) {
       Object.assign(values, {
-        expireTime: dayjs(values.expireTime).format('YYYY-MM-DD HH:mm:ss'),
+        expireAt: dayjs(values.expireAt).format('YYYY-MM-DD HH:mm:ss'),
       });
     }
     save(values).then(() => {
@@ -131,10 +131,10 @@ defineExpose({
           <a-radio value="0">未验证</a-radio>
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="失效时间" name="expireTime">
+      <a-form-item label="失效时间" name="expireAt">
         <a-date-picker
           show-time
-          v-model:value="modelRef.expireTime"
+          v-model:value="modelRef.expireAt"
           style="width: 100%"
         />
       </a-form-item>

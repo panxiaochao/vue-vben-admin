@@ -27,7 +27,7 @@ const width = defineModel('width', { type: Number, default: 800 });
 
 // 字段对象
 interface FormState {
-  userId: string;
+  userId: number;
   pageNo: number;
   pageSize: number;
 }
@@ -44,12 +44,12 @@ const modelRef = reactive<FormState>({
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   userId: string;
   identityTypeStr: string;
   identifier: string;
   verified: string;
-  expireTime: string;
+  expireAt: string;
 }
 
 // 字段定义
@@ -57,7 +57,7 @@ const columns = [
   { field: 'identityTypeStr', title: '登录类型' },
   { field: 'identifier', title: '登录账号' },
   { field: 'verified', title: '是否验证', slots: { default: 'verified' } },
-  { field: 'expireTime', width: 180, title: '失效时间' },
+  { field: 'expireAt', width: 180, title: '失效时间' },
   { field: 'action', width: 120, title: '操作', slots: { default: 'action' } },
 ];
 

@@ -11,7 +11,7 @@ import { FormOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteById, page } from '#/api/system-plus/permission/post';
+import { deleteById, page } from "#/api/system-plus/permission/post";
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
@@ -22,12 +22,12 @@ const editForm = ref();
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   postName: string;
   postCode: string;
   remark: string;
   sort: number;
-  state: string;
+  status: string;
 }
 
 // 字段定义
@@ -36,7 +36,7 @@ const columns = [
   { field: 'postCode', title: '岗位编码' },
   { field: 'remark', title: '描述' },
   { field: 'sort', title: '排序' },
-  { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
+  { field: 'status', title: '状态', width: 80, slots: { default: 'status' } },
   { field: 'action', title: '操作', width: 170, slots: { default: 'action' } },
 ];
 
@@ -117,8 +117,8 @@ async function refresh(bool: boolean) {
     : gridApi.query(queryParams));
 }
 
-const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '禁用';
+const formatStatus = (row: RowType) => {
+  return row.status === '1' ? '正常' : '禁用';
 };
 
 // 自定义方法
@@ -151,9 +151,9 @@ const formDone = () => {
           新建岗位
         </a-button>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'success' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
       <template #action="{ row }">
