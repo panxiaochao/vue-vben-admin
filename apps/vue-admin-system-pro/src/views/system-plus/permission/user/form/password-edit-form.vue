@@ -5,7 +5,10 @@ import { Form } from 'ant-design-vue';
 import dayjs, { Dayjs } from 'dayjs';
 import { pick } from 'lodash-es';
 
-import { selectIdentityTypes, update } from '#/api/system-plus/permission/user-auth';
+import {
+  selectIdentityTypes,
+  update,
+} from '#/api/system-plus/permission/user-auth';
 
 defineOptions({
   name: 'PasswordEditForm',

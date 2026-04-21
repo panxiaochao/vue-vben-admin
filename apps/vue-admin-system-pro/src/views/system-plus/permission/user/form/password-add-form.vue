@@ -4,7 +4,10 @@ import { defineEmits, reactive, ref, toRaw } from 'vue';
 import { Form } from 'ant-design-vue';
 import dayjs from 'dayjs';
 
-import { save, selectIdentityTypes } from '#/api/system-plus/permission/user-auth';
+import {
+  save,
+  selectIdentityTypes,
+} from '#/api/system-plus/permission/user-auth';
 
 defineOptions({
   name: 'PasswordAddForm',

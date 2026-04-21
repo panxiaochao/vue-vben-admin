@@ -11,7 +11,7 @@ import { FormOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteById, page } from "#/api/system-plus/permission/post";
+import { deleteById, page } from '#/api/system-plus/permission/post';
 
 // 自定义组件
 import AddForm from './form/add-form.vue';
