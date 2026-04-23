@@ -8,8 +8,8 @@ import { deleteById, list } from '#/api/system-plus/permission/org';
 export namespace SystemPlusOrgModuleNs {
   export interface SystemPlusOrg {
     [key: string]: any;
-    id: string | undefined;
-    parentId: string | undefined;
+    id: number | undefined;
+    parentId: number | undefined;
     areaId?: string | undefined;
     areaCode?: string | undefined;
     orgName: string | undefined;
@@ -17,12 +17,12 @@ export namespace SystemPlusOrgModuleNs {
     orgNameAbbr: string | undefined;
     orgCode: string | undefined;
     sort: number | undefined;
-    orgCategory: number | undefined;
+    orgCategory: string | undefined;
     orgCategoryStr?: string | undefined;
     mobile: string | undefined;
     fax: string | undefined;
     address: string | undefined;
-    state: string | undefined;
+    status: string | undefined;
     remark: string | undefined;
   }
 }
@@ -42,9 +42,9 @@ function useColumns(): VxeGridProps<SystemPlusOrgModuleNs.SystemPlusOrg>['column
     },
     {
       title: '状态',
-      field: 'state',
+      field: 'status',
       slots: {
-        default: 'state',
+        default: 'status',
       },
       width: 100,
     },
@@ -106,8 +106,8 @@ export const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
-export const formatState = (row: SystemPlusOrgModuleNs.SystemPlusOrg) => {
-  return row.state === '1' ? '正常' : '禁用';
+export const formatStatus = (row: SystemPlusOrgModuleNs.SystemPlusOrg) => {
+  return row.status === '1' ? '正常' : '禁用';
 };
 
 // 自定义方法

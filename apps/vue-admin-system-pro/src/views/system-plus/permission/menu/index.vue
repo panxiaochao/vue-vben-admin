@@ -20,7 +20,7 @@ const editForm = ref();
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   menuName: null | string;
   menuType: string;
   icon: string;
@@ -30,7 +30,7 @@ interface RowType {
   permissionCode: string;
   sort: string;
   isHidden: string;
-  state: string;
+  status: string;
   children: RowType[];
 }
 
@@ -70,9 +70,9 @@ const columns = [
   // },
   {
     title: '状态',
-    field: 'state',
+    field: 'status',
     slots: {
-      default: 'state',
+      default: 'status',
     },
   },
   { field: 'action', title: '操作', width: 120, slots: { default: 'action' } },
@@ -107,8 +107,8 @@ const loadData = () => {
   });
 };
 
-const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '禁用';
+const formatStatus = (row: RowType) => {
+  return row.status === '1' ? '正常' : '禁用';
 };
 
 const formatHidden = (row: RowType) => {
@@ -158,9 +158,9 @@ onMounted(() => {
           <component :is="row.icon" />
         </div>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'success' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
       <template #isHidden="{ row }">

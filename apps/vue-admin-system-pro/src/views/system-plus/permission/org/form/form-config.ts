@@ -32,10 +32,10 @@ export const formItemLayout = {
 };
 
 export const rulesRef = reactive({
-  parentId: [{ type: 'string', required: true, message: '请输入上级机构' }],
+  parentId: [{ type: 'number', required: true, message: '请输入上级机构' }],
   orgName: [{ type: 'string', required: true, message: '请输入机构名称' }],
   orgCode: [{ type: 'string', required: true, message: '请输入机构编码' }],
-  orgCategory: [{ type: 'number', required: true, message: '请输入机构类别' }],
+  orgCategory: [{ type: 'string', required: true, message: '请输入机构类别' }],
 });
 
 export const useFormApi = (modelRef: SystemPlusOrgModuleNs.SystemPlusOrg) => {

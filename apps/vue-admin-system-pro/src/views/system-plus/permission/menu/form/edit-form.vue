@@ -35,11 +35,11 @@ const formItemLayout = {
 
 // 字段对象
 interface FormState {
-  id: string | undefined;
+  id: number | undefined;
   menuName: string | undefined;
   url: string | undefined;
   icon: string | undefined;
-  parentId: string | undefined;
+  parentId: number | undefined;
   redirectUrl: string | undefined;
   menuType: string | undefined;
   openType: string | undefined;
@@ -48,7 +48,7 @@ interface FormState {
   component: string | undefined;
   componentName: string | undefined;
   permissionCode: string | undefined;
-  state: string | undefined;
+  status: string | undefined;
   sort: number;
 }
 
@@ -117,15 +117,9 @@ const handleOk = () => {
   // 对应各自的验证字段
   let validateNames: any[];
   if (modelRef.menuType === '0') {
-    validateNames = ['menuName', 'component', 'url', 'componentName'];
+    validateNames = ['menuName', 'component', 'componentName'];
   } else if (modelRef.menuType === '1') {
-    validateNames = [
-      'menuName',
-      'component',
-      'url',
-      'componentName',
-      'parentId',
-    ];
+    validateNames = ['menuName', 'component', 'componentName', 'parentId'];
   } else {
     validateNames = ['menuName', 'parentId', 'permissionCode'];
   }

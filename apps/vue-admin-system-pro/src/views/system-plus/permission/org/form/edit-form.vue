@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SystemPlusOrgModuleNs } from '#/views/system-plus/permission/org/index';
+import type { SystemPlusOrgModuleNs } from '#/views/system-plus/permission/org/config';
 
 import { defineEmits, nextTick, reactive, ref, toRaw } from 'vue';
 
@@ -54,7 +54,7 @@ const openModal = (raw: SystemPlusOrgModuleNs.SystemPlusOrg) => {
   // 加载机构数据
   treeData.value = [];
   listTree({}).then((res) => {
-    treeData.value = [{ title: '根组织', value: '0', children: res }];
+    treeData.value = [{ title: '根组织', value: 0, children: res }];
   });
   // 加载机构类别下拉
   orgCategoryList.value = [];

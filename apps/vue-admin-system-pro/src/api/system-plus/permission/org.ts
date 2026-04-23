@@ -17,8 +17,8 @@ export async function update(data: object) {
 }
 
 export async function deleteById(id: number | string | undefined) {
-  return requestClient.delete(
-    `${VITE_PROJECT_API_URL}/system/v1/sys-org/${id}`,
+  return requestClient.post(
+    `${VITE_PROJECT_API_URL}/system/v1/sys-org/delete?id=${id}`,
   );
 }
 

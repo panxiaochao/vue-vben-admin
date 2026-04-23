@@ -52,7 +52,7 @@ const modelRef = reactive({
 const rulesRef = reactive({
   menuName: [{ type: 'string', required: true, message: '请输入菜单名称' }],
   url: [{ type: 'string', required: true, message: '请输入路由地址' }],
-  parentId: [{ type: 'string', required: true, message: '请输入上级菜单' }],
+  parentId: [{ type: 'number', required: true, message: '请输入上级菜单' }],
   component: [{ type: 'string', required: true, message: '请输入前端组件' }],
   componentName: [
     { type: 'string', required: true, message: '请输入组件名称' },
@@ -80,15 +80,9 @@ const handleOk = () => {
   // 对应各自的验证字段
   let validateNames: any[];
   if (modelRef.menuType === '0') {
-    validateNames = ['menuName', 'component', 'url', 'componentName'];
+    validateNames = ['menuName', 'component', 'componentName'];
   } else if (modelRef.menuType === '1') {
-    validateNames = [
-      'menuName',
-      'component',
-      'url',
-      'componentName',
-      'parentId',
-    ];
+    validateNames = ['menuName', 'component', 'componentName', 'parentId'];
   } else {
     validateNames = ['menuName', 'parentId', 'permissionCode'];
   }

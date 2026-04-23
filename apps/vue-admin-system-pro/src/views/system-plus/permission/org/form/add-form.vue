@@ -41,7 +41,7 @@ const openModal = (raw?: SystemPlusOrgModuleNs.SystemPlusOrg) => {
   // 加载机构数据
   treeData.value = [];
   listTree({}).then((res) => {
-    treeData.value = [{ title: '根组织', value: '0', children: res }];
+    treeData.value = [{ title: '根组织', value: 0, children: res }];
   });
   // 加载机构类别下拉
   orgCategoryList.value = [];

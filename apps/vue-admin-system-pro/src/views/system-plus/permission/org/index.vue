@@ -8,7 +8,7 @@ import { FormOutlined } from '@ant-design/icons-vue';
 import {
   collapseAll,
   expandAll,
-  formatState,
+  formatStatus,
   formDone,
   Grid,
   loadData,
@@ -48,9 +48,9 @@ onMounted(() => {
           {{ row.orgCategoryStr }}
         </a-tag>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'success' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
       <template #action="{ row }">
