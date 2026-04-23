@@ -77,7 +77,7 @@ const modelRef = reactive<FormState>({
 const rulesRef = reactive({
   menuName: [{ type: 'string', required: true, message: '请输入菜单名称' }],
   url: [{ type: 'string', required: true, message: '请输入路由地址' }],
-  parentId: [{ type: 'string', required: true, message: '请输入上级菜单' }],
+  parentId: [{ type: 'number', required: true, message: '请输入上级菜单' }],
   component: [{ type: 'string', required: true, message: '请输入前端组件' }],
   componentName: [
     { type: 'string', required: true, message: '请输入组件名称' },

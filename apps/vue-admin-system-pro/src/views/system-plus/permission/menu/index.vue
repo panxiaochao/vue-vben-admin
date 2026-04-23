@@ -84,12 +84,23 @@ const gridOptions: VxeGridProps<RowType> = {
   pagerConfig: {
     enabled: false,
   },
+  toolbarConfig: {
+    custom: true,
+    refresh: {
+      queryMethod: (params) => {
+        return loadData(params);
+      },
+    },
+    resizable: true,
+    zoom: true,
+  },
   treeConfig: {
     // 对于同一级的节点，每次只能展开一个
-    accordion: true,
+    // accordion: true,
     parentField: 'parentId',
     rowField: 'id',
     childrenField: 'children',
+    // transform: true,
   },
 };
 
