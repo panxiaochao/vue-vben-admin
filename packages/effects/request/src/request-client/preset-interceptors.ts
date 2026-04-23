@@ -137,7 +137,8 @@ export const errorMessageResponseInterceptor = (
         return Promise.reject(error);
       }
 
-      let errorMessage = '';
+      let errorMessage: string;
+
       switch (status) {
         case 400: {
           errorMessage = $t('ui.fallback.http.badRequest');
