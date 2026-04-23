@@ -87,8 +87,8 @@ const gridOptions: VxeGridProps<RowType> = {
   toolbarConfig: {
     custom: true,
     refresh: {
-      queryMethod: (params) => {
-        return loadData(params);
+      queryMethod: () => {
+        return loadData();
       },
     },
     resizable: true,
