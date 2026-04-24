@@ -17,9 +17,9 @@ export async function update(data: object) {
   return requestClient.put(`${VITE_PROJECT_API_URL}/system/v1/sys-dict`, data);
 }
 
-export async function deleteById(id: string) {
+export async function deleteById(id: number) {
   return requestClient.delete(
-    `${VITE_PROJECT_API_URL}/system/v1/sys-dict/${id}`,
+    `${VITE_PROJECT_API_URL}/system/v1/sys-dict/delete?id=${id}`,
   );
 }
 

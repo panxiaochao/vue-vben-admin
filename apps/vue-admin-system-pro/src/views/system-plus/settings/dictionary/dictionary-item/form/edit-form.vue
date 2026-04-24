@@ -35,7 +35,7 @@ interface FormState {
   dictItemValue: string | undefined;
   remark: string | undefined;
   sort: number;
-  state: string | undefined;
+  status: string | undefined;
 }
 
 const defaultModel = {

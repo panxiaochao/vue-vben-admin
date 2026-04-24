@@ -28,7 +28,7 @@ interface RowType {
   dictItemValue: string;
   remark: string;
   sort: number;
-  state: string;
+  status: string;
 }
 
 // 字段定义
@@ -37,7 +37,7 @@ const columns = [
   { field: 'dictItemValue', title: '字典编码' },
   { field: 'remark', title: '描述' },
   { field: 'sort', title: '排序' },
-  { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
+  { field: 'status', title: '状态', width: 80, slots: { default: 'status' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];
 
@@ -103,8 +103,8 @@ async function refresh(bool: boolean) {
   await loadData();
 }
 
-const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '禁用';
+const formatStatus = (row: RowType) => {
+  return row.status === '1' ? '正常' : '禁用';
 };
 
 // 自定义方法
@@ -166,9 +166,9 @@ defineExpose({
           新建字典项
         </a-button>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'success' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
       <template #action="{ row }">

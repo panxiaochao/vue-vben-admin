@@ -30,7 +30,6 @@ const modelRef = reactive({
   dictName: undefined,
   dictCode: undefined,
   remark: undefined,
-  dictType: '0',
   sort: 0,
   status: '1',
 });
@@ -110,12 +109,6 @@ defineExpose({
         <a-radio-group v-model:value="modelRef.status">
           <a-radio value="1">正常</a-radio>
           <a-radio value="0">禁用</a-radio>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item label="字典类型" name="dictType">
-        <a-radio-group v-model:value="modelRef.dictType">
-          <a-radio value="0">字符串型</a-radio>
-          <a-radio value="1">数值类型</a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item label="描述" name="remark">
