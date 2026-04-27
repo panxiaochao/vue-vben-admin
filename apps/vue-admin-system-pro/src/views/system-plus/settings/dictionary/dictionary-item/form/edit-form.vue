@@ -29,8 +29,8 @@ const formItemLayout = {
 
 // 字段对象
 interface FormState {
-  id: string | undefined;
-  dictId: string | undefined;
+  id: number | undefined;
+  dictId: number | undefined;
   dictItemText: string | undefined;
   dictItemValue: string | undefined;
   remark: string | undefined;
@@ -40,7 +40,7 @@ interface FormState {
 
 const defaultModel = {
   id: undefined,
-  dictId: '',
+  dictId: undefined,
   dictItemText: undefined,
   dictItemValue: undefined,
   remark: undefined,
@@ -117,7 +117,7 @@ defineExpose({
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
-      <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
+      <a-input v-model:value="modelRef.id" allow-clear class="!hidden" />
       <a-form-item
         label="字典项名称"
         name="dictItemText"

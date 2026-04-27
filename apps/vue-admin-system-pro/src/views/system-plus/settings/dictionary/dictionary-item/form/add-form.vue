@@ -27,7 +27,7 @@ const formItemLayout = {
 };
 
 const modelRef = reactive({
-  dictId: '',
+  dictId: 0,
   dictItemText: undefined,
   dictItemValue: undefined,
   remark: undefined,
@@ -50,7 +50,7 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
-const openModal = (id: string) => {
+const openModal = (id: number) => {
   open.value = true;
   modelRef.dictId = id;
 };

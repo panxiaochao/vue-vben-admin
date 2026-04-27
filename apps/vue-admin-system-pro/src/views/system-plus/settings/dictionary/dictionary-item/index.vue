@@ -23,7 +23,7 @@ const editForm = ref();
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   dictItemText: string;
   dictItemValue: string;
   remark: string;
@@ -44,7 +44,7 @@ const columns = [
 const defaultQueryParams = {
   pageNo: 1,
   pageSize: 5,
-  dictId: '',
+  dictId: 0,
 };
 
 // 查询参数
@@ -125,7 +125,7 @@ const open = defineModel('open', { type: Boolean, default: false });
 
 const width = defineModel('width', { type: Number, default: 800 });
 
-const openModal = (id: string) => {
+const openModal = (id: number) => {
   open.value = true;
   queryParams.dictId = id;
   loadData();
