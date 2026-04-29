@@ -33,12 +33,12 @@ const formItemLayout = {
 
 // 字段对象
 interface FormState {
-  id: string | undefined;
+  id: number | undefined;
   paramName: string | undefined;
   paramKey: string | undefined;
   paramValue: string | undefined;
   paramType: string;
-  state: string | undefined;
+  status: string | undefined;
 }
 
 const defaultModel = {
@@ -121,7 +121,7 @@ defineExpose({
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
-      <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
+      <a-input v-model:value="modelRef.id" allow-clear class="!hidden" />
       <a-form-item
         label="参数名称"
         name="paramName"

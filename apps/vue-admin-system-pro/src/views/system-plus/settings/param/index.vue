@@ -27,13 +27,13 @@ const publishedLoading = ref(false);
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   paramName: string;
   paramKey: string;
   remark: string;
   sort: number;
   createAt: string;
-  state: string;
+  status: string;
 }
 
 // 字段定义
@@ -43,7 +43,7 @@ const columns = [
   { field: 'paramValue', title: '参数值' },
   { field: 'paramTypeStr', title: '参数类型' },
   { field: 'createAt', title: '创建时间', width: 180 },
-  { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
+  { field: 'status', title: '状态', width: 80, slots: { default: 'status' } },
   { field: 'action', title: '操作', width: 200, slots: { default: 'action' } },
 ];
 
@@ -124,8 +124,8 @@ async function refresh(bool: boolean) {
     : gridApi.query(queryParams));
 }
 
-const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '禁用';
+const formatStatus = (row: RowType) => {
+  return row.status === '1' ? '正常' : '禁用';
 };
 
 // 自定义方法
@@ -179,9 +179,9 @@ const onPublishedData = () => {
           发布参数
         </a-button>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'success' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'success' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
       <template #action="{ row }">

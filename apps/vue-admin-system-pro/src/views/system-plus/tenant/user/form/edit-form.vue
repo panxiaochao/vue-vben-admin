@@ -45,7 +45,7 @@ interface FormState {
   companyDomain: string | undefined;
   mode: string | undefined;
   expireAt: Dayjs | undefined;
-  state: string | undefined;
+  status: string | undefined;
 }
 
 const defaultModel = {

@@ -33,7 +33,7 @@ interface FormState {
   packageId: string | undefined;
   packageName: string | undefined;
   remark: string | undefined;
-  state: string | undefined;
+  status: string | undefined;
 }
 
 const defaultModel = {
