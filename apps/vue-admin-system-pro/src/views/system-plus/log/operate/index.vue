@@ -10,7 +10,7 @@ import { page } from '#/api/system-plus/log/operate';
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   opTitle: string;
   ip: string;
   address: string;

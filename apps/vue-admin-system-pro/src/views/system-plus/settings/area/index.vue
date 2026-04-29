@@ -31,11 +31,11 @@ interface RowType {
 
 interface AreaLevel {
   disabled: boolean;
-  key: number;
+  key: string;
   label: string;
   title: string;
-  value: number;
-  weight: number;
+  value: string;
+  weight: number | string;
 }
 
 // 区域层级
@@ -111,9 +111,9 @@ const loadData = () => {
 // 格式化数据
 const formatAreaLevel = (row: RowType) => {
   const areaLevel = areaLevelList.value.find(
-    (item) => item.value === row.areaLevel,
-  )!;
-  return areaLevel.title;
+    (item) => item.value === String(row.areaLevel),
+  );
+  return areaLevel?.title;
 };
 
 // 表单处理完成做刷新处理

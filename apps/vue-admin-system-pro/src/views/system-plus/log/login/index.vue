@@ -12,7 +12,7 @@ import { page } from '#/api/system-plus/log/login';
 
 // 字段对象
 interface RowType {
-  id: string;
+  id: number;
   loginName: string;
   ip: string;
   address: string;
@@ -21,7 +21,7 @@ interface RowType {
   createAt: string;
   remark: string;
   loginType: number;
-  state: string;
+  status: string;
 }
 
 // 字段定义
@@ -39,7 +39,7 @@ const columns = [
     width: 80,
     slots: { default: 'loginType' },
   },
-  { field: 'state', title: '状态', width: 80, slots: { default: 'state' } },
+  { field: 'status', title: '状态', width: 80, slots: { default: 'status' } },
 ];
 
 // 查询参数
@@ -116,8 +116,8 @@ const formatLoginType = (row: RowType) => {
   return row.loginType === 1 ? '登录' : '登出';
 };
 
-const formatState = (row: RowType) => {
-  return row.state === '1' ? '正常' : '失败';
+const formatStatus = (row: RowType) => {
+  return row.status === '1' ? '正常' : '失败';
 };
 </script>
 
@@ -129,9 +129,9 @@ const formatState = (row: RowType) => {
           {{ formatLoginType(row) }}
         </a-tag>
       </template>
-      <template #state="{ row }">
-        <a-tag :color="row.state === '1' ? 'green' : 'red'" class="mr-0">
-          {{ formatState(row) }}
+      <template #status="{ row }">
+        <a-tag :color="row.status === '1' ? 'green' : 'red'" class="mr-0">
+          {{ formatStatus(row) }}
         </a-tag>
       </template>
     </Grid>
