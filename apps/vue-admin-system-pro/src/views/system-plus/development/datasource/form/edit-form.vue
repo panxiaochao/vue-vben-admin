@@ -181,7 +181,7 @@ defineExpose({
     @ok="handleOk"
   >
     <a-form v-bind="formItemLayout">
-      <a-input v-model:value="modelRef.id" allow-clear class="hidden" />
+      <a-input v-model:value="modelRef.id" allow-clear class="!hidden" />
       <a-form-item
         label="数据源编码"
         name="dbCode"

@@ -132,7 +132,7 @@ onMounted(() => {
     <template #description>
       中国全国5级行政区划（省、市、县、镇、村），截止时间2023年6月30日，数据来源地址：
       <a-button
-        class="px-0"
+        class="!px-0"
         href="https://www.stats.gov.cn/sj/tjbz/gjtjbz/"
         target="_blank"
         type="link"
@@ -151,7 +151,7 @@ onMounted(() => {
         <span>{{ formatAreaLevel(row) }}</span>
       </template>
       <template #areaName="{ row }">
-        <a-button class="px-0" type="link" @click="editForm.openModal(row)">
+        <a-button class="!px-0" type="link" @click="editForm.openModal(row)">
           {{ row.areaName }}
         </a-button>
       </template>

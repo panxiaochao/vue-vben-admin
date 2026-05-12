@@ -54,11 +54,11 @@ onMounted(() => {
         </a-tag>
       </template>
       <template #action="{ row }">
-        <a-button class="px-0" type="link" @click="addForm.openModal(row)">
+        <a-button class="!px-0" type="link" @click="addForm.openModal(row)">
           添加下级
         </a-button>
         <a-divider type="vertical" />
-        <a-button class="px-0" type="link" @click="editForm.openModal(row)">
+        <a-button class="!px-0" type="link" @click="editForm.openModal(row)">
           编辑
         </a-button>
         <a-divider type="vertical" />
@@ -67,7 +67,7 @@ onMounted(() => {
           title="删除本菜单与下级？"
           @confirm="() => onDelete(row)"
         >
-          <a-button class="px-0" danger type="link">删除</a-button>
+          <a-button class="!px-0" danger type="link">删除</a-button>
         </a-popconfirm>
       </template>
     </Grid>

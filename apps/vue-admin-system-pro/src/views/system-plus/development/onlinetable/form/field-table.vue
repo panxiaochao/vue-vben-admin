@@ -195,7 +195,7 @@ onMounted(() => {
       </a-button>
     </template>
     <template #action="{ row }">
-      <a-button class="px-0" danger type="link" @click="deleteColumn(row)">
+      <a-button class="!px-0" danger type="link" @click="deleteColumn(row)">
         <template #icon>
           <DeleteOutlined />
         </template>

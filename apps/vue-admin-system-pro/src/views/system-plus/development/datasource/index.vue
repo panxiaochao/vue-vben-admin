@@ -201,11 +201,11 @@ onMounted(() => {
         </a-tag>
       </template>
       <template #action="{ row }">
-        <a-button class="px-0" type="link" @click="editForm.openModal(row)">
+        <a-button class="!px-0" type="link" @click="editForm.openModal(row)">
           编辑
         </a-button>
         <a-divider type="vertical" />
-        <a-button class="px-0" type="link" @click="testConnSource(row)">
+        <a-button class="!px-0" type="link" @click="testConnSource(row)">
           测试连接
         </a-button>
         <a-divider type="vertical" />
@@ -214,7 +214,7 @@ onMounted(() => {
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
-          <a-button class="px-0" danger type="link">删除</a-button>
+          <a-button class="!px-0" danger type="link">删除</a-button>
         </a-popconfirm>
       </template>
     </Grid>

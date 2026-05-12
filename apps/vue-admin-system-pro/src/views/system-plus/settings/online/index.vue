@@ -98,7 +98,7 @@ const logout = (row: RowType) => {
           title="确定要强退吗?"
           @confirm="() => logout(row)"
         >
-          <a-button class="px-0" danger type="link">强退</a-button>
+          <a-button class="!px-0" danger type="link">强退</a-button>
         </a-popconfirm>
       </template>
     </Grid>

@@ -192,10 +192,10 @@ onMounted(() => {
           title="确定要同步吗?"
           @confirm="() => syncRow(row)"
         >
-          <a-button class="px-0" type="link">同步</a-button>
+          <a-button class="!px-0" type="link">同步</a-button>
         </a-popconfirm>
         <a-divider type="vertical" />
-        <a-button class="px-0" type="link" @click="genIndex.openModal(row.id)">
+        <a-button class="!px-0" type="link" @click="genIndex.openModal(row.id)">
           生成代码
         </a-button>
         <a-divider type="vertical" />
@@ -204,7 +204,7 @@ onMounted(() => {
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
-          <a-button class="px-0" danger type="link">删除</a-button>
+          <a-button class="!px-0" danger type="link">删除</a-button>
         </a-popconfirm>
       </template>
     </Grid>

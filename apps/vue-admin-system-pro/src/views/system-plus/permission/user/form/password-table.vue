@@ -189,7 +189,7 @@ defineExpose({
       </template>
       <template #action="{ row }">
         <a-button
-          class="px-0"
+          class="!px-0"
           type="link"
           @click="passwordEditForm.openModal(row)"
         >
@@ -201,7 +201,7 @@ defineExpose({
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
-          <a-button class="px-0" danger type="link">删除</a-button>
+          <a-button class="!px-0" danger type="link">删除</a-button>
         </a-popconfirm>
       </template>
     </Grid>

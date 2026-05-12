@@ -189,7 +189,7 @@ const formDone = () => {
         </a-tag>
       </template>
       <template #action="{ row }">
-        <a-button class="px-0" type="link" @click="editForm.openModal(row)">
+        <a-button class="!px-0" type="link" @click="editForm.openModal(row)">
           编辑
         </a-button>
         <a-divider type="vertical" />
@@ -198,11 +198,11 @@ const formDone = () => {
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
-          <Button class="px-0" danger type="link">删除</Button>
+          <Button class="!px-0" danger type="link">删除</Button>
         </a-popconfirm>
         <a-divider type="vertical" />
         <a-dropdown :arrow="{ pointAtCenter: true }" placement="bottomRight">
-          <a-button class="px-0" type="link">
+          <a-button class="!px-0" type="link">
             更多
             <DownOutlined />
           </a-button>

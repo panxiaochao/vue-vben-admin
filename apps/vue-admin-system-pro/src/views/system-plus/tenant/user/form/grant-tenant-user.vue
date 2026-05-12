@@ -232,7 +232,7 @@ defineExpose({
           title="确定要删除吗?"
           @confirm="() => deleteRow(row)"
         >
-          <Button class="px-0" danger type="link">删除</Button>
+          <Button class="!px-0" danger type="link">删除</Button>
         </a-popconfirm>
       </template>
     </Grid>
