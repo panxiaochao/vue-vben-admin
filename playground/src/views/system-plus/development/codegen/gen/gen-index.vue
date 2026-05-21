@@ -7,7 +7,7 @@ import { downloadFileFromBlob } from '@vben/utils';
 
 import { message } from 'ant-design-vue';
 
-import { download, generatorCode } from '#/api/system-plus/development/gen';
+import { download } from '#/api/system-plus/development/gen';
 import { parseContentDispositionForFileName } from '#/utils/download-helper';
 
 // 自定义组件
