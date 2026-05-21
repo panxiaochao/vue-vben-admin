@@ -10,6 +10,10 @@ import '@vben/styles/antdv-next';
 
 import { useTitle } from '@vueuse/core';
 
+import {
+  lazy_use_components,
+  lazy_use_icons,
+} from '#/adapter/component/antd_use';
 import { $t, setupI18n } from '#/locales';
 import { router } from '#/router';
 
@@ -40,6 +44,12 @@ async function bootstrap(namespace: string) {
   // });
 
   const app = createApp(App);
+
+  // 加载Antd组件
+  await lazy_use_components(app);
+
+  // 加载Antd Icons组件
+  await lazy_use_icons(app);
 
   // 注册v-loading指令
   registerLoadingDirective(app, {

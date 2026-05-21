@@ -89,6 +89,14 @@
       "path": "packages/@core/ui-kit/tabs-ui"
     },
     {
+      "name": "@pxc/codemirror",
+      "path": "packages/@pxc/codemirror"
+    },
+    {
+      "name": "@pxc/echarts",
+      "path": "packages/@pxc/echarts"
+    },
+    {
       "name": "@vben/constants",
       "path": "packages/constants"
     },

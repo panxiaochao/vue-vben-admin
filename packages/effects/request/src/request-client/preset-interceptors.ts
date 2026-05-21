@@ -118,6 +118,13 @@ export const errorMessageResponseInterceptor = (
         return Promise.reject(error);
       }
 
+      const status = error?.response?.status;
+      if (status === 200) {
+        // 说明http success，接口报错
+        makeErrorMessage?.(error?.response?.data?.message, error);
+        return Promise.reject(error);
+      }
+
       const err: string = error?.toString?.() ?? '';
       let errMsg = '';
       if (err?.includes('Network Error')) {
@@ -131,8 +138,6 @@ export const errorMessageResponseInterceptor = (
       }
 
       let errorMessage: string;
-      const status = error?.response?.status;
-
       switch (status) {
         case 400: {
           errorMessage = $t('ui.fallback.http.badRequest');

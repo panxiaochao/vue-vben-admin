@@ -1,0 +1,34 @@
+{
+  "name": "@pxc/echarts",
+  "version": "1.0.0",
+  "description": "自定义框架组件库",
+  "homepage": "https://github.com/panxiaochao/vue-admin-system-pro",
+  "bugs": "https://github.com/panxiaochao/vue-admin-system-pro/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panxiaochao/vue-admin-system-pro.git",
+    "directory": "packages/@pxc/echarts"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "author": {
+    "name": "Lypxc",
+    "email": "545685602@qq.com",
+    "url": "https://github.com/panxiaochao"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "echarts": "catalog:",
+    "@vueuse/core": "catalog:",
+    "@vben/preferences": "workspace:*",
+    "vue": "catalog:"
+  }
+}
