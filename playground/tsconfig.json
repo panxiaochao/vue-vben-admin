@@ -2,11 +2,11 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@vben/tsconfig/web-app.json",
   "compilerOptions": {
-    // 使用lodash开启
-    "esModuleInterop": true,
     "paths": {
       "#/*": ["./src/*"]
-    }
+    },
+    // 使用lodash开启
+    "esModuleInterop": true
   },
   "references": [{ "path": "./tsconfig.node.json" }],
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],

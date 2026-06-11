@@ -10,15 +10,15 @@
     "directory": "packages/@pxc/echarts"
   },
   "license": "MIT",
-  "type": "module",
-  "sideEffects": [
-    "**/*.css"
-  ],
   "author": {
     "name": "Lypxc",
     "email": "545685602@qq.com",
     "url": "https://github.com/panxiaochao"
   },
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./src/index.ts",
@@ -26,9 +26,9 @@
     }
   },
   "dependencies": {
-    "echarts": "catalog:",
-    "@vueuse/core": "catalog:",
     "@vben/preferences": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "echarts": "catalog:",
     "vue": "catalog:"
   }
 }

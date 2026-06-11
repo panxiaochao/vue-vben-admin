@@ -91,6 +91,7 @@ pnpm version          # 应用 changeset 版本更新
 ## CI 流水线
 
 `ci.yml` 运行三组并行 job:
+
 1. **test**: `pnpm run test:unit`
 2. **lint**: `pnpm run lint`
 3. **check**: `pnpm check:type` + actionlint
@@ -140,17 +141,21 @@ Turbo 的 `build` task 使用 `dependsOn: ["^build"]`，确保依赖先构建。
 ## 开发约定
 
 ### 路径别名
+
 `#/` 指向应用内 `src/` 目录（在 `tsconfig.json` 和 `package.json` imports 中定义）。
 
 ### 添加新页面
+
 1. 创建组件：`src/views/{module}/{page}/index.vue`
 2. 添加路由：`src/router/routes/modules/{module}.ts`
 3. 国际化：添加翻译到 `src/locales/langs/{zh-CN|en-US}/`
 
 ### API 定义
+
 使用 `requestClient`（基于 axios）在 `src/api/` 下按模块组织。
 
 ### CRUD 页面模式
+
 参考 `playground/src/views/system-plus/permission/role/` 结构：
 
 ```
@@ -165,18 +170,21 @@ Turbo 的 `build` task 使用 `dependsOn: ["^build"]`，确保依赖先构建。
 ```
 
 **列表页面 (index.vue)**:
+
 - 使用 `useVbenVxeGrid` 组合式函数管理表格和搜索表单
 - 工具栏按钮通过 `#toolbar-actions` slot 添加
 - 操作列通过 `#action` slot 自定义操作按钮
 - 通过 `defineExpose({ openModal })` 暴露方法，父组件调用 `xxxForm.openModal(row)` 打开表单
 
 **表单组件 (xxx-form.vue)**:
+
 - 使用 `defineModel('open', { type: Boolean })` 控制显示
 - 使用 `defineExpose({ openModal })` 暴露打开方法
 - 表单完成后通过 `$emits('done')` 通知父组件刷新
 - 使用 Ant Design Vue Form + `useRoleForm` 组合式函数
 
 ### 环境变量
+
 ```
 .env              # 通用变量
 .env.development  # 开发环境

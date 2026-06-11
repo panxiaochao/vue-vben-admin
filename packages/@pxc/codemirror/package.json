@@ -10,15 +10,15 @@
     "directory": "packages/@pxc/codemirror"
   },
   "license": "MIT",
-  "type": "module",
-  "sideEffects": [
-    "**/*.css"
-  ],
   "author": {
     "name": "Lypxc",
     "email": "545685602@qq.com",
     "url": "https://github.com/panxiaochao"
   },
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./src/index.ts",
