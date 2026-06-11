@@ -45,8 +45,24 @@ pre-commit:
   parallel: true
   commands:
     lint:
+      exclude:
+        - '**/node_modules/**'
+        - '**/dist/**'
+        - '**/*.md'
+        - "**/*.yaml"
+        - "**/*.yml"
+        - "**/package.json"
+        - '**/*.vue'
       run: pnpm lint
     checkType:
+      exclude:
+        - '**/node_modules/**'
+        - '**/dist/**'
+        - '**/*.md'
+        - "**/*.yaml"
+        - "**/*.yml"
+        - "**/package.json"
+        - '**/*.vue'
       run: pnpm check:type
 
 post-merge:

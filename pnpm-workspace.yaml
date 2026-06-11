@@ -237,7 +237,7 @@ catalog:
   '@codemirror/commands': ^6.10.3
   '@codemirror/language': ^6.12.3
   '@codemirror/autocomplete': ^6.12.2
-  "thememirror": ^2.0.1
+  thememirror: ^2.0.1
 
 allowBuilds:
   '@parcel/watcher': true

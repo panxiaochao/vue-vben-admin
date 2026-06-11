@@ -22,5 +22,12 @@ export default defineConfig({
     '.npmrc',
     '*-lock.yaml',
     'skills-lock.json',
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/*.md',
+    '**/*.yaml',
+    '**/*.yml',
+    '**/package.json',
+    '**/*.vue',
   ],
 });
